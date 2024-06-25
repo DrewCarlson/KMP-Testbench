@@ -16,7 +16,7 @@ dependencies {
 gradlePlugin {
     plugins {
         create("testBenchPlugin") {
-            id = "org.drewcarlson.kmp-test-bench"
+            id = "build.wallet.kmp-test-bench"
             implementationClass = "testbench.gradle.TestBenchGradlePlugin"
         }
     }

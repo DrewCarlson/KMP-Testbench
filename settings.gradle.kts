@@ -24,6 +24,6 @@ include(
 
 includeBuild("gradle-plugin") {
     dependencySubstitution {
-        substitute(module("org.drewcarlson:gradle-plugin")).using(project(":"))
+        substitute(module("build.wallet:gradle-plugin")).using(project(":"))
     }
 }
