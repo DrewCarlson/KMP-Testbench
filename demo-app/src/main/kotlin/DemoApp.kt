@@ -15,28 +15,27 @@ import io.ktor.client.*
 import testbench.client.TestBenchClient
 import testbench.plugins.network.NetworkClientPlugin
 
-
 fun main() = application {
-    println(System.getProperty("java.class.path"))
     val networkPlugin = remember { NetworkClientPlugin() }
     val coingecko = remember {
-        CoinGeckoClient(HttpClient {
-            networkPlugin.install(this)
-        })
+        CoinGeckoClient(
+            HttpClient {
+                networkPlugin.install(this)
+            },
+        )
     }
     LaunchedEffect(Unit) {
         TestBenchClient(
             plugins = listOf(
-                networkPlugin
-            )
+                networkPlugin,
+            ),
         )
     }
     MaterialTheme {
         Window(
             onCloseRequest = ::exitApplication,
-            title = "Demo App"
+            title = "Demo App",
         ) {
-
             val coins by produceState(emptyList<CoinList>()) {
                 value = coingecko.getCoinList()
             }

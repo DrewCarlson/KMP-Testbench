@@ -12,14 +12,14 @@ public data class NetworkRequestMessage(
     val id: String,
     val url: String,
     val method: String,
-    val headers: Map<String, String>,
+    val headers: Map<String, List<String>>,
     val body: String?,
 ) : NetworkPluginMessage()
 
 @Serializable
 public data class NetworkResponseMessage(
     val id: String,
-    val headers: Map<String, String>,
+    val headers: Map<String, List<String>>,
     val status: Int,
-    val body: String?
+    val body: String?,
 ) : NetworkPluginMessage()

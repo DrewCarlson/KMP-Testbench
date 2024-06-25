@@ -1,4 +1,3 @@
 package testbench.gradle
 
-class TestBenchExtension {
-}
+public class TestBenchExtension

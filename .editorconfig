@@ -1,0 +1,26 @@
+root = true
+
+[*]
+indent_style = space
+indent_size = 2
+
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+
+[*.{kt,kts}]
+indent_size = 4
+ktlint_code_style = ktlint_official
+ktlint_standard = enabled
+ktlint_experimental = enabled
+ktlint_ignore_back_ticked_identifier = true
+
+ktlint_standard_no-wildcard-imports = disabled
+ktlint_standard_multiline-expression-wrapping = disabled
+ktlint_standard_string-template-indent = disabled
+ktlint_standard_no-line-break-before-assignment = disabled
+ktlint_function_signature_body_expression_wrapping = disabled
+ktlint_function_signature_rule_force_multiline_when_parameter_count_greator_or_equal_than = -1
+ktlint_function_naming_ignore_when_annotated_with = Composable

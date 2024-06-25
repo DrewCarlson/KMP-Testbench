@@ -5,6 +5,8 @@ import androidx.compose.ui.Modifier
 import testbench.plugin.BenchPlugin
 
 public interface ServerPlugin : BenchPlugin {
+    public val pluginIcon: String
+        get() = "plugin"
 
     public fun handleMessage(message: String)
 

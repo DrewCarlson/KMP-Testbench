@@ -9,7 +9,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import org.jetbrains.jewel.ui.Orientation
 import org.jetbrains.jewel.ui.component.Divider
@@ -19,14 +18,15 @@ import testbench.plugin.server.ServerPlugin
 
 private data class NetworkEntryHolder(
     val request: NetworkRequestMessage,
-    val response: NetworkResponseMessage? = null
+    val response: NetworkResponseMessage? = null,
 )
 
 public class NetworkServerPlugin : ServerPlugin {
-
     override val id: String = "network"
 
     override val name: String = "Network"
+
+    override val pluginIcon: String = "globe"
 
     private val networkEntries = MutableStateFlow(emptyMap<String, NetworkEntryHolder>())
 
@@ -39,9 +39,10 @@ public class NetworkServerPlugin : ServerPlugin {
             }
 
             is NetworkResponseMessage -> {
-                networkEntries.update {
-                    val entry = it.getValue(networkMessage.id)
-                    it.toMutableMap()
+                networkEntries.update { entries ->
+                    val entry = entries.getValue(networkMessage.id)
+                    entries
+                        .toMutableMap()
                         .apply { replace(networkMessage.id, entry.copy(response = networkMessage)) }
                         .toMap()
                 }
@@ -56,10 +57,11 @@ public class NetworkServerPlugin : ServerPlugin {
             var selectedRequest by remember { mutableStateOf<String?>(null) }
 
             Column(
-                modifier = Modifier.thenIf(selectedRequest != null) {
-                    padding(end = 350.dp)
-                },
-                verticalArrangement = Arrangement.spacedBy(6.dp)
+                modifier = Modifier
+                    .thenIf(selectedRequest != null) {
+                        padding(end = 350.dp)
+                    },
+                verticalArrangement = Arrangement.spacedBy(6.dp),
             ) {
                 if (entries.isEmpty()) {
                     Text("waiting for requests")
@@ -71,7 +73,7 @@ public class NetworkServerPlugin : ServerPlugin {
                             .fillMaxWidth()
                             .clickable { selectedRequest = id }
                             .padding(horizontal = 6.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
                         Text(text = entry.request.url)
                         Text(text = entry.request.method)
@@ -89,37 +91,37 @@ public class NetworkServerPlugin : ServerPlugin {
                         .fillMaxHeight()
                         .width(350.dp)
                         .padding(4.dp)
-                        .align(Alignment.CenterEnd)
+                        .align(Alignment.CenterEnd),
                 ) {
                     Divider(
                         orientation = Orientation.Vertical,
-                        modifier = Modifier.align(Alignment.CenterStart)
+                        modifier = Modifier.align(Alignment.CenterStart),
                     )
 
                     Column(
                         modifier = Modifier
                             .fillMaxSize(),
-                        verticalArrangement = Arrangement.spacedBy(6.dp)
+                        verticalArrangement = Arrangement.spacedBy(6.dp),
                     ) {
                         Column {
                             Text(
                                 text = "Request Headers",
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.Bold,
                             )
 
                             requestData.headers.forEach { (key, value) ->
                                 Row(
                                     modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                    horizontalArrangement = Arrangement.spacedBy(6.dp),
                                 ) {
                                     Text(text = key)
-                                    Text(text = value)
+                                    Text(text = value.joinToString("\n"))
                                 }
                             }
 
                             Text(
                                 text = "Request Body",
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.Bold,
                             )
 
                             Text(
@@ -131,21 +133,21 @@ public class NetworkServerPlugin : ServerPlugin {
                             Column {
                                 Text(
                                     text = "Response Headers",
-                                    fontWeight = FontWeight.Bold
+                                    fontWeight = FontWeight.Bold,
                                 )
 
                                 responseData.headers.entries.take(4).forEach { (key, value) ->
                                     Row(
                                         modifier = Modifier.fillMaxWidth(),
-                                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                        horizontalArrangement = Arrangement.spacedBy(6.dp),
                                     ) {
                                         Text(text = key)
-                                        Text(text = value)
+                                        Text(text = value.joinToString("\n"))
                                     }
                                 }
                                 Text(
                                     text = "Response Body",
-                                    fontWeight = FontWeight.Bold
+                                    fontWeight = FontWeight.Bold,
                                 )
 
                                 Text(
@@ -153,7 +155,6 @@ public class NetworkServerPlugin : ServerPlugin {
                                 )
                             }
                         }
-
                     }
                 }
             }

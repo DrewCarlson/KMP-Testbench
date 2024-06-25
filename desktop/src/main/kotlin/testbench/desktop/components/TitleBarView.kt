@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import org.jetbrains.jewel.ui.component.*
 import org.jetbrains.jewel.ui.painter.hints.Size
@@ -16,7 +15,6 @@ import org.jetbrains.jewel.window.newFullscreenControls
 import testbench.desktop.resources.TestBenchIcons
 import java.awt.Desktop
 import java.net.URI
-
 
 @Composable
 fun DecoratedWindowScope.TitleBarView() {
@@ -73,15 +71,15 @@ fun DecoratedWindowScope.TitleBarView() {
                 Text("Open Jewel Github repository")
             }) {
                 IconButton(
-                    modifier = Modifier.size(40.dp)
+                    modifier = Modifier
+                        .size(40.dp)
                         .padding(5.dp),
-                    onClick = { Desktop.getDesktop().browse(URI.create("https://github.com/DrewCarlson/KMP-Test-Bench")) },
-
-                    ) {
+                    onClick = { Desktop.getDesktop().browse(URI.create("https://github.com/squareup/KMP-Test-Bench")) },
+                ) {
                     Icon(
                         "icons/github@20x20_dark.svg",
                         "Github",
-                        TestBenchIcons::class.java
+                        TestBenchIcons::class.java,
                     )
                 }
             }

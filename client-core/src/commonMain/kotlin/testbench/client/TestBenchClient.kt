@@ -16,8 +16,8 @@ import kotlin.time.Duration.Companion.seconds
 public class TestBenchClient(
     private val plugins: List<ClientPlugin>,
 ) {
-
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    private val connected = MutableStateFlow(false)
 
     private val http = HttpClient {
         defaultRequest {
@@ -29,47 +29,43 @@ public class TestBenchClient(
         }
     }
 
-    private val _connected = MutableStateFlow(false)
-
     init {
         scope.launch {
             while (true) {
                 establishConnection()
+                delay(3.seconds)
             }
         }
     }
 
     private suspend fun establishConnection() {
-        _connected.first { connected -> !connected }
+        // Wait until disconnected
+        connected.first { connected -> !connected }
 
         try {
+            // Attempt to connect to server
             createWsConnection {
-                _connected.update { true }
+                connected.update { true }
             }
-            _connected.update { false }
+            connected.update { false }
         } catch (e: Throwable) {
             e.printStackTrace()
-            _connected.update { false }
-            delay(3.seconds)
+            connected.update { false }
         }
     }
 
     private suspend fun createWsConnection(onConnected: () -> Unit) {
-        http.ws("/plugin") {
+        http.ws {
             onConnected()
 
             plugins.forEach { plugin ->
                 plugin.outgoingMessages
-                    .onEach { println("here: $it") }
-                    .onEach {
-                        val message = PluginMessage(plugin.id, it)
+                    .onEach { content ->
+                        val message = PluginMessage(plugin.id, content)
                         outgoing.send(Frame.Text(Json.encodeToString(message)))
-                    }
-                    .launchIn(this)
+                    }.launchIn(this)
             }
-            while (isActive) {
-                yield()
-            }
+            awaitCancellation()
         }
     }
 }

@@ -10,9 +10,7 @@ import org.jetbrains.jewel.ui.Orientation
 import org.jetbrains.jewel.ui.component.Divider
 
 @Composable
-fun FooterContainer(
-    modifier: Modifier = Modifier,
-) {
+fun FooterContainer(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier,
     ) {
