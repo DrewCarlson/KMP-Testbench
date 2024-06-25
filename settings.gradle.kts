@@ -13,7 +13,6 @@ rootProject.name = "KMP-Test-Bench"
 include(
     ":demo-app",
     ":desktop",
-    ":gradle-plugin",
     ":client-core",
     ":plugin-toolkit-core",
     ":plugin-toolkit-client",
@@ -22,3 +21,9 @@ include(
     ":plugins:network:core-network",
     ":plugins:network:server",
 )
+
+includeBuild("gradle-plugin") {
+    dependencySubstitution {
+        substitute(module("org.drewcarlson:gradle-plugin")).using(project(":"))
+    }
+}
