@@ -1,0 +1,59 @@
+[versions]
+kotlin = { strictly = "2.0.0" }
+compose = "1.6.10"
+coroutines = "1.9.0-RC"
+serialization = "1.7.0"
+ktorio = "2.3.12"
+datetime = "0.6.0"
+jewel = "0.19.6"
+
+[plugins]
+multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+compose-jetbrains = { id = "org.jetbrains.compose", version.ref = "compose" }
+
+[libraries]
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+
+coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines-jdk8 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8", version.ref = "coroutines" }
+coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+
+serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "serialization" }
+serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+
+datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
+
+jewel = { module = "org.jetbrains.jewel:jewel-int-ui-standalone-241", version.ref = "jewel" }
+jewel-decorated = { module = "org.jetbrains.jewel:jewel-int-ui-decorated-window-241", version.ref = "jewel" }
+
+ktor-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorio" }
+
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorio" }
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktorio" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktorio" }
+ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktorio" }
+ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktorio" }
+ktor-client-contentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktorio" }
+ktor-client-websockets = { module = "io.ktor:ktor-client-websockets", version.ref = "ktorio" }
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktorio" }
+
+ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktorio" }
+ktor-server-cio = { module = "io.ktor:ktor-server-cio", version.ref = "ktorio" }
+ktor-server-sessions = { module = "io.ktor:ktor-server-sessions", version.ref = "ktorio" }
+ktor-server-tests = { module = "io.ktor:ktor-server-tests", version.ref = "ktorio" }
+ktor-server-metrics = { module = "io.ktor:ktor-server-metrics", version.ref = "ktorio" }
+ktor-server-partialContent = { module = "io.ktor:ktor-server-partial-content", version.ref = "ktorio" }
+ktor-server-contentNegotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktorio" }
+ktor-server-autoHeadResponse = { module = "io.ktor:ktor-server-auto-head-response", version.ref = "ktorio" }
+ktor-server-defaultHeaders = { module = "io.ktor:ktor-server-default-headers", version.ref = "ktorio" }
+ktor-server-cachingHeaders = { module = "io.ktor:ktor-server-caching-headers", version.ref = "ktorio" }
+ktor-server-callLogging = { module = "io.ktor:ktor-server-call-logging", version.ref = "ktorio" }
+ktor-server-statusPages = { module = "io.ktor:ktor-server-status-pages", version.ref = "ktorio" }
+ktor-server-compression = { module = "io.ktor:ktor-server-compression", version.ref = "ktorio" }
+ktor-server-cors = { module = "io.ktor:ktor-server-cors", version.ref = "ktorio" }
+ktor-server-auth = { module = "io.ktor:ktor-server-auth", version.ref = "ktorio" }
+ktor-server-authJwt = { module = "io.ktor:ktor-server-auth-jwt", version.ref = "ktorio" }
+ktor-server-websockets = { module = "io.ktor:ktor-server-websockets", version.ref = "ktorio" }
