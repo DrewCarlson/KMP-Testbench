@@ -1,8 +1,11 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     alias(libs.plugins.jvm)
     alias(libs.plugins.compose.jetbrains)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.serialization)
+    alias(libs.plugins.shadow)
 }
 
 kotlin {
@@ -51,6 +54,12 @@ dependencies {
 compose.desktop {
     application {
         mainClass = "MainKt"
+    }
+}
+
+tasks.withType<ShadowJar> {
+    manifest {
+        attributes["Main-Class"] = "MainKt"
     }
 }
 
