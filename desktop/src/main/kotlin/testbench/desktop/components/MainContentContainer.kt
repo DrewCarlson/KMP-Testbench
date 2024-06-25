@@ -13,7 +13,7 @@ import testbench.plugin.server.ServerPlugin
 @Composable
 fun MainContentContainer(
     modifier: Modifier = Modifier,
-    activePlugin: ServerPlugin?,
+    activePlugin: ServerPlugin<*, *>?,
 ) {
     Box(
         modifier = modifier

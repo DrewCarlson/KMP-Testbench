@@ -14,10 +14,12 @@ import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.flow.*
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.serializer
 import org.slf4j.LoggerFactory
 import org.slf4j.event.Level
 import testbench.communication.PluginMessage
 import testbench.desktop.plugins.PluginRegistry
+import testbench.plugin.server.ServerPlugin
 import java.time.Duration
 
 class TestBenchServer(
@@ -59,11 +61,13 @@ class TestBenchServer(
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     private suspend fun Flow<Frame.Text>.dispatchPluginMessages() {
         collect { frame ->
             val message = Json.decodeFromString<PluginMessage>(frame.readText())
-            val plugin = pluginRegistry.plugins[message.pluginId] ?: return@collect
-            plugin.handleMessage(message.content)
+            val plugin = (pluginRegistry.plugins[message.pluginId] ?: return@collect) as ServerPlugin<Any, Any>
+            val content = Json.decodeFromString(serializer(plugin.serverMessageType), message.content)
+            plugin.handleMessage(checkNotNull(content) { "Failed to process message (plugin:${plugin.id}): $message" })
         }
     }
 

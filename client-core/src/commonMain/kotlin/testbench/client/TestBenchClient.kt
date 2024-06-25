@@ -9,12 +9,13 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.serializer
 import testbench.communication.PluginMessage
 import testbench.plugin.client.ClientPlugin
 import kotlin.time.Duration.Companion.seconds
 
 public class TestBenchClient(
-    private val plugins: List<ClientPlugin>,
+    private val plugins: List<ClientPlugin<*, *>>,
 ) {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private val connected = MutableStateFlow(false)
@@ -61,7 +62,8 @@ public class TestBenchClient(
             plugins.forEach { plugin ->
                 plugin.outgoingMessages
                     .onEach { content ->
-                        val message = PluginMessage(plugin.id, content)
+                        val serializedContent = Json.encodeToString(serializer(plugin.serverMessageType), content)
+                        val message = PluginMessage(plugin.id, serializedContent)
                         outgoing.send(Frame.Text(Json.encodeToString(message)))
                     }.launchIn(this)
             }

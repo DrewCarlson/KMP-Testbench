@@ -18,7 +18,7 @@ import testbench.plugin.server.ServerPlugin
 @Composable
 fun SidebarContainer(
     modifier: Modifier = Modifier,
-    onPluginSelected: (ServerPlugin) -> Unit,
+    onPluginSelected: (ServerPlugin<*, *>) -> Unit,
 ) {
     val pluginRegistry = LocalPluginRegistry.current
 

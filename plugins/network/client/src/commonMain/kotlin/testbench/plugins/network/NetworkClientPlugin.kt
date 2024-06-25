@@ -9,28 +9,30 @@ import io.ktor.util.*
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import testbench.plugin.client.ClientPlugin
 import java.util.UUID
+import kotlin.reflect.KType
+import kotlin.reflect.typeOf
 
 private val KtorRequestId = AttributeKey<String>("KMP-Test-Bench-ID")
 
 // TODO: Move this implementation to Ktor specific plugin and replace
 //  it with platform based HTTP hooks
-public class NetworkClientPlugin : ClientPlugin {
+public class NetworkClientPlugin : ClientPlugin<NetworkPluginMessage, Unit> {
     override val id: String = "network"
 
     override val name: String = "Network"
 
-    private val messageQueue = Channel<String>(
+    private val messageQueue = Channel<NetworkPluginMessage>(
         capacity = Int.MAX_VALUE,
         onBufferOverflow = BufferOverflow.DROP_OLDEST,
     )
 
-    override val outgoingMessages: Flow<String> = messageQueue.receiveAsFlow()
+    override val serverMessageType: KType = typeOf<NetworkPluginMessage>()
 
-    override fun handleMessage(message: String) {
+    override val outgoingMessages: Flow<NetworkPluginMessage> = messageQueue.receiveAsFlow()
+
+    override fun handleMessage(message: Unit) {
     }
 
     private val ktorPlugin: io.ktor.client.plugins.api.ClientPlugin<Unit> =
@@ -47,8 +49,7 @@ public class NetworkClientPlugin : ClientPlugin {
                     headers = request.headers.build().toMap(),
                     body = (content as? TextContent)?.text,
                 )
-
-                queueMessage(message)
+                messageQueue.send(message)
             }
         }
 
@@ -61,12 +62,7 @@ public class NetworkClientPlugin : ClientPlugin {
                 status = response.status.value,
                 body = response.bodyAsText(),
             )
-
-            queueMessage(message)
+            messageQueue.send(message)
         }
-    }
-
-    private suspend fun queueMessage(message: NetworkPluginMessage) {
-        messageQueue.send(Json.encodeToString(message))
     }
 }

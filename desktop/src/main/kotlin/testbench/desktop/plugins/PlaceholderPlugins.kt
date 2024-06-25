@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import org.jetbrains.jewel.ui.component.Text
 import testbench.plugin.server.ServerPlugin
 
-abstract class PlaceholderPlugin : ServerPlugin {
+abstract class PlaceholderPlugin : ServerPlugin<String, String> {
     override fun handleMessage(message: String) {
     }
 

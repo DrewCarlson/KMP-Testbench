@@ -10,41 +10,44 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.serialization.json.Json
 import org.jetbrains.jewel.ui.Orientation
 import org.jetbrains.jewel.ui.component.Divider
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.util.thenIf
 import testbench.plugin.server.ServerPlugin
+import kotlin.reflect.KType
+import kotlin.reflect.typeOf
 
 private data class NetworkEntryHolder(
     val request: NetworkRequestMessage,
     val response: NetworkResponseMessage? = null,
 )
 
-public class NetworkServerPlugin : ServerPlugin {
+public class NetworkServerPlugin : ServerPlugin<NetworkPluginMessage, Unit> {
     override val id: String = "network"
 
     override val name: String = "Network"
 
     override val pluginIcon: String = "globe"
 
+    override val serverMessageType: KType = typeOf<NetworkPluginMessage>()
+
     private val networkEntries = MutableStateFlow(emptyMap<String, NetworkEntryHolder>())
 
-    override fun handleMessage(message: String) {
-        when (val networkMessage = Json.decodeFromString<NetworkPluginMessage>(message)) {
+    override fun handleMessage(message: NetworkPluginMessage) {
+        when (message) {
             is NetworkRequestMessage -> {
                 networkEntries.update {
-                    mapOf(Pair(networkMessage.id, NetworkEntryHolder(networkMessage))) + it
+                    mapOf(Pair(message.id, NetworkEntryHolder(message))) + it
                 }
             }
 
             is NetworkResponseMessage -> {
                 networkEntries.update { entries ->
-                    val entry = entries.getValue(networkMessage.id)
+                    val entry = entries.getValue(message.id)
                     entries
                         .toMutableMap()
-                        .apply { replace(networkMessage.id, entry.copy(response = networkMessage)) }
+                        .apply { replace(message.id, entry.copy(response = message)) }
                         .toMap()
                 }
             }

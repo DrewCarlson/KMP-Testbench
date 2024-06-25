@@ -22,7 +22,7 @@ import testbench.plugin.server.ServerPlugin
 @Composable
 @Preview
 fun MainWindow(onCloseRequest: () -> Unit) {
-    var activePlugin by remember { mutableStateOf<ServerPlugin?>(null) }
+    var activePlugin by remember { mutableStateOf<ServerPlugin<*, *>?>(null) }
     val windowState = rememberWindowState(
         position = WindowPosition.Aligned(Alignment.Center),
     )
