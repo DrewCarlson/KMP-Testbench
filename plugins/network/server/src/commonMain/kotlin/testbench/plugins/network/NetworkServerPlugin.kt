@@ -1,11 +1,12 @@
 package testbench.plugins.network
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -34,7 +35,7 @@ public class NetworkServerPlugin : ServerPlugin {
         when (val networkMessage = Json.decodeFromString<NetworkPluginMessage>(message)) {
             is NetworkRequestMessage -> {
                 networkEntries.update {
-                    it.plus(Pair(networkMessage.id, NetworkEntryHolder(networkMessage)))
+                    mapOf(Pair(networkMessage.id, NetworkEntryHolder(networkMessage))) + it
                 }
             }
 
@@ -75,9 +76,13 @@ public class NetworkServerPlugin : ServerPlugin {
                             .padding(horizontal = 6.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
-                        Text(text = entry.request.url)
-                        Text(text = entry.request.method)
-                        Text(text = entry.response?.status?.toString() ?: "Pending")
+                        Text(
+                            text = entry.request.url,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                        Text(text = entry.request.method, maxLines = 1)
+                        Text(text = entry.response?.status?.toString() ?: "Pending", maxLines = 1)
                     }
                 }
                 Spacer(modifier = Modifier.size(0.dp))
@@ -90,9 +95,9 @@ public class NetworkServerPlugin : ServerPlugin {
                     modifier = Modifier
                         .fillMaxHeight()
                         .width(350.dp)
-                        .padding(4.dp)
                         .align(Alignment.CenterEnd),
                 ) {
+                    val scrollState = rememberScrollState()
                     Divider(
                         orientation = Orientation.Vertical,
                         modifier = Modifier.align(Alignment.CenterStart),
@@ -100,7 +105,9 @@ public class NetworkServerPlugin : ServerPlugin {
 
                     Column(
                         modifier = Modifier
-                            .fillMaxSize(),
+                            .fillMaxSize()
+                            .padding(4.dp)
+                            .verticalScroll(scrollState),
                         verticalArrangement = Arrangement.spacedBy(6.dp),
                     ) {
                         Column {
@@ -156,6 +163,13 @@ public class NetworkServerPlugin : ServerPlugin {
                             }
                         }
                     }
+
+                    VerticalScrollbar(
+                        modifier = Modifier
+                            .align(Alignment.CenterEnd)
+                            .fillMaxHeight(),
+                        adapter = rememberScrollbarAdapter(scrollState),
+                    )
                 }
             }
         }

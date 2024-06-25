@@ -1,12 +1,10 @@
 package demo
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.produceState
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import coingecko.CoinGeckoClient
@@ -36,11 +34,15 @@ fun main() = application {
             onCloseRequest = ::exitApplication,
             title = "Demo App",
         ) {
-            val coins by produceState(emptyList<CoinList>()) {
+            var refresh by remember { mutableStateOf(0) }
+            val coins by produceState(emptyList<CoinList>(), refresh) {
                 value = coingecko.getCoinList()
             }
 
             Column {
+                Button(onClick = { refresh += 1 }) {
+                    Text("Refresh")
+                }
                 coins.forEach { coin ->
                     Text(text = coin.name)
                 }
