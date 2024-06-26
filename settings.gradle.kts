@@ -35,7 +35,7 @@ plugins {
     id("build.wallet.kmp-test-bench-settings")
 }
 
-extensions.configure<TestBenchGradleSettingsExtension> {
+configure<TestBenchGradleSettingsExtension> {
     includePlugin(":plugins:network") {
         clientVariations("ktor")
     }
