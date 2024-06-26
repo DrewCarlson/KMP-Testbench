@@ -26,6 +26,7 @@ public class TestBenchGradlePlugin : Plugin<Project> {
     }
 
     private fun applyCoreModuleConfiguration(project: Project) {
+        project.pluginManager.apply("org.jetbrains.kotlin.plugin.serialization")
         project.configureKmp {
             applyDefaultHierarchyTemplate()
             jvm()
@@ -37,6 +38,8 @@ public class TestBenchGradlePlugin : Plugin<Project> {
             sourceSets.commonMain {
                 dependencies {
                     api("build.wallet.testbench:plugin-toolkit-core")
+                    // TODO: Allow serialization version to be specified by project
+                    implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.7.0")
                 }
             }
         }
