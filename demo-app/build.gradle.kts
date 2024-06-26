@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.jvm)
+    kotlin("jvm")
     alias(libs.plugins.compose.jetbrains)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.serialization)

@@ -13,4 +13,4 @@ package testbench.gradle
  * the rest of the module structure is sorted out automatically
  * (i.e. no nested build scripts required for each module)
  */
-public class TestBenchPluginExtension
+public open class TestBenchPluginExtension

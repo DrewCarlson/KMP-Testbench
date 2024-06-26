@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.compose.jetbrains)
-    alias(libs.plugins.multiplatform)
+    kotlin("multiplatform")
 }
 
 kotlin {
