@@ -16,9 +16,7 @@ import kotlin.reflect.typeOf
 
 private val KtorRequestId = AttributeKey<String>("KMP-Test-Bench-ID")
 
-// TODO: Move this implementation to Ktor specific plugin and replace
-//  it with platform based HTTP hooks
-public class NetworkClientPlugin : ClientPlugin<NetworkPluginMessage, Unit> {
+public class KtorNetworkClientPlugin : ClientPlugin<NetworkPluginMessage, Unit> {
     override val id: String = "network"
 
     override val name: String = "Network"

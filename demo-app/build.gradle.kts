@@ -21,10 +21,7 @@ dependencies {
     implementation(libs.serialization.json)
 
     implementation(projects.clientCore)
-    implementation(projects.plugins.network.coreNetwork)
-    implementation(projects.plugins.network.client)
-    implementation(projects.pluginToolkitCore)
-    implementation(projects.pluginToolkitClient)
+    implementation(projects.plugins.network.networkClientKtor)
 
     implementation("org.drewcarlson:coingecko:1.0.0-rc01")
 }

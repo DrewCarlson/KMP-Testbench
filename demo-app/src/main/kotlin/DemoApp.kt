@@ -11,10 +11,10 @@ import coingecko.CoinGeckoClient
 import coingecko.models.coins.CoinList
 import io.ktor.client.*
 import testbench.client.TestBenchClient
-import testbench.plugins.network.NetworkClientPlugin
+import testbench.plugins.network.KtorNetworkClientPlugin
 
 fun main() = application {
-    val networkPlugin = remember { NetworkClientPlugin() }
+    val networkPlugin = remember { KtorNetworkClientPlugin() }
     val coingecko = remember {
         CoinGeckoClient(
             HttpClient {

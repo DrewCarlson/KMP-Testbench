@@ -13,9 +13,9 @@ kotlin {
 
         commonMain {
             dependencies {
-                implementation(projects.plugins.network.coreNetwork)
-                implementation(projects.pluginToolkitCore)
-                implementation(projects.pluginToolkitClient)
+                api(projects.plugins.network.networkCore)
+                api(projects.pluginToolkitCore)
+                api(projects.pluginToolkitClient)
 
                 implementation(libs.ktor.client.core)
 

@@ -17,9 +17,9 @@ include(
     ":plugin-toolkit-core",
     ":plugin-toolkit-client",
     ":plugin-toolkit-server",
-    ":plugins:network:client",
-    ":plugins:network:core-network",
-    ":plugins:network:server",
+    ":plugins:network:network-core",
+    ":plugins:network:network-server",
+    ":plugins:network:network-client-ktor",
 )
 
 includeBuild("gradle-plugin") {

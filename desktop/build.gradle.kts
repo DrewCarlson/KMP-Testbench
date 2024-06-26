@@ -22,7 +22,7 @@ kotlin {
 
 dependencies {
     implementation(projects.pluginToolkitServer)
-    implementation(projects.plugins.network.server)
+    implementation(projects.plugins.network.networkServer)
 
     implementation(compose.desktop.currentOs) {
         exclude(group = "org.jetbrains.compose.material")

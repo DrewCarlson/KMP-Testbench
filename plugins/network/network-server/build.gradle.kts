@@ -14,8 +14,7 @@ kotlin {
 
         commonMain {
             dependencies {
-                api(projects.plugins.network.coreNetwork)
-                // implementation(projects.pluginToolkit.core)
+                api(projects.plugins.network.networkCore)
                 implementation(projects.pluginToolkitServer)
 
                 implementation(libs.serialization.core)
