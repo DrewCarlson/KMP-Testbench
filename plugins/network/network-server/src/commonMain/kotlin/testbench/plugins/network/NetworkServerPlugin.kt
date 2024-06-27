@@ -15,23 +15,15 @@ import org.jetbrains.jewel.ui.component.Divider
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.util.thenIf
 import testbench.plugin.server.ServerPlugin
-import kotlin.reflect.KType
-import kotlin.reflect.typeOf
 
 private data class NetworkEntryHolder(
     val request: NetworkRequestMessage,
     val response: NetworkResponseMessage? = null,
 )
 
-public class NetworkServerPlugin : ServerPlugin<NetworkPluginMessage, Unit> {
-    override val id: String = "network"
-
-    override val name: String = "Network"
-
-    override val pluginIcon: String = "globe"
-
-    override val serverMessageType: KType = typeOf<NetworkPluginMessage>()
-
+public class NetworkServerPlugin :
+    NetworkPlugin(),
+    ServerPlugin<NetworkPluginMessage, Unit> {
     private val networkEntries = MutableStateFlow(emptyMap<String, NetworkEntryHolder>())
 
     override fun handleMessage(message: NetworkPluginMessage) {

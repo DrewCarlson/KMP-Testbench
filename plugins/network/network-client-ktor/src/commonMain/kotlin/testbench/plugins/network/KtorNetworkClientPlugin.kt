@@ -11,22 +11,16 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import testbench.plugin.client.ClientPlugin
 import java.util.UUID
-import kotlin.reflect.KType
-import kotlin.reflect.typeOf
 
 private val KtorRequestId = AttributeKey<String>("KMP-Test-Bench-ID")
 
-public class KtorNetworkClientPlugin : ClientPlugin<NetworkPluginMessage, Unit> {
-    override val id: String = "network"
-
-    override val name: String = "Network"
-
+public class KtorNetworkClientPlugin :
+    NetworkPlugin(),
+    ClientPlugin<NetworkPluginMessage, Unit> {
     private val messageQueue = Channel<NetworkPluginMessage>(
         capacity = Int.MAX_VALUE,
         onBufferOverflow = BufferOverflow.DROP_OLDEST,
     )
-
-    override val serverMessageType: KType = typeOf<NetworkPluginMessage>()
 
     override val outgoingMessages: Flow<NetworkPluginMessage> = messageQueue.receiveAsFlow()
 
