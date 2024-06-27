@@ -9,6 +9,10 @@ kotlin {
 }
 
 dependencies {
+    // TODO: These should be compileOnly dependencies but for some reason,
+    //  likely the composite build setup, they must be provided via this
+    //  gradle-plugin project.
+    implementation(libs.android.gradlePlugin)
     implementation(libs.kotlin.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin.api)
     compileOnly(libs.kotlin.stdlib)
