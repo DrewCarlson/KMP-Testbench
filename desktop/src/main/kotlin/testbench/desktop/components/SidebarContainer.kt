@@ -1,6 +1,5 @@
 package testbench.desktop.components
 
-import LocalPluginRegistry
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,6 +11,7 @@ import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.ui.component.Icon
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.theme.colorPalette
+import testbench.LocalPluginRegistry
 import testbench.desktop.resources.TestBenchIcons
 import testbench.plugin.server.ServerPlugin
 

@@ -23,6 +23,9 @@ kotlin {
 dependencies {
     implementation(projects.pluginToolkitServer)
     implementation(projects.plugins.network.networkServer)
+    implementation(projects.plugins.logs.logsServer)
+    implementation(projects.plugins.preferences.preferencesServer)
+    implementation(projects.plugins.databases.databasesServer)
 
     implementation(compose.desktop.currentOs) {
         exclude(group = "org.jetbrains.compose.material")
@@ -53,13 +56,13 @@ dependencies {
 
 compose.desktop {
     application {
-        mainClass = "MainKt"
+        mainClass = "testbench.MainKt"
     }
 }
 
 tasks.withType<ShadowJar> {
     manifest {
-        attributes["Main-Class"] = "MainKt"
+        attributes["Main-Class"] = "testbench.MainKt"
     }
 }
 

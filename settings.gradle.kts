@@ -22,7 +22,7 @@ include(
     ":plugin-toolkit-client",
     ":plugin-toolkit-server",
     ":plugins",
-    ":plugins:network",
+    ":service-compiler-plugin",
 )
 
 includeBuild("gradle-plugin") {
@@ -36,6 +36,9 @@ plugins {
 }
 
 configure<TestBenchGradleSettingsExtension> {
+    includePlugin(":plugins:logs")
+    includePlugin(":plugins:databases")
+    includePlugin(":plugins:preferences")
     includePlugin(":plugins:network") {
         clientVariations("ktor")
     }

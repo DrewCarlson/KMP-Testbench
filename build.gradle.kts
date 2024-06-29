@@ -31,6 +31,8 @@ subprojects {
                 .using(project(":plugin-toolkit-client"))
             substitute(module("build.wallet.testbench:plugin-toolkit-server"))
                 .using(project(":plugin-toolkit-server"))
+            substitute(module("build.wallet.testbench:service-compiler-plugin"))
+                .using(project(":service-compiler-plugin"))
         }
     }
 }
