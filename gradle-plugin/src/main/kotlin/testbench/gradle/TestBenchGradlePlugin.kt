@@ -11,27 +11,31 @@ import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.support.serviceOf
 import testbench.gradle.plugins.configureCustomPlugins
 
+private const val RUNTIME_CONFIG = "testBenchRuntime"
+private const val RUN_TASK_NAME = "runTestBench"
+private const val DESKTOP_MAIN = "testbench.MainKt"
+
 public class TestBenchGradlePlugin : Plugin<Project> {
     override fun apply(project: Project) {
+        project.extensions.create("testbench", TestBenchExtension::class.java)
         val pluginProjects = configureCustomPlugins(project)
 
-        val testBenchRuntime = project.configurations.create("testBenchRuntime") {
+        val testBenchRuntime = project.configurations.create(RUNTIME_CONFIG) {
             attributes {
                 attribute(Attribute.of("org.gradle.usage", String::class.java), "java-runtime")
                 attribute(Attribute.of("org.jetbrains.kotlin.platform.type", String::class.java), "jvm")
             }
         }
         project.dependencies {
-            // todo: specify dependency version
-            add(testBenchRuntime.name, "build.wallet.testbench:desktop")
+            add(testBenchRuntime.name, "build.wallet.testbench:desktop:${BuildConfig.VERSION}")
             pluginProjects.forEach { pluginProject ->
                 add(testBenchRuntime.name, pluginProject.server)
             }
         }
 
-        project.tasks.create("runTestBench", JavaExec::class.java) {
+        project.tasks.create(RUN_TASK_NAME, JavaExec::class.java) {
             val javaToolchains = project.serviceOf<JavaToolchainService>()
-            mainClass.set("testbench.MainKt")
+            mainClass.set(DESKTOP_MAIN)
             javaLauncher.set(
                 javaToolchains.launcherFor {
                     vendor.set(JvmVendorSpec.JETBRAINS)

@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.jvm)
     `java-gradle-plugin`
     `kotlin-dsl`
+    alias(libs.plugins.gradleBuildConfig)
 }
 
 kotlin {
@@ -16,6 +17,12 @@ dependencies {
     implementation(libs.kotlin.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin.api)
     compileOnly(libs.kotlin.stdlib)
+}
+
+buildConfig {
+    packageName("testbench.gradle")
+    buildConfigField("VERSION", version.toString())
+    buildConfigField("SERIALIZATION_VERSION", libs.versions.serialization)
 }
 
 gradlePlugin {

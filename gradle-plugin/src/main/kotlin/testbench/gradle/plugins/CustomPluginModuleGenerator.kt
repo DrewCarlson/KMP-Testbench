@@ -6,6 +6,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.extraProperties
+import testbench.gradle.BuildConfig
 import testbench.gradle.TEST_BENCH_PLUGIN_MODULE
 import testbench.gradle.TestBenchPluginGroup
 import testbench.gradle.subplugin.ServiceGeneratorSubplugin
@@ -48,9 +49,8 @@ private fun applyCoreModuleConfiguration(project: Project): Project {
 
         sourceSets.commonMain {
             dependencies {
-                api("build.wallet.testbench:plugin-toolkit-core")
-                // TODO: Allow serialization version to be specified by project
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.7.0")
+                api("build.wallet.testbench:plugin-toolkit-core:${BuildConfig.VERSION}")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:${BuildConfig.SERIALIZATION_VERSION}")
             }
         }
     }
@@ -74,9 +74,7 @@ private fun applyServerModuleConfiguration(
         sourceSets.commonMain {
             dependencies {
                 api(coreProject)
-                api("build.wallet.testbench:plugin-toolkit-server")
-
-                implementation("com.google.auto.service:auto-service-annotations:1.1.1")
+                api("build.wallet.testbench:plugin-toolkit-server:${BuildConfig.VERSION}")
             }
         }
     }
@@ -98,7 +96,7 @@ private fun applyClientModuleConfiguration(
         sourceSets.commonMain {
             dependencies {
                 api(coreProject)
-                api("build.wallet.testbench:plugin-toolkit-client")
+                api("build.wallet.testbench:plugin-toolkit-client:${BuildConfig.VERSION}")
             }
         }
     }

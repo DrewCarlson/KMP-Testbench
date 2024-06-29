@@ -13,6 +13,9 @@ import java.io.File
 
 private const val SERVICE_PLUGIN_FQN = "testbench.plugin.server.ServerPlugin"
 
+/**
+ * Scans for all classes and generates a `ServerPlugin` service file in the [servicesDir].
+ */
 class CustomPluginIrGenerationExtension(
     private val servicesDir: File,
 ) : IrGenerationExtension {
