@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.compose.jetbrains)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.serialization)
-    alias(libs.plugins.bomGenerator)
 }
 
 kotlin {
@@ -50,25 +49,6 @@ dependencies {
     implementation(libs.ktor.server.contentNegotiation)
     implementation(libs.ktor.server.compression)
     implementation(libs.ktor.server.callLogging)
-}
-
-bomGenerator {
-    configurations.runtimeClasspath
-        .get()
-        .resolvedConfiguration
-        .resolvedArtifacts
-        .forEach { artifact ->
-            val id = artifact.moduleVersion.id
-            includeDependency("${id.group}:${id.name}:${id.version}")
-        }
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            artifactId = "desktop-bom"
-        }
-    }
 }
 
 compose.desktop {

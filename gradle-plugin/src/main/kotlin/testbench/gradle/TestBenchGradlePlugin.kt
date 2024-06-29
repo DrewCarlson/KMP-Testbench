@@ -24,8 +24,6 @@ public class TestBenchGradlePlugin : Plugin<Project> {
         project.dependencies {
             // todo: specify dependency version
             add(testBenchRuntime.name, "build.wallet.testbench:desktop")
-            // todo: support bom locally without publishing
-            add(testBenchRuntime.name, platform("build.wallet.testbench:desktop-bom:1.0.0-SNAPSHOT"))
             pluginProjects.forEach { pluginProject ->
                 add(testBenchRuntime.name, pluginProject.server)
             }
