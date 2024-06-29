@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:standard:filename")
+
 package testbench.gradle.plugins
 
 import org.gradle.api.Project
@@ -8,25 +10,33 @@ import testbench.gradle.TEST_BENCH_PLUGIN_MODULE
 import testbench.gradle.TestBenchPluginGroup
 import testbench.gradle.subplugin.ServiceGeneratorSubplugin
 
-internal fun configureCustomPlugins(project: Project) {
+internal data class CustomPluginModuleGroup(
+    val client: List<Project>,
+    val server: Project,
+    val core: Project,
+)
+
+internal fun configureCustomPlugins(project: Project): List<CustomPluginModuleGroup> {
     val benchPluginModules = if (project.gradle.extraProperties.has(TEST_BENCH_PLUGIN_MODULE)) {
         @Suppress("UNCHECKED_CAST")
         project.gradle.extraProperties.get(TEST_BENCH_PLUGIN_MODULE) as List<TestBenchPluginGroup>
     } else {
-        return
+        return emptyList()
     }
 
-    benchPluginModules.forEach { moduleGroup ->
+    return benchPluginModules.map { moduleGroup ->
         val coreProject = project.project(moduleGroup.coreModulePath)
-        applyCoreModuleConfiguration(coreProject)
-        applyServerModuleConfiguration(project.project(moduleGroup.serverModulePath), coreProject)
-        moduleGroup.clientModulePaths.forEach { clientModulePath ->
-            applyClientModuleConfiguration(project.project(clientModulePath), coreProject)
-        }
+        CustomPluginModuleGroup(
+            core = applyCoreModuleConfiguration(coreProject),
+            server = applyServerModuleConfiguration(project.project(moduleGroup.serverModulePath), coreProject),
+            client = moduleGroup.clientModulePaths.map { clientModulePath ->
+                applyClientModuleConfiguration(project.project(clientModulePath), coreProject)
+            },
+        )
     }
 }
 
-private fun applyCoreModuleConfiguration(project: Project) {
+private fun applyCoreModuleConfiguration(project: Project): Project {
     project.pluginManager.apply("org.jetbrains.kotlin.plugin.serialization")
     project.configureKmp {
         applyDefaultHierarchyTemplate()
@@ -44,12 +54,13 @@ private fun applyCoreModuleConfiguration(project: Project) {
             }
         }
     }
+    return project
 }
 
 private fun applyServerModuleConfiguration(
     project: Project,
     coreProject: Project,
-) {
+): Project {
     project.pluginManager.apply("org.jetbrains.kotlin.plugin.compose")
     project.pluginManager.apply(ServiceGeneratorSubplugin::class.java)
     project.configureKmp {
@@ -69,12 +80,13 @@ private fun applyServerModuleConfiguration(
             }
         }
     }
+    return project
 }
 
 private fun applyClientModuleConfiguration(
     project: Project,
     coreProject: Project,
-) {
+): Project {
     project.configureKmp {
         applyDefaultHierarchyTemplate()
         jvm()
@@ -90,6 +102,7 @@ private fun applyClientModuleConfiguration(
             }
         }
     }
+    return project
 }
 
 private fun Project.configureKmp(block: KotlinMultiplatformExtension.() -> Unit) {

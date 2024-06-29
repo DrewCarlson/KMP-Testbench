@@ -1,11 +1,9 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 plugins {
     kotlin("jvm")
     alias(libs.plugins.compose.jetbrains)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.serialization)
-    alias(libs.plugins.shadow)
+    alias(libs.plugins.bomGenerator)
 }
 
 kotlin {
@@ -54,15 +52,28 @@ dependencies {
     implementation(libs.ktor.server.callLogging)
 }
 
-compose.desktop {
-    application {
-        mainClass = "testbench.MainKt"
+bomGenerator {
+    configurations.runtimeClasspath
+        .get()
+        .resolvedConfiguration
+        .resolvedArtifacts
+        .forEach { artifact ->
+            val id = artifact.moduleVersion.id
+            includeDependency("${id.group}:${id.name}:${id.version}")
+        }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            artifactId = "desktop-bom"
+        }
     }
 }
 
-tasks.withType<ShadowJar> {
-    manifest {
-        attributes["Main-Class"] = "testbench.MainKt"
+compose.desktop {
+    application {
+        mainClass = "testbench.MainKt"
     }
 }
 
