@@ -17,6 +17,7 @@ kotlin {
                 api(compose.ui)
                 api(projects.pluginToolkitCore)
                 api(libs.jewel)
+                api(compose.desktop.common)
             }
         }
     }
