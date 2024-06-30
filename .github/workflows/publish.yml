@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4
       - name: Setup JBR 17
-        uses: gmitch215/setup-java@e1f4c15facc0cf68c0e764340e374be034e4a859
+        uses: DrewCarlson/setup-java@e1f4c15facc0cf68c0e764340e374be034e4a859
         with:
           distribution: 'jetbrains'
           java-version: 17
