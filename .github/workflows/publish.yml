@@ -15,9 +15,10 @@ jobs:
       ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.ORG_GRADLE_PROJECT_mavenCentralUsername }}
     steps:
       - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4
-      - uses: actions/setup-java@v4
+      - name: Setup JBR 17
+        uses: gmitch215/setup-java@e1f4c15facc0cf68c0e764340e374be034e4a859
         with:
-          distribution: 'zulu'
+          distribution: 'jetbrains'
           java-version: 17
       - name: Cache Build files
         uses: actions/cache@v4
