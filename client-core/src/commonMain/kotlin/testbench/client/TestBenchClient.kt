@@ -10,8 +10,11 @@ import kotlinx.coroutines.flow.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
+import testbench.communication.ClientConnectMessage
 import testbench.communication.PluginMessage
+import testbench.device.DeviceInfo
 import testbench.plugin.client.ClientPlugin
+import kotlin.random.Random
 import kotlin.time.Duration.Companion.seconds
 
 public class TestBenchClient(
@@ -19,6 +22,9 @@ public class TestBenchClient(
 ) {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private val connected = MutableStateFlow(false)
+
+    @OptIn(ExperimentalStdlibApi::class)
+    private val sessionId = Random.Default.nextBytes(4).toHexString()
 
     private val http = HttpClient {
         defaultRequest {
@@ -59,12 +65,18 @@ public class TestBenchClient(
         http.ws {
             onConnected()
 
+            sendSerialized(
+                ClientConnectMessage(
+                    sessionId = sessionId,
+                    deviceInfo = DeviceInfo.host,
+                ),
+            )
+
             plugins.forEach { plugin ->
                 plugin.outgoingMessages
                     .onEach { content ->
                         val serializedContent = Json.encodeToString(serializer(plugin.serverMessageType), content)
-                        val message = PluginMessage(plugin.id, serializedContent)
-                        outgoing.send(Frame.Text(Json.encodeToString(message)))
+                        sendSerialized(PluginMessage(plugin.id, serializedContent))
                     }.launchIn(this)
             }
             awaitCancellation()

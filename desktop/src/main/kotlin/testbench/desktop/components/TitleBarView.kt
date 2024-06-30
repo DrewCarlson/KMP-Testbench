@@ -2,46 +2,47 @@ package testbench.desktop.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.jetbrains.jewel.ui.component.*
-import org.jetbrains.jewel.ui.painter.hints.Size
-import org.jetbrains.jewel.ui.painter.rememberResourcePainterProvider
 import org.jetbrains.jewel.window.DecoratedWindowScope
 import org.jetbrains.jewel.window.TitleBar
 import org.jetbrains.jewel.window.newFullscreenControls
 import testbench.desktop.resources.TestBenchIcons
+import testbench.testbench.desktop.components.DeviceInfoIcon
+import testbench.testbench.desktop.server.SessionData
 import java.awt.Desktop
 import java.net.URI
 
 @Composable
-fun DecoratedWindowScope.TitleBarView() {
+fun DecoratedWindowScope.TitleBarView(
+    activeSession: SessionData,
+    sessions: Map<String, SessionData>,
+    onSessionSelected: (sessionId: String) -> Unit,
+) {
     TitleBar(
         modifier = Modifier.newFullscreenControls(),
     ) {
         Row(Modifier.align(Alignment.Start)) {
             Dropdown(Modifier.height(30.dp), menuContent = {
-                /*MainViewModel.views.forEach {
+                sessions.forEach { (_, session) ->
                     selectableItem(
-                        selected = MainViewModel.currentView == it,
-                        onClick = {
-                            MainViewModel.currentView = it
-                        },
+                        selected = session.sessionId == activeSession.sessionId,
+                        onClick = { onSessionSelected(session.sessionId) },
                     ) {
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(4.dp),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            val painterProvider =
-                                rememberResourcePainterProvider(it.icon, StandaloneSampleIcons::class.java)
-                            val painter by painterProvider.getPainter(Size(20))
-                            Icon(painter, "icon", modifier = Modifier.size(20.dp))
-                            Text(it.title)
+                            DeviceInfoIcon(
+                                deviceInfo = session.deviceInfo,
+                                isConnected = session.isConnected,
+                            )
+                            Text(session.title)
                         }
                     }
-                }*/
+                }
             }) {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(3.dp),
@@ -51,24 +52,24 @@ fun DecoratedWindowScope.TitleBarView() {
                         horizontalArrangement = Arrangement.spacedBy(4.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        val painterProvider =
-                            rememberResourcePainterProvider(
-                                "icons/app_icon.svg",
-                                TestBenchIcons::class.java,
+                        if (activeSession.isDefault) {
+                            DeviceInfoIcon(deviceInfo = activeSession.deviceInfo)
+                            Text("(idle)")
+                        } else {
+                            DeviceInfoIcon(
+                                deviceInfo = activeSession.deviceInfo,
+                                isConnected = activeSession.isConnected,
                             )
-                        val painter by painterProvider.getPainter(Size(20))
-                        Icon(painter, "icon")
-                        Text("Test")
+                            Text(activeSession.title)
+                        }
                     }
                 }
             }
         }
 
-        Text(title)
-
         Row(Modifier.align(Alignment.End)) {
             Tooltip({
-                Text("Open Jewel Github repository")
+                Text("Open Github repository")
             }) {
                 IconButton(
                     modifier = Modifier

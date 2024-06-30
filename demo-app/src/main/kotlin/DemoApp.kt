@@ -36,6 +36,7 @@ fun main() = application {
         ) {
             var refresh by remember { mutableStateOf(0) }
             val coins by produceState(emptyList<CoinList>(), refresh) {
+                coingecko.getCoinById("bitcoin")
                 value = coingecko.getCoinList()
             }
 

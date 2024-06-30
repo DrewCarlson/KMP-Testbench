@@ -11,17 +11,16 @@ import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.ui.component.Icon
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.theme.colorPalette
-import testbench.LocalPluginRegistry
 import testbench.desktop.resources.TestBenchIcons
 import testbench.plugin.server.ServerPlugin
+import testbench.testbench.desktop.server.SessionData
 
 @Composable
 fun SidebarContainer(
+    activeSession: SessionData,
     modifier: Modifier = Modifier,
     onPluginSelected: (ServerPlugin<*, *>) -> Unit,
 ) {
-    val pluginRegistry = LocalPluginRegistry.current
-
     Box(
         modifier = modifier
             .background(JewelTheme.globalColors.panelBackground),
@@ -35,7 +34,7 @@ fun SidebarContainer(
         ) {
             Spacer(modifier = Modifier.size(0.dp))
 
-            pluginRegistry.plugins.forEach { (_, plugin) ->
+            activeSession.pluginRegistry.plugins.forEach { (_, plugin) ->
                 PluginRow(
                     name = plugin.name,
                     icon = "icons/${plugin.pluginIcon}.svg",

@@ -63,6 +63,7 @@ tasks.withType<JavaExec> {
             languageVersion = JavaLanguageVersion.of(17)
             vendor = JvmVendorSpec.JETBRAINS
         }
+        jvmArgs("-Xmx2048m")
         setExecutable(javaLauncher.map { it.executablePath.asFile.absolutePath }.get())
     }
 }

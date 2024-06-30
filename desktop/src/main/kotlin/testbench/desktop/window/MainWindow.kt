@@ -13,25 +13,41 @@ import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.ui.Orientation
 import org.jetbrains.jewel.ui.component.Divider
 import org.jetbrains.jewel.window.DecoratedWindow
-import testbench.desktop.components.FooterContainer
 import testbench.desktop.components.MainContentContainer
 import testbench.desktop.components.SidebarContainer
 import testbench.desktop.components.TitleBarView
 import testbench.plugin.server.ServerPlugin
+import testbench.testbench.desktop.server.SessionData
 
 @Composable
 @Preview
-fun MainWindow(onCloseRequest: () -> Unit) {
+fun MainWindow(
+    activeSession: SessionData,
+    sessions: Map<String, SessionData>,
+    onSessionSelected: (sessionId: String) -> Unit,
+    onCloseRequest: () -> Unit,
+) {
     var activePlugin by remember { mutableStateOf<ServerPlugin<*, *>?>(null) }
     val windowState = rememberWindowState(
         position = WindowPosition.Aligned(Alignment.Center),
     )
+    LaunchedEffect(activeSession) {
+        activePlugin = activeSession.pluginRegistry
+            .plugins
+            .firstNotNullOfOrNull { (_, value) ->
+                value.takeIf { it.id == activePlugin?.id }
+            }
+    }
     DecoratedWindow(
         onCloseRequest = onCloseRequest,
         title = "KMP Test Bench",
         state = windowState,
     ) {
-        TitleBarView()
+        TitleBarView(
+            activeSession = activeSession,
+            sessions = sessions,
+            onSessionSelected = onSessionSelected,
+        )
 
         Column(
             modifier = Modifier
@@ -47,6 +63,7 @@ fun MainWindow(onCloseRequest: () -> Unit) {
                         .width(200.dp)
                         .fillMaxHeight(),
                     onPluginSelected = { activePlugin = it },
+                    activeSession = activeSession,
                 )
                 Divider(
                     orientation = Orientation.Vertical,
@@ -58,8 +75,6 @@ fun MainWindow(onCloseRequest: () -> Unit) {
                     activePlugin = activePlugin,
                 )
             }
-
-            FooterContainer(modifier = Modifier.fillMaxWidth())
         }
     }
 }

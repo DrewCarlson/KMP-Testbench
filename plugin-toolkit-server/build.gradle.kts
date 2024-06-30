@@ -14,10 +14,15 @@ kotlin {
 
         commonMain {
             dependencies {
-                api(compose.ui)
                 api(projects.pluginToolkitCore)
+
+                api(libs.serialization.json)
+
                 api(libs.jewel)
-                api(compose.desktop.common)
+                api(compose.ui)
+                api(compose.desktop.common) {
+                    exclude(group = "org.jetbrains.compose.material")
+                }
             }
         }
     }

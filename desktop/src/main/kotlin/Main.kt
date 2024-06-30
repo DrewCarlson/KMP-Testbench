@@ -1,9 +1,6 @@
 package testbench
 
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.window.application
 import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.intui.standalone.theme.IntUiTheme
@@ -13,19 +10,16 @@ import org.jetbrains.jewel.intui.window.decoratedWindow
 import org.jetbrains.jewel.intui.window.styling.dark
 import org.jetbrains.jewel.ui.ComponentStyling
 import org.jetbrains.jewel.window.styling.TitleBarStyle
-import testbench.desktop.plugins.PluginRegistry
 import testbench.desktop.server.TestBenchServer
 import testbench.desktop.window.MainWindow
+import testbench.testbench.desktop.server.SessionHolder
 
-val LocalPluginRegistry = compositionLocalOf<PluginRegistry> { error("PluginRegistry not found!") }
+val LocalSessionHolder = compositionLocalOf<SessionHolder> { error("SessionHolder not found") }
 val LocalTestBenchServer = compositionLocalOf<TestBenchServer> { error("TestBenchServer not found!") }
 
 fun main() = application {
-    val pluginRegistry = remember {
-        PluginRegistry()
-    }
-
-    val server = remember { TestBenchServer(pluginRegistry) }
+    val sessionHolder = remember { SessionHolder() }
+    val server = remember { TestBenchServer(sessionHolder) }
 
     LaunchedEffect(Unit) {
         server.setupServer(8182)
@@ -33,7 +27,7 @@ fun main() = application {
     }
 
     CompositionLocalProvider(
-        LocalPluginRegistry provides pluginRegistry,
+        LocalSessionHolder provides sessionHolder,
         LocalTestBenchServer provides server,
     ) {
         IntUiTheme(
@@ -42,7 +36,12 @@ fun main() = application {
                 titleBarStyle = TitleBarStyle.dark(),
             ),
         ) {
+            val sessions by sessionHolder.sessions.collectAsState()
+            val activeSession by sessionHolder.activeSession.collectAsState()
             MainWindow(
+                activeSession = activeSession,
+                sessions = sessions,
+                onSessionSelected = sessionHolder::setActiveSession,
                 onCloseRequest = {
                     server.stopServer()
                     exitApplication()

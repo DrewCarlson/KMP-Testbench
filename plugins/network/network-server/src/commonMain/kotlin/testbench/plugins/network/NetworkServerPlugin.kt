@@ -10,10 +10,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.serialization.SerializationException
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonNull
+import kotlinx.serialization.json.JsonPrimitive
 import org.jetbrains.jewel.ui.Orientation
-import org.jetbrains.jewel.ui.component.Divider
-import org.jetbrains.jewel.ui.component.Text
+import org.jetbrains.jewel.ui.component.*
 import org.jetbrains.jewel.ui.util.thenIf
+import testbench.compose.JsonTreeViewer
 import testbench.plugin.server.ServerPlugin
 
 private data class NetworkEntryHolder(
@@ -48,9 +53,10 @@ public class NetworkServerPlugin :
 
     @Composable
     override fun renderPanel(modifier: Modifier) {
+        var searchQuery by remember { mutableStateOf("") }
         Box(modifier = modifier) {
             val entries by networkEntries.collectAsState(initial = emptyMap())
-            var selectedRequest by remember { mutableStateOf<String?>(null) }
+            var selectedRequest by remember(entries) { mutableStateOf<String?>(null) }
 
             Column(
                 modifier = Modifier
@@ -59,27 +65,58 @@ public class NetworkServerPlugin :
                     },
                 verticalArrangement = Arrangement.spacedBy(6.dp),
             ) {
+                Row(
+                    modifier = Modifier.padding(4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    TextField(
+                        modifier = Modifier.weight(1f, fill = true),
+                        value = searchQuery,
+                        onValueChange = { searchQuery = it },
+                        placeholder = { Text("Search...") },
+                        leadingIcon = {
+                            Icon(
+                                resource = "icons/search_dark.svg",
+                                contentDescription = null,
+                                iconClass = NetworkServerPlugin::class.java,
+                                modifier = Modifier.size(16.dp),
+                            )
+                        },
+                    )
+                    DefaultButton(
+                        onClick = { networkEntries.update { emptyMap() } },
+                    ) {
+                        Text("Clear")
+                    }
+                }
                 if (entries.isEmpty()) {
                     Text("waiting for requests")
                 }
-                Spacer(modifier = Modifier.size(0.dp))
-                entries.forEach { (id, entry) ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { selectedRequest = id }
-                            .padding(horizontal = 6.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                    ) {
-                        Text(
-                            text = entry.request.url,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                        Text(text = entry.request.method, maxLines = 1)
-                        Text(text = entry.response?.status?.toString() ?: "Pending", maxLines = 1)
+                entries
+                    .run {
+                        if (searchQuery.isNotBlank()) {
+                            filter { (_, value) -> value.request.url.contains(searchQuery, ignoreCase = true) }
+                        } else {
+                            this
+                        }
+                    }.forEach { (id, entry) ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { selectedRequest = id }
+                                .padding(horizontal = 6.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                        ) {
+                            Text(
+                                text = entry.request.url,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                            Text(text = entry.request.method, maxLines = 1)
+                            Text(text = entry.response?.status?.toString() ?: "Pending", maxLines = 1)
+                        }
                     }
-                }
                 Spacer(modifier = Modifier.size(0.dp))
             }
 
@@ -92,53 +129,24 @@ public class NetworkServerPlugin :
                         .width(350.dp)
                         .align(Alignment.CenterEnd),
                 ) {
-                    val scrollState = rememberScrollState()
                     Divider(
                         orientation = Orientation.Vertical,
                         modifier = Modifier.align(Alignment.CenterStart),
                     )
 
-                    Column(
+                    VerticalSplitLayout(
                         modifier = Modifier
-                            .fillMaxSize()
-                            .padding(4.dp)
-                            .verticalScroll(scrollState),
-                        verticalArrangement = Arrangement.spacedBy(6.dp),
-                    ) {
-                        Column {
-                            Text(
-                                text = "Request Headers",
-                                fontWeight = FontWeight.Bold,
-                            )
-
-                            requestData.headers.forEach { (key, value) ->
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                                ) {
-                                    Text(text = key)
-                                    Text(text = value.joinToString("\n"))
-                                }
-                            }
-
-                            Text(
-                                text = "Request Body",
-                                fontWeight = FontWeight.Bold,
-                            )
-
-                            Text(
-                                text = requestData.body ?: "<no content>",
-                            )
-                        }
-
-                        responseData?.let { responseData ->
-                            Column {
+                            .fillMaxSize(),
+                        first = { modifier ->
+                            Column(
+                                modifier = modifier,
+                            ) {
                                 Text(
-                                    text = "Response Headers",
+                                    text = "Request Headers",
                                     fontWeight = FontWeight.Bold,
                                 )
 
-                                responseData.headers.entries.take(4).forEach { (key, value) ->
+                                requestData.headers.forEach { (key, value) ->
                                     Row(
                                         modifier = Modifier.fillMaxWidth(),
                                         horizontalArrangement = Arrangement.spacedBy(6.dp),
@@ -147,26 +155,102 @@ public class NetworkServerPlugin :
                                         Text(text = value.joinToString("\n"))
                                     }
                                 }
+
                                 Text(
-                                    text = "Response Body",
+                                    text = "Request Body",
                                     fontWeight = FontWeight.Bold,
                                 )
 
                                 Text(
-                                    text = responseData.body ?: "<no content>",
+                                    text = requestData.body ?: "<no content>",
                                 )
                             }
-                        }
-                    }
 
-                    VerticalScrollbar(
-                        modifier = Modifier
-                            .align(Alignment.CenterEnd)
-                            .fillMaxHeight(),
-                        adapter = rememberScrollbarAdapter(scrollState),
+                            responseData?.let { responseData ->
+                                Column {
+                                    Text(
+                                        text = "Response Headers",
+                                        fontWeight = FontWeight.Bold,
+                                    )
+
+                                    responseData.headers.entries.take(4).forEach { (key, value) ->
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                                        ) {
+                                            Text(text = key)
+                                            Text(text = value.joinToString("\n"))
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        second = { modifier ->
+                            var viewingResponse by remember { mutableStateOf(true) }
+                            Column(
+                                modifier = modifier,
+                                verticalArrangement = Arrangement.spacedBy(6.dp),
+                            ) {
+                                TabStrip(
+                                    tabs = listOf(
+                                        TabData.Default(
+                                            selected = viewingResponse,
+                                            closable = false,
+                                            onClick = { viewingResponse = true },
+                                            content = { tabState ->
+                                                SimpleTabContent(
+                                                    label = "Response Body",
+                                                    state = tabState,
+                                                )
+                                            },
+                                        ),
+                                        TabData.Default(
+                                            selected = !viewingResponse,
+                                            closable = false,
+                                            onClick = { viewingResponse = false },
+                                            content = { tabState ->
+                                                SimpleTabContent(
+                                                    label = "Request Body",
+                                                    state = tabState,
+                                                )
+                                            },
+                                        ),
+                                    ),
+                                )
+
+                                val body = if (viewingResponse) {
+                                    responseData?.body
+                                } else {
+                                    requestData.body
+                                }
+
+                                BodyContainer(
+                                    body = body,
+                                )
+                            }
+                        },
                     )
                 }
             }
         }
+    }
+
+    @Composable
+    private fun BodyContainer(body: String? = null) {
+        val json = try {
+            if (body == null) {
+                JsonNull
+            } else {
+                Json.decodeFromString<JsonElement>(body)
+            }
+        } catch (e: SerializationException) {
+            JsonPrimitive(body)
+        }
+        JsonTreeViewer(
+            rootElement = json,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(400.dp),
+        )
     }
 }

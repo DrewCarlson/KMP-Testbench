@@ -7,6 +7,7 @@ pluginManagement {
         mavenCentral()
     }
 
+    includeBuild("build-logic")
     includeBuild("gradle-plugin")
 }
 

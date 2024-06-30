@@ -1,10 +1,8 @@
 plugins {
-    kotlin("multiplatform")
+    id("all-targets")
 }
 
 kotlin {
-    jvm()
-
     sourceSets {
         all {
             explicitApi()

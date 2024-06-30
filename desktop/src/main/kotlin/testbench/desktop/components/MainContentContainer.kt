@@ -7,8 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import org.jetbrains.jewel.foundation.theme.JewelTheme
-import org.jetbrains.jewel.ui.component.Text
 import testbench.plugin.server.ServerPlugin
+import testbench.testbench.desktop.components.WelcomePanel
 
 @Composable
 fun MainContentContainer(
@@ -20,11 +20,8 @@ fun MainContentContainer(
             .background(JewelTheme.globalColors.panelBackground),
         contentAlignment = Alignment.Center,
     ) {
-        if (activePlugin == null) {
-            // TODO: Better default welcome screen
-            Text(text = "Welcome to KMP Test Bench!")
-        } else {
-            activePlugin.renderPanel(Modifier.fillMaxSize())
-        }
+        activePlugin
+            ?.renderPanel(Modifier.fillMaxSize())
+            ?: WelcomePanel()
     }
 }

@@ -11,19 +11,22 @@ import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
-import io.ktor.websocket.*
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.isActive
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import org.slf4j.LoggerFactory
 import org.slf4j.event.Level
+import testbench.communication.ClientConnectMessage
 import testbench.communication.PluginMessage
 import testbench.desktop.plugins.PluginRegistry
 import testbench.plugin.server.ServerPlugin
+import testbench.testbench.desktop.server.SessionData
+import testbench.testbench.desktop.server.SessionHolder
 import java.time.Duration
 
 class TestBenchServer(
-    private val pluginRegistry: PluginRegistry,
+    private val sessionHolder: SessionHolder,
 ) {
     private lateinit var server: ApplicationEngine
     private val serverStarted = MutableStateFlow(false)
@@ -52,22 +55,54 @@ class TestBenchServer(
             }
             routing {
                 webSocket {
-                    incoming
-                        .receiveAsFlow()
-                        .filterIsInstance<Frame.Text>()
-                        .dispatchPluginMessages()
+                    val connectMessage = receiveDeserialized<ClientConnectMessage>()
+
+                    val session = sessionHolder.updateOrCreate(
+                        connectMessage.sessionId,
+                        update = { it.copy(isConnected = true) },
+                    ) {
+                        SessionData(
+                            sessionId = connectMessage.sessionId,
+                            isConnected = true,
+                            pluginRegistry = PluginRegistry(),
+                            deviceInfo = connectMessage.deviceInfo,
+                        )
+                    }
+
+                    if (sessionHolder.activeSession.value.isDefault) {
+                        sessionHolder.setActiveSession(session.sessionId)
+                        sessionHolder.remove("default")
+                    }
+
+                    try {
+                        while (isActive) {
+                            val message = receiveDeserialized<PluginMessage>()
+                            dispatchPluginMessage(session, message)
+                        }
+                    } finally {
+                        sessionHolder.update(connectMessage.sessionId) {
+                            it.copy(isConnected = false)
+                        }
+                    }
                 }
             }
         }
     }
 
-    @Suppress("UNCHECKED_CAST")
-    private suspend fun Flow<Frame.Text>.dispatchPluginMessages() {
-        collect { frame ->
-            val message = Json.decodeFromString<PluginMessage>(frame.readText())
-            val plugin = (pluginRegistry.plugins[message.pluginId] ?: return@collect) as ServerPlugin<Any, Any>
-            val content = Json.decodeFromString(serializer(plugin.serverMessageType), message.content)
-            plugin.handleMessage(checkNotNull(content) { "Failed to process message (plugin:${plugin.id}): $message" })
+    private fun dispatchPluginMessage(
+        session: SessionData,
+        message: PluginMessage,
+    ) {
+        @Suppress("UNCHECKED_CAST")
+        val plugin = session.pluginRegistry.plugins[message.pluginId] as? ServerPlugin<Any, Any>
+        if (plugin != null) {
+            val content =
+                Json.decodeFromString(serializer(plugin.serverMessageType), message.content)
+            plugin.handleMessage(
+                checkNotNull(content) {
+                    "Failed to process message (plugin:${plugin.id}): ${message.content}"
+                },
+            )
         }
     }
 

@@ -1,0 +1,13 @@
+language = Objective-C
+
+---
+#include <TargetConditionals.h>
+#include <stdbool.h>
+
+bool isSimulator() {
+#if TARGET_OS_SIMULATOR
+  return true;
+#else
+  return false;
+#endif
+}

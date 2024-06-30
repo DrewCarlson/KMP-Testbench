@@ -23,6 +23,8 @@ kotlin-gradlePlugin-api = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin-
 kotlin-compilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version = "8.2.0" }
 
+gradleConventions = { module = "org.gradle.kotlin:gradle-kotlin-dsl-conventions", version = "0.9.0" }
+
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
