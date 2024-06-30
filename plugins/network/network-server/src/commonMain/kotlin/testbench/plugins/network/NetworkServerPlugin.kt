@@ -74,7 +74,12 @@ public class NetworkServerPlugin :
                         modifier = Modifier.weight(1f, fill = true),
                         value = searchQuery,
                         onValueChange = { searchQuery = it },
-                        placeholder = { Text("Search...") },
+                        placeholder = {
+                            Text(
+                                text = "Search...",
+                                maxLines = 1,
+                            )
+                        },
                         leadingIcon = {
                             Icon(
                                 resource = "icons/search_dark.svg",
@@ -87,7 +92,10 @@ public class NetworkServerPlugin :
                     DefaultButton(
                         onClick = { networkEntries.update { emptyMap() } },
                     ) {
-                        Text("Clear")
+                        Text(
+                            text = "Clear",
+                            maxLines = 1,
+                        )
                     }
                 }
                 if (entries.isEmpty()) {
@@ -106,15 +114,22 @@ public class NetworkServerPlugin :
                                 .fillMaxWidth()
                                 .clickable { selectedRequest = id }
                                 .padding(horizontal = 6.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
                         ) {
                             Text(
                                 text = entry.request.url,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.weight(1f, fill = true),
                             )
-                            Text(text = entry.request.method, maxLines = 1)
-                            Text(text = entry.response?.status?.toString() ?: "Pending", maxLines = 1)
+                            Text(
+                                text = entry.request.method,
+                                maxLines = 1,
+                            )
+                            Text(
+                                text = entry.response?.status?.toString() ?: "...",
+                                maxLines = 1,
+                            )
                         }
                     }
                 Spacer(modifier = Modifier.size(0.dp))
@@ -156,18 +171,7 @@ public class NetworkServerPlugin :
                                     }
                                 }
 
-                                Text(
-                                    text = "Request Body",
-                                    fontWeight = FontWeight.Bold,
-                                )
-
-                                Text(
-                                    text = requestData.body ?: "<no content>",
-                                )
-                            }
-
-                            responseData?.let { responseData ->
-                                Column {
+                                responseData?.let { responseData ->
                                     Text(
                                         text = "Response Headers",
                                         fontWeight = FontWeight.Bold,
