@@ -13,6 +13,7 @@ import kotlinx.serialization.serializer
 import testbench.communication.ClientConnectMessage
 import testbench.communication.PluginMessage
 import testbench.device.DeviceInfo
+import testbench.device.DevicePlatform
 import testbench.plugin.client.ClientPlugin
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.seconds
@@ -28,7 +29,11 @@ public class TestBenchClient(
 
     private val http = HttpClient {
         defaultRequest {
-            url(host = "127.0.0.1", port = 8182)
+            if (DeviceInfo.host.platform == DevicePlatform.ANDROID) {
+                url(host = "10.0.2.2", port = 8182)
+            } else {
+                url(host = "127.0.0.1", port = 8182)
+            }
         }
         WebSockets {
             pingInterval = 60
