@@ -15,10 +15,10 @@ public open class TestBenchGradleSettingsExtension(
     ) {
         val config = TestBenchIncludePluginBuilder().apply(block)
         val baseName = pluginPath.substringAfterLast(":")
-        val newModulePaths = if (config.clientVariations.isEmpty()) {
-            (PLUGIN_MODULE_NAMES + "client")
-        } else {
-            (PLUGIN_MODULE_NAMES + config.clientVariations.map { "client-$it" })
+        val newModulePaths = when {
+            config.serverOnly -> listOf("server")
+            config.clientVariations.isEmpty() -> PLUGIN_MODULE_NAMES + "client"
+            else -> PLUGIN_MODULE_NAMES + config.clientVariations.map { "client-$it" }
         }.map { "$pluginPath:$baseName-$it" }
 
         newModulePaths.forEach { modulePath ->
@@ -39,11 +39,19 @@ public open class TestBenchGradleSettingsExtension(
             emptyList()
         }
 
-        val new = TestBenchPluginGroup(
-            coreModulePath = newModulePaths[0],
-            serverModulePath = newModulePaths[1],
-            clientModulePaths = newModulePaths.drop(2),
-        )
+        val new = if (config.serverOnly) {
+            TestBenchPluginGroup(
+                coreModulePath = null,
+                serverModulePath = newModulePaths[0],
+                clientModulePaths = emptyList(),
+            )
+        } else {
+            TestBenchPluginGroup(
+                coreModulePath = newModulePaths[0],
+                serverModulePath = newModulePaths[1],
+                clientModulePaths = newModulePaths.drop(2),
+            )
+        }
         settings.gradle.extraProperties.set(TEST_BENCH_PLUGIN_MODULE, existing + new)
     }
 }
@@ -51,13 +59,15 @@ public open class TestBenchGradleSettingsExtension(
 public class TestBenchIncludePluginBuilder {
     internal val clientVariations = mutableListOf<String>()
 
+    public var serverOnly: Boolean = false
+
     public fun clientVariations(vararg names: String) {
         clientVariations.addAll(names)
     }
 }
 
 internal data class TestBenchPluginGroup(
-    val coreModulePath: String,
+    val coreModulePath: String?,
     val clientModulePaths: List<String>,
     val serverModulePath: String,
 )

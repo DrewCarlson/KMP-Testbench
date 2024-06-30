@@ -14,7 +14,7 @@ import testbench.gradle.subplugin.ServiceGeneratorSubplugin
 internal data class CustomPluginModuleGroup(
     val client: List<Project>,
     val server: Project,
-    val core: Project,
+    val core: Project?,
 )
 
 internal fun configureCustomPlugins(project: Project): List<CustomPluginModuleGroup> {
@@ -26,9 +26,9 @@ internal fun configureCustomPlugins(project: Project): List<CustomPluginModuleGr
     }
 
     return benchPluginModules.map { moduleGroup ->
-        val coreProject = project.project(moduleGroup.coreModulePath)
+        val coreProject = moduleGroup.coreModulePath?.let(project::project)
         CustomPluginModuleGroup(
-            core = applyCoreModuleConfiguration(coreProject),
+            core = coreProject?.apply(::applyCoreModuleConfiguration),
             server = applyServerModuleConfiguration(project.project(moduleGroup.serverModulePath), coreProject),
             client = moduleGroup.clientModulePaths.map { clientModulePath ->
                 applyClientModuleConfiguration(project.project(clientModulePath), coreProject)
@@ -59,7 +59,7 @@ private fun applyCoreModuleConfiguration(project: Project): Project {
 
 private fun applyServerModuleConfiguration(
     project: Project,
-    coreProject: Project,
+    coreProject: Project?,
 ): Project {
     project.pluginManager.apply("org.jetbrains.kotlin.plugin.compose")
     project.pluginManager.apply(ServiceGeneratorSubplugin::class.java)
@@ -73,7 +73,7 @@ private fun applyServerModuleConfiguration(
 
         sourceSets.commonMain {
             dependencies {
-                api(coreProject)
+                coreProject?.let { api(it) }
                 api("build.wallet.testbench:plugin-toolkit-server:${BuildConfig.VERSION}")
             }
         }
@@ -83,7 +83,7 @@ private fun applyServerModuleConfiguration(
 
 private fun applyClientModuleConfiguration(
     project: Project,
-    coreProject: Project,
+    coreProject: Project?,
 ): Project {
     project.configureKmp {
         applyDefaultHierarchyTemplate()
@@ -95,7 +95,9 @@ private fun applyClientModuleConfiguration(
 
         sourceSets.commonMain {
             dependencies {
-                api(coreProject)
+                if (coreProject != null) {
+                    api(coreProject)
+                }
                 api("build.wallet.testbench:plugin-toolkit-client:${BuildConfig.VERSION}")
             }
         }
