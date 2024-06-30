@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 plugins {
     alias(libs.plugins.serialization)
     id("all-targets")
+    alias(libs.plugins.mavenPublish)
 }
 
 kotlin {

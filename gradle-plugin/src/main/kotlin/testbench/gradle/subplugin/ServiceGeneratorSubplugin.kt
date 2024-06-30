@@ -10,10 +10,10 @@ import testbench.gradle.BuildConfig
 public class ServiceGeneratorSubplugin : KotlinCompilerPluginSupportPlugin {
     override fun isApplicable(kotlinCompilation: KotlinCompilation<*>): Boolean = true
 
-    override fun getCompilerPluginId(): String = "build.wallet.service.compiler"
+    override fun getCompilerPluginId(): String = "org.drewcarlson.service.compiler"
 
     override fun getPluginArtifact(): SubpluginArtifact = SubpluginArtifact(
-        groupId = "build.wallet.testbench",
+        groupId = "org.drewcarlson",
         artifactId = "service-compiler-plugin",
         version = BuildConfig.VERSION,
     )

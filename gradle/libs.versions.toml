@@ -15,6 +15,8 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 compose-jetbrains = { id = "org.jetbrains.compose", version.ref = "compose" }
 buildKonfig = { id = "com.codingfeline.buildkonfig", version = "0.15.1" }
 gradleBuildConfig = { id = "com.github.gmazzo.buildconfig", version = "5.3.5" }
+mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.29.0" }
+android-library = { id = "com.android.library", version = "8.2.0" }
 
 [libraries]
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }

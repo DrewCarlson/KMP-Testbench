@@ -3,6 +3,7 @@ plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
     alias(libs.plugins.gradleBuildConfig)
+    alias(libs.plugins.mavenPublish)
 }
 
 kotlin {
@@ -10,11 +11,13 @@ kotlin {
 }
 
 dependencies {
-    // TODO: These should be compileOnly dependencies but for some reason,
-    //  likely the composite build setup, they must be provided via this
-    //  gradle-plugin project.
-    implementation(libs.android.gradlePlugin)
-    implementation(libs.kotlin.gradlePlugin)
+    if (gradle.parent == null) {
+        compileOnly(libs.android.gradlePlugin)
+        compileOnly(libs.kotlin.gradlePlugin)
+    } else {
+        implementation(libs.android.gradlePlugin)
+        implementation(libs.kotlin.gradlePlugin)
+    }
     compileOnly(libs.kotlin.gradlePlugin.api)
     compileOnly(libs.kotlin.stdlib)
 }
@@ -28,11 +31,11 @@ buildConfig {
 gradlePlugin {
     plugins {
         create("testbenchPlugin") {
-            id = "build.wallet.kmp-test-bench"
+            id = "org.drewcarlson.kmp-test-bench"
             implementationClass = "testbench.gradle.TestBenchGradlePlugin"
         }
         create("testbenchSettingsPlugin") {
-            id = "build.wallet.kmp-test-bench-settings"
+            id = "org.drewcarlson.kmp-test-bench-settings"
             implementationClass = "testbench.gradle.TestBenchGradleSettingsPlugin"
         }
     }

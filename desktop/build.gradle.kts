@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.compose.jetbrains)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.serialization)
+    alias(libs.plugins.mavenPublish)
 }
 
 kotlin {

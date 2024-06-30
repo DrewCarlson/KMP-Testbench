@@ -49,7 +49,7 @@ private fun applyCoreModuleConfiguration(project: Project): Project {
 
         sourceSets.commonMain {
             dependencies {
-                api("build.wallet.testbench:plugin-toolkit-core:${BuildConfig.VERSION}")
+                api("org.drewcarlson:plugin-toolkit-core:${BuildConfig.VERSION}")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:${BuildConfig.SERIALIZATION_VERSION}")
             }
         }
@@ -74,7 +74,7 @@ private fun applyServerModuleConfiguration(
         sourceSets.commonMain {
             dependencies {
                 coreProject?.let { api(it) }
-                api("build.wallet.testbench:plugin-toolkit-server:${BuildConfig.VERSION}")
+                api("org.drewcarlson:plugin-toolkit-server:${BuildConfig.VERSION}")
             }
         }
     }
@@ -98,7 +98,7 @@ private fun applyClientModuleConfiguration(
                 if (coreProject != null) {
                     api(coreProject)
                 }
-                api("build.wallet.testbench:plugin-toolkit-client:${BuildConfig.VERSION}")
+                api("org.drewcarlson:plugin-toolkit-client:${BuildConfig.VERSION}")
             }
         }
     }

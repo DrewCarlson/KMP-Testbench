@@ -27,7 +27,7 @@ public class TestBenchGradlePlugin : Plugin<Project> {
             }
         }
         project.dependencies {
-            add(testBenchRuntime.name, "build.wallet.testbench:desktop:${BuildConfig.VERSION}")
+            add(testBenchRuntime.name, "org.drewcarlson:desktop:${BuildConfig.VERSION}")
             pluginProjects.forEach { pluginProject ->
                 add(testBenchRuntime.name, pluginProject.server)
             }

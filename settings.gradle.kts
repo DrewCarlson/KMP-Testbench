@@ -1,5 +1,3 @@
-import testbench.gradle.TestBenchGradleSettingsExtension
-
 pluginManagement {
     repositories {
         google()
@@ -28,15 +26,24 @@ include(
 
 includeBuild("gradle-plugin") {
     dependencySubstitution {
-        substitute(module("build.wallet:gradle-plugin")).using(project(":"))
+        substitute(module("org.drewcarlson:gradle-plugin")).using(project(":"))
+    }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+        google()
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        maven("https://packages.jetbrains.team/maven/p/kpm/public/")
     }
 }
 
 plugins {
-    id("build.wallet.kmp-test-bench-settings")
+    id("org.drewcarlson.kmp-test-bench-settings")
 }
 
-configure<TestBenchGradleSettingsExtension> {
+testbench {
     includePlugin(":plugins:logs")
     includePlugin(":plugins:databases")
     includePlugin(":plugins:preferences")

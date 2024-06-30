@@ -7,7 +7,7 @@ plugins {
 }
 
 configure<LibraryExtension> {
-    namespace = "build.wallet.${project.name.replace("-", "")}"
+    namespace = "org.drewcarlson.${project.name.replace("-", "")}"
     compileSdk = 34
     defaultConfig {
         minSdk = 23

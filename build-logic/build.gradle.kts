@@ -3,8 +3,8 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.kotlin.gradlePlugin)
     implementation(libs.gradleConventions)
+    implementation(libs.kotlin.gradlePlugin)
     implementation(libs.android.gradlePlugin)
 }
 
