@@ -7,13 +7,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import org.jetbrains.jewel.foundation.theme.JewelTheme
-import testbench.plugin.server.ServerPlugin
+import testbench.plugin.desktop.DesktopPlugin
 import testbench.testbench.desktop.components.WelcomePanel
 
 @Composable
 fun MainContentContainer(
     modifier: Modifier = Modifier,
-    activePlugin: ServerPlugin<*, *>?,
+    activePlugin: DesktopPlugin<*, *>?,
 ) {
     Box(
         modifier = modifier

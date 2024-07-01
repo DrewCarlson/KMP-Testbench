@@ -23,7 +23,7 @@ class TestBenchCommandLineProcessor : CommandLineProcessor {
             )
     }
 
-    override val pluginId: String = "org.drewcarlson.service.compiler"
+    override val pluginId: String = "org.drewcarlson.testbench.service.compiler"
 
     override val pluginOptions: Collection<AbstractCliOption> =
         listOf(

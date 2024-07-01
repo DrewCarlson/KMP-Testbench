@@ -7,7 +7,7 @@ plugins {
 }
 
 configure<LibraryExtension> {
-    namespace = "org.drewcarlson.${project.name.replace("-", "")}"
+    namespace = "org.drewcarlson.testbench.${project.name.replace("-", "")}"
     compileSdk = 34
     defaultConfig {
         minSdk = 23

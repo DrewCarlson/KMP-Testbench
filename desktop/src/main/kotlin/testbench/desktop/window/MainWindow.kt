@@ -16,7 +16,7 @@ import org.jetbrains.jewel.window.DecoratedWindow
 import testbench.desktop.components.MainContentContainer
 import testbench.desktop.components.SidebarContainer
 import testbench.desktop.components.TitleBarView
-import testbench.plugin.server.ServerPlugin
+import testbench.plugin.desktop.DesktopPlugin
 import testbench.testbench.desktop.server.SessionData
 
 @Composable
@@ -27,7 +27,7 @@ fun MainWindow(
     onSessionSelected: (sessionId: String) -> Unit,
     onCloseRequest: () -> Unit,
 ) {
-    var activePlugin by remember { mutableStateOf<ServerPlugin<*, *>?>(null) }
+    var activePlugin by remember { mutableStateOf<DesktopPlugin<*, *>?>(null) }
     val windowState = rememberWindowState(
         position = WindowPosition.Aligned(Alignment.Center),
     )

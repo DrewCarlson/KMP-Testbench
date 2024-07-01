@@ -6,7 +6,8 @@ pluginManagement {
     }
 
     includeBuild("build-logic")
-    includeBuild("gradle-plugin")
+    includeBuild("gradle-plugin-settings")
+    includeBuild("gradle-plugin-project")
 }
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
@@ -19,14 +20,19 @@ include(
     ":client-core",
     ":plugin-toolkit-core",
     ":plugin-toolkit-client",
-    ":plugin-toolkit-server",
+    ":plugin-toolkit-desktop",
     ":plugins",
     ":service-compiler-plugin",
 )
 
-includeBuild("gradle-plugin") {
+includeBuild("gradle-plugin-settings") {
     dependencySubstitution {
-        substitute(module("org.drewcarlson:gradle-plugin")).using(project(":"))
+        substitute(module("org.drewcarlson.testbench:gradle-plugin-settings")).using(project(":"))
+    }
+}
+includeBuild("gradle-plugin-project") {
+    dependencySubstitution {
+        substitute(module("org.drewcarlson.testbench:gradle-plugin-project")).using(project(":"))
     }
 }
 
@@ -40,7 +46,7 @@ dependencyResolutionManagement {
 }
 
 plugins {
-    id("org.drewcarlson.kmp-test-bench-settings")
+    id("org.drewcarlson.testbench.plugin-toolkit")
 }
 
 testbench {

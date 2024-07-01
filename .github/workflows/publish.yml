@@ -33,9 +33,14 @@ jobs:
         with:
           arguments: clean publishAllPublicationsToMavenCentralRepository
       - uses: gradle/gradle-build-action@v3.3.2
-        name: Publish Gradle Plugin
+        name: Publish Gradle Settings Plugin
         with:
-          working-directory: "gradle-plugin"
+          working-directory: "gradle-plugin-settings"
+          arguments: clean publishAllPublicationsToMavenCentralRepository
+      - uses: gradle/gradle-build-action@v3.3.2
+        name: Publish Gradle Project Plugin
+        with:
+          working-directory: "gradle-plugin-project"
           arguments: clean publishAllPublicationsToMavenCentralRepository
 
   publish-docs:

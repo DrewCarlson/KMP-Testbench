@@ -19,11 +19,11 @@ kotlin {
 }
 
 dependencies {
-    implementation(projects.pluginToolkitServer)
-    implementation(projects.plugins.network.networkServer)
-    implementation(projects.plugins.logs.logsServer)
-    implementation(projects.plugins.preferences.preferencesServer)
-    implementation(projects.plugins.databases.databasesServer)
+    implementation(projects.pluginToolkitDesktop)
+    implementation(projects.plugins.network.networkDesktop)
+    implementation(projects.plugins.logs.logsDesktop)
+    implementation(projects.plugins.preferences.preferencesDesktop)
+    implementation(projects.plugins.databases.databasesDesktop)
 
     implementation(compose.desktop.currentOs) {
         exclude(group = "org.jetbrains.compose.material")

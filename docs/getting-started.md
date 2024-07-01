@@ -6,27 +6,19 @@ Include the Desktop application plugin in your root `build.gradle.kts`:
 
 ```kotlin
 plugins {
-  id("build.wallet.kmp-test-bench") version "{{ lib_version }}"
+  id("build.wallet.testbench") version "{{ lib_version }}"
 }
+```
 
+Optional configuration:
+```kotlin
 testbench {
   // ...
 }
 ```
 
-(optional) Add Custom bench plugins in `settings.gradle.kts`
+## Run Test Bench
 
-```
-plugins {
-  id("build.wallet.kmp-test-bench-settings") version "{{ lib_version }}"
-}
-
-testbench {
-  includePlugin(":plugins:logs")
-  includePlugin(":plugins:databases")
-  includePlugin(":plugins:preferences")
-  includePlugin(":plugins:network") {
-      clientVariations("ktor", "okhttp", "platform")
-  }
-}
+```bash
+./gradlew runTestbench
 ```

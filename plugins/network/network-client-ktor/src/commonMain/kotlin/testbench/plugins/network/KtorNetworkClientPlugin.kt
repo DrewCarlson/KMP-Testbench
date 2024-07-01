@@ -24,7 +24,7 @@ public class KtorNetworkClientPlugin :
 
     override val outgoingMessages: Flow<NetworkPluginMessage> = messageQueue.receiveAsFlow()
 
-    override fun handleMessage(message: Unit) {
+    override suspend fun handleMessage(message: Unit) {
     }
 
     private val ktorPlugin: io.ktor.client.plugins.api.ClientPlugin<Unit> =

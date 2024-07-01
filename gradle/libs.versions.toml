@@ -6,6 +6,7 @@ serialization = "1.7.0"
 ktorio = "2.3.12"
 datetime = "0.6.0"
 jewel = "0.19.6"
+jvmTarget = "17"
 
 [plugins]
 multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }

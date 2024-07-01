@@ -11,10 +11,10 @@ import org.jetbrains.kotlin.ir.util.isInterface
 import org.jetbrains.kotlin.name.FqName
 import java.io.File
 
-private const val SERVICE_PLUGIN_FQN = "testbench.plugin.server.ServerPlugin"
+private const val SERVICE_PLUGIN_FQN = "testbench.plugin.desktop.DesktopPlugin"
 
 /**
- * Scans for all classes and generates a `ServerPlugin` service file in the [servicesDir].
+ * Scans for all classes and generates a `DesktopPlugin` service file in the [servicesDir].
  */
 class CustomPluginIrGenerationExtension(
     private val servicesDir: File,

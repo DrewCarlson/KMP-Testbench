@@ -12,14 +12,14 @@ import org.jetbrains.jewel.ui.component.Icon
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.theme.colorPalette
 import testbench.desktop.resources.TestBenchIcons
-import testbench.plugin.server.ServerPlugin
+import testbench.plugin.desktop.DesktopPlugin
 import testbench.testbench.desktop.server.SessionData
 
 @Composable
 fun SidebarContainer(
     activeSession: SessionData,
     modifier: Modifier = Modifier,
-    onPluginSelected: (ServerPlugin<*, *>) -> Unit,
+    onPluginSelected: (DesktopPlugin<*, *>) -> Unit,
 ) {
     Box(
         modifier = modifier

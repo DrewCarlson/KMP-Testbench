@@ -8,7 +8,7 @@ plugins {
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.serialization) apply false
     alias(libs.plugins.mavenPublish) apply false
-    id("org.drewcarlson.kmp-test-bench")
+    id("org.drewcarlson.testbench")
 }
 
 project(":plugins").subprojects {
@@ -20,13 +20,13 @@ project(":plugins").subprojects {
 subprojects {
     configurations.configureEach {
         resolutionStrategy.dependencySubstitution {
-            substitute(module("org.drewcarlson:plugin-toolkit-core"))
+            substitute(module("org.drewcarlson.testbench:plugin-toolkit-core"))
                 .using(project(":plugin-toolkit-core"))
-            substitute(module("org.drewcarlson:plugin-toolkit-client"))
+            substitute(module("org.drewcarlson.testbench:plugin-toolkit-client"))
                 .using(project(":plugin-toolkit-client"))
-            substitute(module("org.drewcarlson:plugin-toolkit-server"))
-                .using(project(":plugin-toolkit-server"))
-            substitute(module("org.drewcarlson:service-compiler-plugin"))
+            substitute(module("org.drewcarlson.testbench:plugin-toolkit-desktop"))
+                .using(project(":plugin-toolkit-desktop"))
+            substitute(module("org.drewcarlson.testbench:service-compiler-plugin"))
                 .using(project(":service-compiler-plugin"))
         }
     }

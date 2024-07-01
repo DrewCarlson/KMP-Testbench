@@ -13,6 +13,7 @@ import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import org.slf4j.LoggerFactory
@@ -20,7 +21,7 @@ import org.slf4j.event.Level
 import testbench.communication.ClientConnectMessage
 import testbench.communication.PluginMessage
 import testbench.desktop.plugins.PluginRegistry
-import testbench.plugin.server.ServerPlugin
+import testbench.plugin.desktop.DesktopPlugin
 import testbench.testbench.desktop.server.SessionData
 import testbench.testbench.desktop.server.SessionHolder
 import java.time.Duration
@@ -89,21 +90,23 @@ class TestBenchServer(
         }
     }
 
-    private fun dispatchPluginMessage(
+    private suspend fun DefaultWebSocketServerSession.dispatchPluginMessage(
         session: SessionData,
         message: PluginMessage,
     ) {
         @Suppress("UNCHECKED_CAST")
-        val plugin = session.pluginRegistry.plugins[message.pluginId] as? ServerPlugin<Any, Any>
-        if (plugin != null) {
-            val content =
-                Json.decodeFromString(serializer(plugin.serverMessageType), message.content)
-            plugin.handleMessage(
-                checkNotNull(content) {
-                    "Failed to process message (plugin:${plugin.id}): ${message.content}"
-                },
-            )
+        val plugin = session.pluginRegistry.plugins[message.pluginId] as? DesktopPlugin<Any, Any>
+        if (plugin == null) {
+            call.application.log.warn("Received unhandled plugin message: $message")
+            return
         }
+
+        val content =
+            Json.decodeFromString(serializer(plugin.serverMessageType), message.content)
+        val typedContent = checkNotNull(content) {
+            "Failed to process message (plugin:${plugin.id}): ${message.content}"
+        }
+        launch { plugin.handleMessage(typedContent) }
     }
 
     fun startSever() {
