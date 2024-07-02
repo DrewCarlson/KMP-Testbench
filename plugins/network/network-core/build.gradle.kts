@@ -1,3 +1,7 @@
+plugins {
+    id("publish-library")
+}
+
 kotlin {
     sourceSets {
         commonMain {

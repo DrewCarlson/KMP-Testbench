@@ -1,0 +1,4 @@
+public final class testbench/client/TestBenchClient {
+	public fun <init> (Ljava/util/List;)V
+}
+

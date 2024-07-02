@@ -1,0 +1,12 @@
+public abstract interface class testbench/plugin/client/ClientPlugin : testbench/plugin/BenchPlugin {
+	public abstract fun getOutgoingMessages ()Lkotlinx/coroutines/flow/Flow;
+	public abstract fun handleMessage (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class testbench/plugin/client/ClientPlugin$DefaultImpls {
+	public static fun getClientMessageType (Ltestbench/plugin/client/ClientPlugin;)Lkotlin/reflect/KType;
+	public static fun getOutgoingMessages (Ltestbench/plugin/client/ClientPlugin;)Lkotlinx/coroutines/flow/Flow;
+	public static fun getPluginIcon (Ltestbench/plugin/client/ClientPlugin;)Ljava/lang/String;
+	public static fun getServerMessageType (Ltestbench/plugin/client/ClientPlugin;)Lkotlin/reflect/KType;
+}
+

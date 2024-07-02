@@ -1,6 +1,6 @@
 plugins {
     id("all-targets")
-    alias(libs.plugins.mavenPublish)
+    id("publish-library")
 }
 
 kotlin {

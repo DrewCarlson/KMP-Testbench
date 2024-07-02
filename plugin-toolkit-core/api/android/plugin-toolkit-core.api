@@ -1,0 +1,120 @@
+public final class testbench/communication/ClientConnectMessage {
+	public static final field Companion Ltestbench/communication/ClientConnectMessage$Companion;
+	public fun <init> (Ljava/lang/String;Ltestbench/device/DeviceInfo;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ltestbench/device/DeviceInfo;
+	public final fun copy (Ljava/lang/String;Ltestbench/device/DeviceInfo;)Ltestbench/communication/ClientConnectMessage;
+	public static synthetic fun copy$default (Ltestbench/communication/ClientConnectMessage;Ljava/lang/String;Ltestbench/device/DeviceInfo;ILjava/lang/Object;)Ltestbench/communication/ClientConnectMessage;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDeviceInfo ()Ltestbench/device/DeviceInfo;
+	public final fun getSessionId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class testbench/communication/ClientConnectMessage$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltestbench/communication/ClientConnectMessage$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltestbench/communication/ClientConnectMessage;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltestbench/communication/ClientConnectMessage;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class testbench/communication/ClientConnectMessage$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class testbench/communication/PluginMessage {
+	public static final field Companion Ltestbench/communication/PluginMessage$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Ltestbench/communication/PluginMessage;
+	public static synthetic fun copy$default (Ltestbench/communication/PluginMessage;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ltestbench/communication/PluginMessage;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContent ()Ljava/lang/String;
+	public final fun getPluginId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class testbench/communication/PluginMessage$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltestbench/communication/PluginMessage$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltestbench/communication/PluginMessage;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltestbench/communication/PluginMessage;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class testbench/communication/PluginMessage$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class testbench/device/DeviceInfo {
+	public static final field Companion Ltestbench/device/DeviceInfo$Companion;
+	public fun <init> (Ljava/lang/String;Ltestbench/device/DevicePlatform;Z)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ltestbench/device/DevicePlatform;
+	public final fun component3 ()Z
+	public final fun copy (Ljava/lang/String;Ltestbench/device/DevicePlatform;Z)Ltestbench/device/DeviceInfo;
+	public static synthetic fun copy$default (Ltestbench/device/DeviceInfo;Ljava/lang/String;Ltestbench/device/DevicePlatform;ZILjava/lang/Object;)Ltestbench/device/DeviceInfo;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getModel ()Ljava/lang/String;
+	public final fun getPlatform ()Ltestbench/device/DevicePlatform;
+	public fun hashCode ()I
+	public final fun isSoftwareDevice ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class testbench/device/DeviceInfo$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltestbench/device/DeviceInfo$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltestbench/device/DeviceInfo;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltestbench/device/DeviceInfo;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class testbench/device/DeviceInfo$Companion {
+	public final fun getHost ()Ltestbench/device/DeviceInfo;
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class testbench/device/DevicePlatform : java/lang/Enum {
+	public static final field ANDROID Ltestbench/device/DevicePlatform;
+	public static final field BROWSER Ltestbench/device/DevicePlatform;
+	public static final field IOS Ltestbench/device/DevicePlatform;
+	public static final field JVM Ltestbench/device/DevicePlatform;
+	public static final field LINUX Ltestbench/device/DevicePlatform;
+	public static final field MACOS Ltestbench/device/DevicePlatform;
+	public static final field NODEJS Ltestbench/device/DevicePlatform;
+	public static final field TVOS Ltestbench/device/DevicePlatform;
+	public static final field WATCHOS Ltestbench/device/DevicePlatform;
+	public static final field WINDOWS Ltestbench/device/DevicePlatform;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Ltestbench/device/DevicePlatform;
+	public static fun values ()[Ltestbench/device/DevicePlatform;
+}
+
+public abstract interface class testbench/plugin/BenchPlugin {
+	public abstract fun getClientMessageType ()Lkotlin/reflect/KType;
+	public abstract fun getId ()Ljava/lang/String;
+	public abstract fun getName ()Ljava/lang/String;
+	public abstract fun getPluginIcon ()Ljava/lang/String;
+	public abstract fun getServerMessageType ()Lkotlin/reflect/KType;
+}
+
+public final class testbench/plugin/BenchPlugin$DefaultImpls {
+	public static fun getClientMessageType (Ltestbench/plugin/BenchPlugin;)Lkotlin/reflect/KType;
+	public static fun getPluginIcon (Ltestbench/plugin/BenchPlugin;)Ljava/lang/String;
+	public static fun getServerMessageType (Ltestbench/plugin/BenchPlugin;)Lkotlin/reflect/KType;
+}
+

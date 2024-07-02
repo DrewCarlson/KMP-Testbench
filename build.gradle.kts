@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.serialization) apply false
     alias(libs.plugins.mavenPublish) apply false
+    alias(libs.plugins.dokka)
+    alias(libs.plugins.binaryCompat) apply false
     id("org.drewcarlson.testbench")
 }
 
@@ -15,6 +17,13 @@ project(":plugins").subprojects {
     if (extensions.findByType<KotlinMultiplatformExtension>() != null) {
         apply(plugin = "com.vanniktech.maven.publish")
     }
+}
+
+subprojects {
+    System
+        .getenv("GITHUB_REF_NAME")
+        ?.takeIf { it.startsWith("v") }
+        ?.let { version = it.removePrefix("v") }
 }
 
 subprojects {

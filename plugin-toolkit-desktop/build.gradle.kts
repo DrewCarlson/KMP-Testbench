@@ -2,7 +2,7 @@ plugins {
     kotlin("multiplatform")
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.compose.jetbrains)
-    alias(libs.plugins.mavenPublish)
+    id("publish-library")
 }
 
 kotlin {

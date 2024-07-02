@@ -1,0 +1,114 @@
+public final class testbench/ComposableSingletons$MainKt {
+	public static final field INSTANCE Ltestbench/ComposableSingletons$MainKt;
+	public static field lambda-1 Lkotlin/jvm/functions/Function3;
+	public fun <init> ()V
+	public final fun getLambda-1$desktop ()Lkotlin/jvm/functions/Function3;
+}
+
+public final class testbench/MainKt {
+	public static final fun getLocalSessionHolder ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public static final fun getLocalTestBenchServer ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public static final fun main ()V
+	public static synthetic fun main ([Ljava/lang/String;)V
+}
+
+public final class testbench/desktop/components/ComposableSingletons$TitleBarViewKt {
+	public static final field INSTANCE Ltestbench/desktop/components/ComposableSingletons$TitleBarViewKt;
+	public static field lambda-1 Lkotlin/jvm/functions/Function2;
+	public static field lambda-2 Lkotlin/jvm/functions/Function4;
+	public static field lambda-3 Lkotlin/jvm/functions/Function2;
+	public fun <init> ()V
+	public final fun getLambda-1$desktop ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda-2$desktop ()Lkotlin/jvm/functions/Function4;
+	public final fun getLambda-3$desktop ()Lkotlin/jvm/functions/Function2;
+}
+
+public final class testbench/desktop/components/FooterContainerKt {
+	public static final fun FooterContainer (Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class testbench/desktop/components/MainContentContainerKt {
+	public static final fun MainContentContainer (Landroidx/compose/ui/Modifier;Ltestbench/plugin/desktop/DesktopPlugin;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class testbench/desktop/components/SidebarContainerKt {
+	public static final fun SidebarContainer (Ltestbench/testbench/desktop/server/SessionData;Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class testbench/desktop/components/TitleBarViewKt {
+	public static final fun TitleBarView (Lorg/jetbrains/jewel/window/DecoratedWindowScope;Ltestbench/testbench/desktop/server/SessionData;Ljava/util/Map;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;I)V
+}
+
+public final class testbench/desktop/plugins/PluginRegistry {
+	public static final field $stable I
+	public fun <init> ()V
+	public final fun getPlugins ()Ljava/util/Map;
+}
+
+public final class testbench/desktop/resources/TestBenchIcons {
+	public static final field $stable I
+	public static final field INSTANCE Ltestbench/desktop/resources/TestBenchIcons;
+}
+
+public final class testbench/desktop/server/TestBenchServer {
+	public static final field $stable I
+	public fun <init> (Ltestbench/testbench/desktop/server/SessionHolder;)V
+	public final fun setupServer (I)V
+	public final fun startSever ()V
+	public final fun stopServer ()V
+}
+
+public final class testbench/desktop/window/MainWindowKt {
+	public static final fun MainWindow (Ltestbench/testbench/desktop/server/SessionData;Ljava/util/Map;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;Landroidx/compose/runtime/Composer;I)V
+}
+
+public final class testbench/testbench/desktop/components/ComposableSingletons$DeviceInfoIconKt {
+	public static final field INSTANCE Ltestbench/testbench/desktop/components/ComposableSingletons$DeviceInfoIconKt;
+	public static field lambda-1 Lkotlin/jvm/functions/Function2;
+	public fun <init> ()V
+	public final fun getLambda-1$desktop ()Lkotlin/jvm/functions/Function2;
+}
+
+public final class testbench/testbench/desktop/components/DeviceInfoIconKt {
+	public static final fun DeviceInfoIcon (Ltestbench/device/DeviceInfo;Landroidx/compose/ui/Modifier;Ljava/lang/Boolean;ZLandroidx/compose/runtime/Composer;II)V
+	public static final fun DeviceInfoIcon (Ltestbench/device/DevicePlatform;Ljava/lang/String;Ljava/lang/Boolean;ZLandroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class testbench/testbench/desktop/components/WelcomePanelKt {
+	public static final fun WelcomePanel (Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class testbench/testbench/desktop/server/SessionData {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Ltestbench/device/DeviceInfo;ZLtestbench/desktop/plugins/PluginRegistry;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ltestbench/device/DeviceInfo;
+	public final fun component3 ()Z
+	public final fun component4 ()Ltestbench/desktop/plugins/PluginRegistry;
+	public final fun copy (Ljava/lang/String;Ltestbench/device/DeviceInfo;ZLtestbench/desktop/plugins/PluginRegistry;)Ltestbench/testbench/desktop/server/SessionData;
+	public static synthetic fun copy$default (Ltestbench/testbench/desktop/server/SessionData;Ljava/lang/String;Ltestbench/device/DeviceInfo;ZLtestbench/desktop/plugins/PluginRegistry;ILjava/lang/Object;)Ltestbench/testbench/desktop/server/SessionData;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDeviceInfo ()Ltestbench/device/DeviceInfo;
+	public final fun getPluginRegistry ()Ltestbench/desktop/plugins/PluginRegistry;
+	public final fun getSessionId ()Ljava/lang/String;
+	public final fun getTitle ()Ljava/lang/String;
+	public fun hashCode ()I
+	public final fun isConnected ()Z
+	public final fun isDefault ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class testbench/testbench/desktop/server/SessionHolder {
+	public static final field $stable I
+	public fun <init> ()V
+	public final fun get (Ljava/lang/String;)Ltestbench/testbench/desktop/server/SessionData;
+	public final fun getActiveSession ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun getSessions ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun has (Ljava/lang/String;)Z
+	public final fun remove (Ljava/lang/String;)V
+	public final fun set (Ljava/lang/String;Ltestbench/testbench/desktop/server/SessionData;)V
+	public final fun setActiveSession (Ljava/lang/String;)V
+	public final fun update (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Ltestbench/testbench/desktop/server/SessionData;
+	public final fun updateOrCreate (Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;)Ltestbench/testbench/desktop/server/SessionData;
+}
+

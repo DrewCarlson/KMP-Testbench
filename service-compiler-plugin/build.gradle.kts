@@ -1,6 +1,10 @@
 plugins {
     kotlin("jvm")
-    alias(libs.plugins.mavenPublish)
+    id("publish-library")
+}
+
+apiValidation {
+    validationDisabled = true
 }
 
 dependencies {

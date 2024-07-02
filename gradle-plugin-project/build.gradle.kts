@@ -7,6 +7,8 @@ plugins {
     `kotlin-dsl`
     alias(libs.plugins.gradleBuildConfig)
     alias(libs.plugins.mavenPublish)
+    alias(libs.plugins.dokka)
+    alias(libs.plugins.binaryCompat)
 }
 
 kotlin {
@@ -46,3 +48,8 @@ gradlePlugin {
         }
     }
 }
+
+System
+    .getenv("GITHUB_REF_NAME")
+    ?.takeIf { it.startsWith("v") }
+    ?.let { version = it.removePrefix("v") }
