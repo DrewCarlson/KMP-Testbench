@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-
 plugins {
     kotlin("multiplatform") apply false
     kotlin("jvm") apply false
@@ -11,12 +9,6 @@ plugins {
     alias(libs.plugins.dokka)
     alias(libs.plugins.binaryCompat) apply false
     id("org.drewcarlson.testbench")
-}
-
-project(":plugins").subprojects {
-    if (extensions.findByType<KotlinMultiplatformExtension>() != null) {
-        apply(plugin = "com.vanniktech.maven.publish")
-    }
 }
 
 subprojects {
