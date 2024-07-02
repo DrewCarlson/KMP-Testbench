@@ -9,10 +9,13 @@ import io.ktor.util.*
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import testbench.plugin.client.ClientPlugin
 import java.util.UUID
 
 private val KtorRequestId = AttributeKey<String>("KMP-Test-Bench-ID")
+private val KtorRequestTime = AttributeKey<Instant>("KMP-Test-Bench-Time")
 
 public class KtorNetworkClientPlugin :
     NetworkPlugin(),
@@ -30,8 +33,8 @@ public class KtorNetworkClientPlugin :
     private val ktorPlugin: io.ktor.client.plugins.api.ClientPlugin<Unit> =
         createClientPlugin("KMP-Test-Bench-Plugin") {
             on(SetupRequest) { request ->
-                val id = UUID.randomUUID().toString()
-                request.attributes.put(KtorRequestId, id)
+                request.attributes.put(KtorRequestId, UUID.randomUUID().toString())
+                request.attributes.put(KtorRequestTime, Clock.System.now())
             }
             on(SendingRequest) { request, content ->
                 val message = NetworkRequestMessage(
@@ -39,6 +42,7 @@ public class KtorNetworkClientPlugin :
                     url = request.url.buildString(),
                     method = request.method.value,
                     headers = request.headers.build().toMap(),
+                    initiatedAt = request.attributes[KtorRequestTime],
                     body = (content as? TextContent)?.text,
                 )
                 messageQueue.send(message)

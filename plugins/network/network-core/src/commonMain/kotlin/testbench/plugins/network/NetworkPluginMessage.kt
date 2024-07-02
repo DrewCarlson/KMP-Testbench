@@ -1,5 +1,6 @@
 package testbench.plugins.network
 
+import kotlinx.datetime.Instant
 import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.Serializable
 
@@ -14,6 +15,7 @@ public data class NetworkRequestMessage(
     val method: String,
     val headers: Map<String, List<String>>,
     val body: String?,
+    val initiatedAt: Instant,
 ) : NetworkPluginMessage()
 
 @Serializable

@@ -8,10 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.jetbrains.jewel.ui.component.DefaultButton
-import org.jetbrains.jewel.ui.component.Icon
-import org.jetbrains.jewel.ui.component.Text
-import org.jetbrains.jewel.ui.component.TextField
+import org.jetbrains.jewel.ui.component.*
 import testbench.plugins.network.NetworkDesktopPlugin
 
 @Composable
@@ -21,8 +18,8 @@ public fun SearchRow(
     onClearEntries: () -> Unit,
 ) {
     Row(
-        modifier = Modifier.padding(4.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.padding(horizontal = 6.dp, vertical = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         TextField(
@@ -44,7 +41,7 @@ public fun SearchRow(
                 )
             },
         )
-        DefaultButton(
+        OutlinedButton(
             onClick = onClearEntries,
         ) {
             Text(

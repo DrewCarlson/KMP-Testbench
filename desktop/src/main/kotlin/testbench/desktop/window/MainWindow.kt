@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
@@ -18,6 +19,7 @@ import testbench.desktop.components.SidebarContainer
 import testbench.desktop.components.TitleBarView
 import testbench.plugin.desktop.DesktopPlugin
 import testbench.testbench.desktop.server.SessionData
+import java.awt.Toolkit
 
 @Composable
 @Preview
@@ -28,8 +30,10 @@ fun MainWindow(
     onCloseRequest: () -> Unit,
 ) {
     var activePlugin by remember { mutableStateOf<DesktopPlugin<*, *>?>(null) }
+
     val windowState = rememberWindowState(
         position = WindowPosition.Aligned(Alignment.Center),
+        size = remember { calculateDefaultWindowSize() },
     )
     LaunchedEffect(activeSession) {
         activePlugin = activeSession.pluginRegistry
@@ -40,7 +44,7 @@ fun MainWindow(
     }
     DecoratedWindow(
         onCloseRequest = onCloseRequest,
-        title = "KMP Test Bench",
+        title = "Testbench",
         state = windowState,
     ) {
         TitleBarView(
@@ -77,4 +81,14 @@ fun MainWindow(
             }
         }
     }
+}
+
+private fun calculateDefaultWindowSize(): DpSize {
+    val screenSize = Toolkit.getDefaultToolkit().screenSize
+    val screenWidth = screenSize.width
+
+    val targetWidth = (screenWidth * 0.8).toInt()
+    val targetHeight = (targetWidth / 16.0 * 10.0).toInt()
+
+    return DpSize(targetWidth.dp, targetHeight.dp)
 }

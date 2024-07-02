@@ -9,7 +9,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
@@ -19,6 +20,9 @@ import kotlinx.serialization.json.JsonPrimitive
 import org.jetbrains.jewel.ui.Orientation
 import org.jetbrains.jewel.ui.component.*
 import testbench.compose.JsonTreeViewer
+import testbench.compose.table.DataTable
+import testbench.compose.table.DataTableColumn
+import testbench.compose.table.DataTableHeader
 import testbench.plugins.network.NetworkRequestMessage
 import testbench.plugins.network.NetworkResponseMessage
 import java.awt.Cursor
@@ -28,9 +32,10 @@ import androidx.compose.foundation.gestures.Orientation as DragOrientation
 public fun RequestDataView(
     requestData: NetworkRequestMessage,
     responseData: NetworkResponseMessage?,
-    onResize: (Int) -> Unit,
+    onResize: (Dp) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val density = LocalDensity.current
     val dividerInteractionSource = remember { MutableInteractionSource() }
     Box(
         modifier = modifier
@@ -40,39 +45,55 @@ public fun RequestDataView(
             modifier = Modifier
                 .fillMaxSize(),
             first = { modifier ->
+                var viewingResponse by remember { mutableStateOf(false) }
                 Column(
                     modifier = modifier,
+                    verticalArrangement = Arrangement.Top,
                 ) {
-                    Text(
-                        text = "Request Headers",
-                        fontWeight = FontWeight.Bold,
+                    TabStrip(
+                        tabs = listOf(
+                            TabData.Default(
+                                selected = !viewingResponse,
+                                closable = false,
+                                onClick = { viewingResponse = false },
+                                content = { tabState ->
+                                    SimpleTabContent(
+                                        label = "Request Headers",
+                                        state = tabState,
+                                    )
+                                },
+                            ),
+                            TabData.Default(
+                                selected = viewingResponse,
+                                closable = false,
+                                onClick = { viewingResponse = true },
+                                content = { tabState ->
+                                    SimpleTabContent(
+                                        label = "Response Headers",
+                                        state = tabState,
+                                    )
+                                },
+                            ),
+                        ),
                     )
 
-                    requestData.headers.forEach { (key, value) ->
-                        Row(
+                    if (viewingResponse) {
+                        val responseHeaders = remember(responseData) {
+                            responseData?.headers?.toList().orEmpty()
+                        }
+                        DataTable(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(6.dp),
-                        ) {
-                            Text(text = key)
-                            Text(text = value.joinToString("\n"))
-                        }
-                    }
-
-                    responseData?.let { responseData ->
-                        Text(
-                            text = "Response Headers",
-                            fontWeight = FontWeight.Bold,
+                            items = responseHeaders,
+                            lazyList = false,
+                            columns = listOf(HeaderKeyColumn, HeaderValueColumn),
                         )
-
-                        responseData.headers.entries.take(4).forEach { (key, value) ->
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(6.dp),
-                            ) {
-                                Text(text = key)
-                                Text(text = value.joinToString("\n"))
-                            }
-                        }
+                    } else {
+                        DataTable(
+                            modifier = Modifier.fillMaxWidth(),
+                            items = requestData.headers.toList(),
+                            lazyList = false,
+                            columns = listOf(HeaderKeyColumn, HeaderValueColumn),
+                        )
                     }
                 }
             },
@@ -85,23 +106,23 @@ public fun RequestDataView(
                     TabStrip(
                         tabs = listOf(
                             TabData.Default(
-                                selected = viewingResponse,
-                                closable = false,
-                                onClick = { viewingResponse = true },
-                                content = { tabState ->
-                                    SimpleTabContent(
-                                        label = "Response Body",
-                                        state = tabState,
-                                    )
-                                },
-                            ),
-                            TabData.Default(
                                 selected = !viewingResponse,
                                 closable = false,
                                 onClick = { viewingResponse = false },
                                 content = { tabState ->
                                     SimpleTabContent(
                                         label = "Request Body",
+                                        state = tabState,
+                                    )
+                                },
+                            ),
+                            TabData.Default(
+                                selected = viewingResponse,
+                                closable = false,
+                                onClick = { viewingResponse = true },
+                                content = { tabState ->
+                                    SimpleTabContent(
+                                        label = "Response Body",
                                         state = tabState,
                                     )
                                 },
@@ -129,7 +150,11 @@ public fun RequestDataView(
                 .draggable(
                     interactionSource = dividerInteractionSource,
                     orientation = DragOrientation.Horizontal,
-                    state = rememberDraggableState { delta -> onResize(delta.toInt()) },
+                    state = rememberDraggableState { delta ->
+                        with(density) {
+                            onResize(delta.toDp())
+                        }
+                    },
                 ).pointerHoverIcon(PointerIcon(Cursor(Cursor.E_RESIZE_CURSOR))),
         )
     }
@@ -153,3 +178,29 @@ private fun BodyContainer(body: String? = null) {
             .height(400.dp),
     )
 }
+
+private val HeaderKeyColumn = DataTableColumn<Pair<String, List<String>>>(
+    header = {
+        DataTableHeader("Key")
+    },
+    cell = { data ->
+        val (key, _) = data
+        Text(
+            text = key,
+            modifier = Modifier.padding(6.dp),
+        )
+    },
+)
+
+private val HeaderValueColumn = DataTableColumn<Pair<String, List<String>>>(
+    header = {
+        DataTableHeader("Value")
+    },
+    cell = { data ->
+        val (_, value) = data
+        Text(
+            text = value.joinToString("\n"),
+            modifier = Modifier.padding(6.dp),
+        )
+    },
+)
