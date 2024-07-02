@@ -35,6 +35,7 @@ dependencies {
 buildConfig {
     packageName("testbench.gradle")
     buildConfigField("VERSION", version.toString())
+    buildConfigField("COMPOSE_VERSION", libs.versions.compose)
     buildConfigField("SERIALIZATION_VERSION", libs.versions.serialization)
 }
 

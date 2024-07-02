@@ -25,7 +25,7 @@ dependencies {
     implementation(projects.plugins.preferences.preferencesDesktop)
     implementation(projects.plugins.databases.databasesDesktop)
 
-    implementation(compose.desktop.currentOs) {
+    implementation(compose.desktop.common) {
         exclude(group = "org.jetbrains.compose.material")
     }
 

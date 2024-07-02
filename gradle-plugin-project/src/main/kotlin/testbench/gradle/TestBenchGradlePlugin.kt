@@ -9,6 +9,7 @@ import org.gradle.jvm.toolchain.JavaToolchainService
 import org.gradle.jvm.toolchain.JvmVendorSpec
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.support.serviceOf
+import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
 import testbench.gradle.plugins.configureCustomPlugins
 
 private const val RUNTIME_CONFIG = "testBenchRuntime"
@@ -36,6 +37,28 @@ public open class TestBenchGradlePlugin : Plugin<Project> {
             pluginProjects.forEach { pluginProject ->
                 add(testBenchRuntime.name, pluginProject.desktop)
             }
+            val os = DefaultNativePlatform.getCurrentOperatingSystem()
+            val artifactVariant = when {
+                os.isWindows -> "windows-x64"
+
+                os.isLinux -> if (DefaultNativePlatform.getCurrentArchitecture().isArm) {
+                    "linux-arm64"
+                } else {
+                    "linux-x64"
+                }
+
+                os.isMacOsX -> if (DefaultNativePlatform.getCurrentArchitecture().isArm) {
+                    "macos-arm64"
+                } else {
+                    "macos-x64"
+                }
+
+                else -> error("Unsupported operating system: $os")
+            }
+            add(
+                testBenchRuntime.name,
+                "org.jetbrains.compose.desktop:desktop-jvm-$artifactVariant:${BuildConfig.COMPOSE_VERSION}",
+            )
         }
 
         project.tasks.create(RUN_TASK_NAME, JavaExec::class.java) {
