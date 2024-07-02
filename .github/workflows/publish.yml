@@ -20,6 +20,7 @@ jobs:
         with:
           distribution: 'jetbrains'
           java-version: 17
+      - uses: gradle/actions/setup-gradle@v3
       - name: Cache Build files
         uses: actions/cache@v4
         if: ${{ !startsWith(matrix.os, 'windows') }}
@@ -28,20 +29,14 @@ jobs:
             ~/.konan
             ~/.gradle
           key: ${{ runner.os }}-${{ hashFiles('gradle.properties') }}-v1
-      - uses: gradle/gradle-build-action@v3.3.2
-        name: Publish
-        with:
-          arguments: clean publishAllPublicationsToMavenCentralRepository
-      - uses: gradle/gradle-build-action@v3.3.2
-        name: Publish Gradle Settings Plugin
-        with:
-          working-directory: "gradle-plugin-settings"
-          arguments: clean publishAllPublicationsToMavenCentralRepository
-      - uses: gradle/gradle-build-action@v3.3.2
-        name: Publish Gradle Project Plugin
-        with:
-          working-directory: "gradle-plugin-project"
-          arguments: clean publishAllPublicationsToMavenCentralRepository
+      - name: Publish
+        run: ./gradlew clean publishAllPublicationsToMavenCentralRepository
+      - name: Publish Gradle Settings Plugin
+        working-directory: "gradle-plugin-settings"
+        run: ./graadlew clean publishAllPublicationsToMavenCentralRepository
+      - name: Publish Gradle Project Plugin
+        working-directory: "gradle-plugin-project"
+        run: ./gradlew clean publishAllPublicationsToMavenCentralRepository
 
   publish-docs:
     runs-on: ubuntu-latest
