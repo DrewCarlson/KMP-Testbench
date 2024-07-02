@@ -33,7 +33,7 @@ jobs:
         run: ./gradlew clean publishAllPublicationsToMavenCentralRepository
       - name: Publish Gradle Settings Plugin
         working-directory: "gradle-plugin-settings"
-        run: ./graadlew clean publishAllPublicationsToMavenCentralRepository
+        run: ./gradlew clean publishAllPublicationsToMavenCentralRepository
       - name: Publish Gradle Project Plugin
         working-directory: "gradle-plugin-project"
         run: ./gradlew clean publishAllPublicationsToMavenCentralRepository
