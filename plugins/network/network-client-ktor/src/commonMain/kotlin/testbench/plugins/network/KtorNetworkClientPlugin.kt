@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import testbench.plugin.client.ClientPlugin
-import java.util.UUID
+import kotlin.random.Random
 
 private val KtorRequestId = AttributeKey<String>("KMP-Test-Bench-ID")
 private val KtorRequestTime = AttributeKey<Instant>("KMP-Test-Bench-Time")
@@ -30,10 +30,11 @@ public class KtorNetworkClientPlugin :
     override suspend fun handleMessage(message: Unit) {
     }
 
+    @OptIn(ExperimentalStdlibApi::class)
     private val ktorPlugin: io.ktor.client.plugins.api.ClientPlugin<Unit> =
         createClientPlugin("KMP-Test-Bench-Plugin") {
             on(SetupRequest) { request ->
-                request.attributes.put(KtorRequestId, UUID.randomUUID().toString())
+                request.attributes.put(KtorRequestId, Random.Default.nextBytes(8).toHexString())
                 request.attributes.put(KtorRequestTime, Clock.System.now())
             }
             on(SendingRequest) { request, content ->
