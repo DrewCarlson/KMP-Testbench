@@ -6,7 +6,7 @@ Include the Desktop application plugin in your root `build.gradle.kts`:
 
 ```kotlin
 plugins {
-  id("build.wallet.testbench") version "{{ lib_version }}"
+  id("org.drewcarlson.testbench") version "{{ lib_version }}"
 }
 ```
 
