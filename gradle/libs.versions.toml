@@ -27,7 +27,7 @@ kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-gradlePlugin-api = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin-api", version.ref = "kotlin" }
 kotlin-compilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
-android-gradlePlugin = { module = "com.android.tools.build:gradle", version = "8.2.0" }
+android-gradlePlugin = { module = "com.android.tools.build:gradle", version = "8.2.2" }
 
 gradleConventions = { module = "org.gradle.kotlin:gradle-kotlin-dsl-conventions", version = "0.9.0" }
 mavenPublish-gradlePlugin = { module = "com.vanniktech:gradle-maven-publish-plugin", version = "0.29.0" }

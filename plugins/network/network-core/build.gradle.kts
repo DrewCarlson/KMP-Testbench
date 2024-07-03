@@ -5,6 +5,9 @@ plugins {
 
 kotlin {
     sourceSets {
+        all {
+            explicitApi()
+        }
         commonMain {
             dependencies {
                 api(libs.datetime)

@@ -5,6 +5,9 @@ plugins {
 
 kotlin {
     sourceSets {
+        all {
+            explicitApi()
+        }
         commonMain {
             dependencies {
                 implementation(libs.ktor.client.core)

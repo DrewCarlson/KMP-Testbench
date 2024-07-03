@@ -5,6 +5,7 @@ fun KotlinMultiplatformExtension.allTargets() {
 
     jvm()
     androidTarget {
+        publishAllLibraryVariants()
     }
 
     js(IR) {

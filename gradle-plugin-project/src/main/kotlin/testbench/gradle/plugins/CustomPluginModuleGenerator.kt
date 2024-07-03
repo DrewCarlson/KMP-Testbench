@@ -2,8 +2,11 @@
 
 package testbench.gradle.plugins
 
+import com.android.build.gradle.LibraryExtension
+import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import testbench.gradle.BuildConfig
@@ -36,7 +39,12 @@ private val TestBenchPluginGroup.desktopModulePath: String
     get() = third
 
 internal fun configureCustomPlugins(project: Project): List<CustomPluginModuleGroup> {
-    val modulesListFile = project.rootProject.rootDir.resolve("build/testbench.modules")
+    val modulesListFile = project.rootProject
+        .layout
+        .buildDirectory
+        .file("testbench.modules")
+        .get()
+        .asFile
     val benchPluginModules = if (modulesListFile.exists()) {
         modulesListFile.readText().lines()
     } else {
@@ -59,17 +67,15 @@ internal fun configureCustomPlugins(project: Project): List<CustomPluginModuleGr
 
 private fun applyCoreModuleConfiguration(project: Project): Project {
     project.pluginManager.apply("org.jetbrains.kotlin.plugin.serialization")
+    project.configureAndroidLibrary()
     project.configureKmp {
-        applyDefaultHierarchyTemplate()
-        jvm()
-
-        sourceSets.all {
-            explicitApi()
-        }
-
         sourceSets.commonMain {
             dependencies {
-                api("org.drewcarlson.testbench:plugin-toolkit-core:${BuildConfig.VERSION}")
+                if (project.rootProject.name == "KMP-Test-Bench") {
+                    api(project(":plugin-toolkit-core"))
+                } else {
+                    api("org.drewcarlson.testbench:plugin-toolkit-core:${BuildConfig.VERSION}")
+                }
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:${BuildConfig.SERIALIZATION_VERSION}")
             }
         }
@@ -83,18 +89,14 @@ private fun applyDesktopModuleConfiguration(
 ): Project {
     project.pluginManager.apply("org.jetbrains.kotlin.plugin.compose")
     project.pluginManager.apply(ServiceGeneratorSubplugin::class)
-    project.configureKmp {
-        applyDefaultHierarchyTemplate()
-        jvm()
-
-        sourceSets.all {
-            explicitApi()
-        }
-
-        sourceSets.commonMain {
-            dependencies {
-                coreProject?.let { api(it) }
-                api("org.drewcarlson.testbench:plugin-toolkit-desktop:${BuildConfig.VERSION}")
+    project.pluginManager.apply("org.jetbrains.kotlin.jvm")
+    project.pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
+        project.dependencies.apply {
+            coreProject?.let { add("api", it) }
+            if (project.rootProject.name == "KMP-Test-Bench") {
+                add("api", project.project(":plugin-toolkit-desktop"))
+            } else {
+                add("api", "org.drewcarlson.testbench:plugin-toolkit-desktop:${BuildConfig.VERSION}")
             }
         }
     }
@@ -105,24 +107,37 @@ private fun applyClientModuleConfiguration(
     project: Project,
     coreProject: Project?,
 ): Project {
+    project.configureAndroidLibrary()
     project.configureKmp {
-        applyDefaultHierarchyTemplate()
-        jvm()
-
-        sourceSets.all {
-            explicitApi()
-        }
-
         sourceSets.commonMain {
             dependencies {
-                if (coreProject != null) {
-                    api(coreProject)
+                coreProject?.let { api(it) }
+                if (project.rootProject.name == "KMP-Test-Bench") {
+                    api(project.project(":plugin-toolkit-client"))
+                } else {
+                    api("org.drewcarlson.testbench:plugin-toolkit-client:${BuildConfig.VERSION}")
                 }
-                api("org.drewcarlson.testbench:plugin-toolkit-client:${BuildConfig.VERSION}")
             }
         }
     }
     return project
+}
+
+private fun Project.configureAndroidLibrary() {
+    pluginManager.apply("com.android.library")
+    pluginManager.withPlugin("com.android.library") {
+        extensions.configure<LibraryExtension> {
+            namespace = "$group.${project.name.replace("-", "")}"
+            compileSdk = 34
+            defaultConfig {
+                minSdk = 23
+            }
+            compileOptions {
+                sourceCompatibility = JavaVersion.VERSION_17
+                targetCompatibility = JavaVersion.VERSION_17
+            }
+        }
+    }
 }
 
 private fun Project.configureKmp(block: KotlinMultiplatformExtension.() -> Unit) {
