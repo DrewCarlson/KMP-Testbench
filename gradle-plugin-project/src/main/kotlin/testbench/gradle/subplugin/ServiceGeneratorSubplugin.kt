@@ -24,7 +24,7 @@ public class ServiceGeneratorSubplugin : KotlinCompilerPluginSupportPlugin {
             .buildDirectory
             .get()
             .asFile
-            .resolve("classes/kotlin/jvm/main/META-INF/services")
+            .resolve("classes/kotlin/main/META-INF/services")
             .absolutePath
         return project.provider {
             listOf(

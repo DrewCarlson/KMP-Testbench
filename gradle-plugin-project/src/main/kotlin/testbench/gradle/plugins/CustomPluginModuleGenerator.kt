@@ -39,12 +39,7 @@ private val TestBenchPluginGroup.desktopModulePath: String
     get() = third
 
 internal fun configureCustomPlugins(project: Project): List<CustomPluginModuleGroup> {
-    val modulesListFile = project.rootProject
-        .layout
-        .buildDirectory
-        .file("testbench.modules")
-        .get()
-        .asFile
+    val modulesListFile = project.rootProject.rootDir.resolve(".gradle/testbench.modules")
     val benchPluginModules = if (modulesListFile.exists()) {
         modulesListFile.readText().lines()
     } else {

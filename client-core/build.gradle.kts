@@ -19,11 +19,5 @@ kotlin {
                 implementation(libs.ktor.serialization)
             }
         }
-
-        jvmMain {
-            dependencies {
-                implementation(libs.ktor.client.cio)
-            }
-        }
     }
 }

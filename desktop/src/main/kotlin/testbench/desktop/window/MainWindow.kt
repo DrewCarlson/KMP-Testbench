@@ -33,7 +33,7 @@ fun MainWindow(
 
     val windowState = rememberWindowState(
         position = WindowPosition.Aligned(Alignment.Center),
-        size = remember { calculateDefaultWindowSize() },
+        // size = remember { calculateDefaultWindowSize() },
     )
     LaunchedEffect(activeSession) {
         activePlugin = activeSession.pluginRegistry
@@ -43,9 +43,9 @@ fun MainWindow(
             }
     }
     DecoratedWindow(
-        onCloseRequest = onCloseRequest,
         title = "Testbench",
         state = windowState,
+        onCloseRequest = onCloseRequest,
     ) {
         TitleBarView(
             activeSession = activeSession,

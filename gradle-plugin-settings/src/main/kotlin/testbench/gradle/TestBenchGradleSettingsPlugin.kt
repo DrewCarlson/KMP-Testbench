@@ -24,7 +24,7 @@ public class TestBenchGradleSettingsPlugin : Plugin<Settings> {
                 @Suppress("UNCHECKED_CAST")
                 val text =
                     (settings.gradle.extraProperties.get(TEST_BENCH_PLUGIN_MODULE) as List<String>).joinToString("\n")
-                val modulesListFile = settings.rootDir.resolve("build/testbench.modules")
+                val modulesListFile = settings.rootDir.resolve(".gradle/testbench.modules")
                 modulesListFile.parentFile.mkdirs()
                 modulesListFile.bufferedWriter().use { out ->
                     out.write(text)

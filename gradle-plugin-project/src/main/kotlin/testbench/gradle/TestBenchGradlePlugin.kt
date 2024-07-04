@@ -14,7 +14,7 @@ import testbench.gradle.plugins.configureCustomPlugins
 
 private const val RUNTIME_CONFIG = "testBenchRuntime"
 private const val RUN_TASK_NAME = "runTestBench"
-private const val DESKTOP_MAIN = "testbench.MainKt"
+private const val DESKTOP_MAIN = "testbench.desktop.MainKt"
 
 public open class TestBenchGradlePlugin : Plugin<Project> {
     override fun apply(project: Project) {

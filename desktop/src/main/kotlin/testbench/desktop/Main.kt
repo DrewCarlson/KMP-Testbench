@@ -1,4 +1,4 @@
-package testbench
+package testbench.desktop
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.window.application

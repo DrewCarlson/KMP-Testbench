@@ -16,7 +16,7 @@ Define custom plugins in `settings.gradle.kts`:
 
 ```kotlin
 testbench {
-  // Plugin with client and server implementation
+  // Plugin with client and desktop implementation
   includePlugin(":plugins:my-plugin")
 
   // Plugin with server only implementation

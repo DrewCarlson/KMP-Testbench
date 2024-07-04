@@ -54,7 +54,7 @@ dependencies {
 
 compose.desktop {
     application {
-        mainClass = "testbench.MainKt"
+        mainClass = "testbench.desktop.MainKt"
     }
 }
 
