@@ -7,4 +7,5 @@ import testbench.device.DeviceInfo
 public data class ClientConnectMessage(
     val sessionId: String,
     val deviceInfo: DeviceInfo,
+    val pluginIds: List<String>,
 )

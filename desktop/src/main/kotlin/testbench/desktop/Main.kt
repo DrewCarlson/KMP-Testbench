@@ -10,9 +10,9 @@ import org.jetbrains.jewel.intui.window.decoratedWindow
 import org.jetbrains.jewel.intui.window.styling.dark
 import org.jetbrains.jewel.ui.ComponentStyling
 import org.jetbrains.jewel.window.styling.TitleBarStyle
+import testbench.desktop.server.SessionHolder
 import testbench.desktop.server.TestBenchServer
 import testbench.desktop.window.MainWindow
-import testbench.testbench.desktop.server.SessionHolder
 
 val LocalSessionHolder = compositionLocalOf<SessionHolder> { error("SessionHolder not found") }
 val LocalTestBenchServer = compositionLocalOf<TestBenchServer> { error("TestBenchServer not found!") }

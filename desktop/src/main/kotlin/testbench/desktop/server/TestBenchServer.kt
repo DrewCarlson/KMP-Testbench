@@ -22,8 +22,6 @@ import testbench.communication.ClientConnectMessage
 import testbench.communication.PluginMessage
 import testbench.desktop.plugins.PluginRegistry
 import testbench.plugin.desktop.DesktopPlugin
-import testbench.testbench.desktop.server.SessionData
-import testbench.testbench.desktop.server.SessionHolder
 import java.time.Duration
 
 class TestBenchServer(
@@ -65,7 +63,7 @@ class TestBenchServer(
                         SessionData(
                             sessionId = connectMessage.sessionId,
                             isConnected = true,
-                            pluginRegistry = PluginRegistry(),
+                            pluginRegistry = PluginRegistry(connectMessage.pluginIds),
                             deviceInfo = connectMessage.deviceInfo,
                         )
                     }
@@ -95,7 +93,7 @@ class TestBenchServer(
         message: PluginMessage,
     ) {
         @Suppress("UNCHECKED_CAST")
-        val plugin = session.pluginRegistry.plugins[message.pluginId] as? DesktopPlugin<Any, Any>
+        val plugin = session.pluginRegistry.enabledPlugins[message.pluginId] as? DesktopPlugin<Any, Any>
         if (plugin == null) {
             call.application.log.warn("Received unhandled plugin message: $message")
             return

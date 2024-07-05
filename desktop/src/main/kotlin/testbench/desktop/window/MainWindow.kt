@@ -17,8 +17,8 @@ import org.jetbrains.jewel.window.DecoratedWindow
 import testbench.desktop.components.MainContentContainer
 import testbench.desktop.components.SidebarContainer
 import testbench.desktop.components.TitleBarView
+import testbench.desktop.server.SessionData
 import testbench.plugin.desktop.DesktopPlugin
-import testbench.testbench.desktop.server.SessionData
 import java.awt.Toolkit
 
 @Composable
@@ -37,7 +37,7 @@ fun MainWindow(
     )
     LaunchedEffect(activeSession) {
         activePlugin = activeSession.pluginRegistry
-            .plugins
+            .enabledPlugins
             .firstNotNullOfOrNull { (_, value) ->
                 value.takeIf { it.id == activePlugin?.id }
             }

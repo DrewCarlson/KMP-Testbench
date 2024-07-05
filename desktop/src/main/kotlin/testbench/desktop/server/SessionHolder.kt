@@ -1,4 +1,4 @@
-package testbench.testbench.desktop.server
+package testbench.desktop.server
 
 import io.ktor.util.collections.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +17,7 @@ class SessionHolder {
         sessionId = "default",
         isConnected = false,
         deviceInfo = DeviceInfo.host,
-        pluginRegistry = PluginRegistry(),
+        pluginRegistry = PluginRegistry(emptyList()),
     )
 
     private val _activeSession = MutableStateFlow(defaultSessionData)

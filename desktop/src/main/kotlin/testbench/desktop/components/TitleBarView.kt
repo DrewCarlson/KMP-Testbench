@@ -10,8 +10,8 @@ import org.jetbrains.jewel.window.DecoratedWindowScope
 import org.jetbrains.jewel.window.TitleBar
 import org.jetbrains.jewel.window.newFullscreenControls
 import testbench.desktop.resources.TestBenchIcons
+import testbench.desktop.server.SessionData
 import testbench.testbench.desktop.components.DeviceInfoIcon
-import testbench.testbench.desktop.server.SessionData
 import java.awt.Desktop
 import java.net.URI
 

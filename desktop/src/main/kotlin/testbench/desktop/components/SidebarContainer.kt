@@ -6,14 +6,19 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.ui.component.Icon
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.theme.colorPalette
+import org.jetbrains.jewel.ui.util.thenIf
 import testbench.desktop.resources.TestBenchIcons
+import testbench.desktop.server.SessionData
 import testbench.plugin.desktop.DesktopPlugin
-import testbench.testbench.desktop.server.SessionData
+import testbench.plugin.desktop.UiHookLocation
 
 @Composable
 fun SidebarContainer(
@@ -30,11 +35,23 @@ fun SidebarContainer(
         Column(
             modifier = Modifier
                 .verticalScroll(scrollState),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            Spacer(modifier = Modifier.size(0.dp))
+            Text(
+                text = "Plugins",
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                fontWeight = FontWeight.Bold,
+                fontSize = 12.sp,
+                modifier = Modifier
+                    .padding(8.dp),
+            )
 
-            activeSession.pluginRegistry.plugins.forEach { (_, plugin) ->
+            remember(activeSession) {
+                activeSession
+                    .pluginRegistry
+                    .enabledPlugins
+                    .filterValues { it.uiHooks.containsKey(UiHookLocation.MAIN_PANEL) }
+            }.forEach { (_, plugin) ->
                 PluginRow(
                     name = plugin.name,
                     icon = "icons/${plugin.pluginIcon}.svg",
@@ -43,7 +60,30 @@ fun SidebarContainer(
                 )
             }
 
-            Spacer(modifier = Modifier.size(0.dp))
+            if (activeSession.pluginRegistry.disabledPlugins.isNotEmpty()) {
+                Text(
+                    text = "Disabled",
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 12.sp,
+                    modifier = Modifier
+                        .padding(8.dp),
+                )
+            }
+
+            activeSession.pluginRegistry
+                .disabledPlugins
+                .forEach { (plugin, _) ->
+                    PluginRow(
+                        name = plugin.name,
+                        icon = "icons/${plugin.pluginIcon}.svg",
+                        enabled = false,
+                        onClick = { onPluginSelected(plugin) },
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                    )
+                }
         }
 
         VerticalScrollbar(
@@ -61,18 +101,26 @@ private fun PluginRow(
     icon: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
 ) {
     Row(
         modifier = modifier
-            .clickable(onClick = onClick)
-            .padding(horizontal = 10.dp),
+            .thenIf(enabled) { clickable(onClick = onClick) }
+            .padding(horizontal = 10.dp, vertical = 6.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
             Modifier
                 .size(20.dp)
-                .background(JewelTheme.colorPalette.blue(4), shape = RoundedCornerShape(4.dp)),
+                .background(
+                    if (enabled) {
+                        JewelTheme.colorPalette.blue(4)
+                    } else {
+                        JewelTheme.colorPalette.grey(4)
+                    },
+                    shape = RoundedCornerShape(4.dp),
+                ),
             contentAlignment = Alignment.Center,
         ) {
             Icon(

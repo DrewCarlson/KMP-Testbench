@@ -74,6 +74,7 @@ public class TestBenchClient(
                 ClientConnectMessage(
                     sessionId = sessionId,
                     deviceInfo = DeviceInfo.host,
+                    pluginIds = plugins.map { it.id },
                 ),
             )
 
