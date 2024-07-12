@@ -17,6 +17,7 @@ dependencies {
     api(projects.pluginToolkitCore)
 
     api(libs.serialization.json)
+    api(libs.datetime)
 
     api(libs.jewel)
     api(compose.ui)

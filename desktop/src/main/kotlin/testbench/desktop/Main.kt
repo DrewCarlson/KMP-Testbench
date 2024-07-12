@@ -15,7 +15,6 @@ import testbench.desktop.server.TestBenchServer
 import testbench.desktop.window.MainWindow
 
 val LocalSessionHolder = compositionLocalOf<SessionHolder> { error("SessionHolder not found") }
-val LocalTestBenchServer = compositionLocalOf<TestBenchServer> { error("TestBenchServer not found!") }
 
 fun main() = application {
     val sessionHolder = remember { SessionHolder() }
@@ -28,7 +27,6 @@ fun main() = application {
 
     CompositionLocalProvider(
         LocalSessionHolder provides sessionHolder,
-        LocalTestBenchServer provides server,
     ) {
         IntUiTheme(
             theme = JewelTheme.darkThemeDefinition(),

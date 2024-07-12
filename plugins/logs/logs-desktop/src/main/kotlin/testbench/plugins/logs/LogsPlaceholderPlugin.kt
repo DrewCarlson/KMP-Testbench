@@ -1,6 +1,5 @@
 package testbench.plugins.logs
 
-import org.jetbrains.jewel.ui.component.Text
 import testbench.plugin.desktop.DesktopPlugin
 import testbench.plugin.desktop.UiHook
 import testbench.plugin.desktop.UiHookLocation
@@ -13,8 +12,11 @@ public class LogsPlaceholderPlugin : DesktopPlugin<String, String> {
     override val requiresClient: Boolean = false
 
     override val uiHooks: Map<UiHookLocation, UiHook> = registerUi {
-        addMainPanel {
-            Text(text = "$name Placeholder")
+        addMainPanel { modifier ->
+            LogsMainPanel(
+                entries = emptyList(),
+                modifier = modifier,
+            )
         }
     }
 

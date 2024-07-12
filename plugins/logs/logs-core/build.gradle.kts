@@ -4,7 +4,15 @@ plugins {
 }
 
 kotlin {
-    sourceSets.all {
-        explicitApi()
+    sourceSets {
+        all {
+            explicitApi()
+        }
+
+        commonMain {
+            dependencies {
+                api(libs.datetime)
+            }
+        }
     }
 }
