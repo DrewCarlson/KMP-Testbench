@@ -1,8 +1,8 @@
-site_name: KMP Test Bench
+site_name: KMP Testbench
 site_description: "A modular tool for debugging Kotlin Multiplatform applications."
-site_url: https://drewcarlson.github.io/kmp-test-bench/
-repo_url: https://github.com/DrewCarlson/kmp-test-bench
-repo_name: kmp-test-bench
+site_url: https://drewcarlson.github.io/kmp-testbench/
+repo_url: https://github.com/DrewCarlson/kmp-testbench
+repo_name: kmp-testbench
 edit_uri: blob/main/docs/
 remote_branch: gh-pages
 docs_dir: docs
@@ -47,4 +47,4 @@ extra:
     provider: mike
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/DrewCarlson/KMP-Test-Bench
+      link: https://github.com/DrewCarlson/KMP-Testbench

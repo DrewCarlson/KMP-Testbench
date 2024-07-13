@@ -1,32 +1,23 @@
-# Custom Plugins
+# Getting Started
+
+Testbench makes it easy to define custom plugins and include them when running the desktop app.
+
 
 ## Installation
 
-Add the plugin toolkit gradle plugin to `settings.gradle.kts`
+Add the plugin-toolkit Gradle plugin and configure custom plugins in `settings.gradle.kts`:
 
 ```kotlin
 plugins {
   id("org.drewcarlson.testbench.plugin-toolkit") version "{{ lib_version }}"
 }
-```
 
-## Define Plugins
-
-Define custom plugins in `settings.gradle.kts`:
-
-```kotlin
 testbench {
-  // Plugin with client and desktop implementation
-  includePlugin(":plugins:my-plugin")
-
-  // Plugin with server only implementation
-  includePlugin(":plugin:my-server-plugin") {
-    desktopOnly = true
-  }
-
-  // Plugin with different client implementations
-  includePlugin(":plugin:my-plugin") {
-    clientVariations("a", "b")
+  includePlugin(":plugins:my-plugin") {
+    // optional: Create multiple client implementation variations
+    clientVariations("ktor", "okhttp", "fuel")
+    // optional: Create only a desktop module without client or core modules
+    desktopOnly()
   }
 }
 ```

@@ -12,7 +12,7 @@ pluginManagement {
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-rootProject.name = "KMP-Test-Bench"
+rootProject.name = "KMP-Testbench"
 
 include(
     ":demo-app",

@@ -66,7 +66,7 @@ private fun applyCoreModuleConfiguration(project: Project): Project {
     project.configureKmp {
         sourceSets.commonMain {
             dependencies {
-                if (project.rootProject.name == "KMP-Test-Bench") {
+                if (project.rootProject.name == "KMP-Testbench") {
                     api(project(":plugin-toolkit-core"))
                 } else {
                     api("org.drewcarlson.testbench:plugin-toolkit-core:${BuildConfig.VERSION}")
@@ -88,7 +88,7 @@ private fun applyDesktopModuleConfiguration(
     project.pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
         project.dependencies.apply {
             coreProject?.let { add("api", it) }
-            if (project.rootProject.name == "KMP-Test-Bench") {
+            if (project.rootProject.name == "KMP-Testbench") {
                 add("api", project.project(":plugin-toolkit-desktop"))
             } else {
                 add("api", "org.drewcarlson.testbench:plugin-toolkit-desktop:${BuildConfig.VERSION}")
@@ -107,7 +107,7 @@ private fun applyClientModuleConfiguration(
         sourceSets.commonMain {
             dependencies {
                 coreProject?.let { api(it) }
-                if (project.rootProject.name == "KMP-Test-Bench") {
+                if (project.rootProject.name == "KMP-Testbench") {
                     api(project.project(":plugin-toolkit-client"))
                 } else {
                     api("org.drewcarlson.testbench:plugin-toolkit-client:${BuildConfig.VERSION}")

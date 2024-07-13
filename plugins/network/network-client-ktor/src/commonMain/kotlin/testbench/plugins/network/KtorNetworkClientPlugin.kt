@@ -14,8 +14,8 @@ import kotlinx.datetime.Instant
 import testbench.plugin.client.ClientPlugin
 import kotlin.random.Random
 
-private val KtorRequestId = AttributeKey<String>("KMP-Test-Bench-ID")
-private val KtorRequestTime = AttributeKey<Instant>("KMP-Test-Bench-Time")
+private val KtorRequestId = AttributeKey<String>("KMP-Testbench-ID")
+private val KtorRequestTime = AttributeKey<Instant>("KMP-Testbench-Time")
 
 public class KtorNetworkClientPlugin :
     NetworkPlugin(),
@@ -32,7 +32,7 @@ public class KtorNetworkClientPlugin :
 
     @OptIn(ExperimentalStdlibApi::class)
     private val ktorPlugin: io.ktor.client.plugins.api.ClientPlugin<Unit> =
-        createClientPlugin("KMP-Test-Bench-Plugin") {
+        createClientPlugin("KMP-Testbench-Plugin") {
             on(SetupRequest) { request ->
                 request.attributes.put(KtorRequestId, Random.Default.nextBytes(8).toHexString())
                 request.attributes.put(KtorRequestTime, Clock.System.now())

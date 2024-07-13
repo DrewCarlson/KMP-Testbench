@@ -75,7 +75,7 @@ fun DecoratedWindowScope.TitleBarView(
                     modifier = Modifier
                         .size(40.dp)
                         .padding(5.dp),
-                    onClick = { Desktop.getDesktop().browse(URI.create("https://github.com/squareup/KMP-Test-Bench")) },
+                    onClick = { Desktop.getDesktop().browse(URI.create("https://github.com/squareup/KMP-Testbench")) },
                 ) {
                     Icon(
                         "icons/github@20x20_dark.svg",
