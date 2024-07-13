@@ -119,8 +119,17 @@ private val methodColumn = DataTableColumn<NetworkEntryHolder>(
 private val statusColumn = DataTableColumn<NetworkEntryHolder>(
     header = { DataTableHeader(text = "Status") },
     cell = { entry ->
+        val labelText = remember(entry.response) {
+            when (val response = entry.response) {
+                is NetworkResponseMessage.Completed -> response.status.toString()
+                is NetworkResponseMessage.Cancelled -> "cancelled"
+                is NetworkResponseMessage.Failed -> "failed"
+                null -> "pending"
+            }
+        }
+
         Text(
-            text = entry.response?.status?.toString() ?: "pending",
+            text = labelText,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.padding(6.dp),

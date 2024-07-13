@@ -79,7 +79,7 @@ public fun RequestDataView(
 
                     if (viewingResponse) {
                         val responseHeaders = remember(responseData) {
-                            responseData?.headers?.toList().orEmpty()
+                            (responseData as? NetworkResponseMessage.Completed)?.headers?.toList().orEmpty()
                         }
                         DataTable(
                             modifier = Modifier.fillMaxWidth(),
@@ -131,7 +131,7 @@ public fun RequestDataView(
                     )
 
                     val body = if (viewingResponse) {
-                        responseData?.body
+                        (responseData as? NetworkResponseMessage.Completed)?.body
                     } else {
                         requestData.body
                     }

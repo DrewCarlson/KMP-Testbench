@@ -4,6 +4,7 @@ import io.ktor.client.*
 import io.ktor.client.plugins.api.*
 import io.ktor.client.plugins.observer.*
 import io.ktor.client.statement.*
+import io.ktor.client.utils.*
 import io.ktor.http.content.*
 import io.ktor.util.*
 import kotlinx.coroutines.channels.BufferOverflow
@@ -12,6 +13,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import testbench.plugin.client.ClientPlugin
+import kotlin.coroutines.cancellation.CancellationException
 import kotlin.random.Random
 
 private val KtorRequestId = AttributeKey<String>("KMP-Testbench-ID")
@@ -48,12 +50,39 @@ public class KtorNetworkClientPlugin :
                 )
                 messageQueue.send(message)
             }
+            on(Send) { request ->
+                try {
+                    proceed(request)
+                } catch (e: Throwable) {
+                    val id = request.attributes[KtorRequestId]
+                    val message = if ((e.cause ?: e) is CancellationException) {
+                        NetworkResponseMessage.Cancelled(
+                            id = id,
+                            sent = false,
+                        )
+                    } else {
+                        NetworkResponseMessage.Failed(
+                            id = id,
+                            message = e.stackTraceToString(),
+                        )
+                    }
+                    messageQueue.trySend(message)
+                    throw e
+                }
+            }
+            on(MonitoringEvent(HttpResponseCancelled)) { response ->
+                val message = NetworkResponseMessage.Cancelled(
+                    id = response.request.attributes[KtorRequestId],
+                    sent = true,
+                )
+                messageQueue.trySend(message)
+            }
         }
 
     public fun install(config: HttpClientConfig<*>) {
         config.install(ktorPlugin)
         config.ResponseObserver { response ->
-            val message = NetworkResponseMessage(
+            val message = NetworkResponseMessage.Completed(
                 id = response.request.attributes[KtorRequestId],
                 headers = response.headers.toMap(),
                 status = response.status.value,
