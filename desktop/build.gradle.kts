@@ -60,6 +60,7 @@ compose.desktop {
 
 tasks.withType<JavaExec> {
     afterEvaluate {
+        dependencies.implementation(dependencies.compose.desktop.currentOs)
         javaLauncher = project.javaToolchains.launcherFor {
             languageVersion = JavaLanguageVersion.of(17)
             vendor = JvmVendorSpec.JETBRAINS
