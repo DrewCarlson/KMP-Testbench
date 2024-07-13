@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "version": "v0.0.3-SNAPSHOT",
+    "title": "v0.0.3-SNAPSHOT",
+    "aliases": [
+      "dev-snapshot"
+    ]
+  }
+]
