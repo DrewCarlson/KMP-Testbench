@@ -1,9 +1,7 @@
 package testbench.plugins.logs
 
 import testbench.plugin.desktop.DesktopPlugin
-import testbench.plugin.desktop.UiHook
-import testbench.plugin.desktop.UiHookLocation
-import testbench.plugin.desktop.registerUi
+import testbench.plugin.desktop.UiHooks
 
 public class LogsPlaceholderPlugin : DesktopPlugin<String, String> {
     override val id: String = "logs"
@@ -11,8 +9,8 @@ public class LogsPlaceholderPlugin : DesktopPlugin<String, String> {
 
     override val requiresClient: Boolean = false
 
-    override val uiHooks: Map<UiHookLocation, UiHook> = registerUi {
-        addMainPanel { modifier ->
+    override val ui: UiHooks = UiHooks {
+        MainPanel { modifier ->
             LogsMainPanel(
                 entries = emptyList(),
                 modifier = modifier,

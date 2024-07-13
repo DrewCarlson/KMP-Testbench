@@ -15,8 +15,13 @@ public interface DesktopPlugin<ServerMessage : Any, ClientMessage : Any> : Bench
     public val requiresClient: Boolean
         get() = true
 
-    public val uiHooks: Map<UiHookLocation, UiHook>
-        get() = emptyMap()
+    public val ui: UiHooks
+        get() = UiHooks(emptyMap())
 
     public suspend fun handleMessage(message: ServerMessage)
+}
+
+@Suppress("UnusedReceiverParameter")
+public fun DesktopPlugin<*, *>.UiHooks(block: UiHookMapBuilder.() -> Unit): UiHooks {
+    return UiHookMapBuilder().apply(block).build()
 }

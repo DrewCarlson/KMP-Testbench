@@ -50,7 +50,7 @@ fun SidebarContainer(
                 activeSession
                     .pluginRegistry
                     .enabledPlugins
-                    .filterValues { it.uiHooks.containsKey(UiHookLocation.MAIN_PANEL) }
+                    .filterValues { it.ui.containsKey(UiHookLocation.MAIN_PANEL) }
             }.forEach { (_, plugin) ->
                 PluginRow(
                     name = plugin.name,

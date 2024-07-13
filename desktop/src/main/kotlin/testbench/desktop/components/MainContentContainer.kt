@@ -17,7 +17,7 @@ fun MainContentContainer(
     activePlugin: DesktopPlugin<*, *>?,
 ) {
     val uiHook = remember(activePlugin) {
-        activePlugin?.uiHooks?.get(UiHookLocation.MAIN_PANEL)
+        activePlugin?.ui?.get(UiHookLocation.MAIN_PANEL)
     }
     Box(
         modifier = modifier

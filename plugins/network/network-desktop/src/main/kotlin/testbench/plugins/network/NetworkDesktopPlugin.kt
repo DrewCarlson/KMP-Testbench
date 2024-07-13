@@ -3,10 +3,7 @@ package testbench.plugins.network
 import androidx.compose.runtime.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
-import testbench.plugin.desktop.DesktopPlugin
-import testbench.plugin.desktop.UiHook
-import testbench.plugin.desktop.UiHookLocation
-import testbench.plugin.desktop.registerUi
+import testbench.plugin.desktop.*
 import testbench.plugins.network.ui.NetworkMainPanel
 
 public data class NetworkEntryHolder(
@@ -19,8 +16,8 @@ public class NetworkDesktopPlugin :
     DesktopPlugin<NetworkPluginMessage, Unit> {
     private val networkEntries = MutableStateFlow(emptyMap<String, NetworkEntryHolder>())
 
-    override val uiHooks: Map<UiHookLocation, UiHook> = registerUi {
-        addMainPanel { modifier ->
+    override val ui: UiHooks = UiHooks {
+        MainPanel { modifier ->
             val entries by networkEntries.collectAsState(initial = emptyMap())
             NetworkMainPanel(
                 entries = entries,

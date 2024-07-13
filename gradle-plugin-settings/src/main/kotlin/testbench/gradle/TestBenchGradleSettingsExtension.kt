@@ -65,7 +65,11 @@ public open class TestBenchGradleSettingsExtension(
 public class TestBenchIncludePluginBuilder {
     internal val clientVariations = mutableListOf<String>()
 
-    public var desktopOnly: Boolean = false
+    internal var desktopOnly: Boolean = false
+
+    public fun desktopOnly() {
+        desktopOnly = true
+    }
 
     public fun clientVariations(vararg names: String) {
         clientVariations.addAll(names)

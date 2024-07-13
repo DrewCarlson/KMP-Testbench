@@ -1,18 +1,14 @@
 package testbench.plugin.desktop
 
+@Suppress("ktlint:standard:function-naming", "FunctionName")
 public class UiHookMapBuilder {
     private val hooks = mutableMapOf<UiHookLocation, UiHook>()
 
-    public fun addMainPanel(hook: UiHook) {
+    public fun MainPanel(hook: UiHook) {
         hooks[UiHookLocation.MAIN_PANEL] = hook
     }
 
-    internal fun build(): Map<UiHookLocation, UiHook> {
-        return hooks.toMap()
+    internal fun build(): UiHooks {
+        return UiHooks(hooks.toMap())
     }
-}
-
-@Suppress("UnusedReceiverParameter")
-public fun DesktopPlugin<*, *>.registerUi(block: UiHookMapBuilder.() -> Unit): Map<UiHookLocation, UiHook> {
-    return UiHookMapBuilder().apply(block).build()
 }
