@@ -15,12 +15,10 @@ KMP Testbench
 ![](https://img.shields.io/static/v1?label=&message=tvOS&color=blue)
 ![](https://img.shields.io/static/v1?label=&message=watchOS&color=blue)
 
+**[Getting Started](getting-started.md)** |
+**[Custom Plugins](custom-plugins/getting-started.md)**
+
 A modular tool for debugging Kotlin Multiplatform applications.
 
 <img src="img/screenshot.png" width="805px" height="416px">
-
-
-**[Documentation](https://drewcarlson.github.io/kmp-testbench/latest/)**
-
-**[Getting Started](https://drewcarlson.github.io/kmp-testbench/latest/getting-started/)**
 
