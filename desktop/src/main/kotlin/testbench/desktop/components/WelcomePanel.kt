@@ -7,5 +7,5 @@ import org.jetbrains.jewel.ui.component.Text
 @Composable
 fun WelcomePanel(modifier: Modifier = Modifier) {
     // TODO: Better default welcome screen
-    Text(text = "Welcome to KMP Test Bench!")
+    Text(text = "Welcome to KMP Testbench!")
 }

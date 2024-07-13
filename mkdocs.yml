@@ -41,7 +41,7 @@ plugins:
   - markdownextradata: { }
 
 extra:
-  project: KMP Test Bench
+  project: KMP Testbench
   lib_version: !ENV [ VERSION, '0.0.1' ]
   version:
     provider: mike

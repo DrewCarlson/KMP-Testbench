@@ -1,4 +1,4 @@
-KMP Test Bench
+KMP Testbench
 ===
 [![Maven Central](https://img.shields.io/maven-central/v/org.drewcarlson.testbench/desktop?label=maven&color=blue)](https://central.sonatype.com/search?q=desktop-*&namespace=org.drewcarlson.testbench)
 ![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/org.drewcarlson.testbench/desktop?server=https%3A%2F%2Fs01.oss.sonatype.org)
