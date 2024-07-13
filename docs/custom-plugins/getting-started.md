@@ -21,3 +21,7 @@ testbench {
   }
 }
 ```
+
+## Next Steps
+
+For next steps, see [Plugin Basics](plugin-basics.md).

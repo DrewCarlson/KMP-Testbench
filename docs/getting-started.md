@@ -17,8 +17,14 @@ testbench {
 }
 ```
 
-## Run Test Bench
+## Run Testbench
+
+Launch the desktop app with the `runTestbench` task.
 
 ```bash
 ./gradlew runTestbench
 ```
+
+You should see an idle testbench window:
+
+![](img/screenshot-empty.png)

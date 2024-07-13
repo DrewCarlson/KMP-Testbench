@@ -23,12 +23,13 @@ class MyDesktopPlugin : ServerPlugin<Unit, ClientMessage> {
     batteryPercentFlow.value = message.batteryPercent
   }
 
-  @Composable
-  override fun renderPanel(modifier: Modifier) {
-    val batteryPercent by batteryPercentFlow.collectAsState()
-    Column(modifier = modifier) {
-      Text("Battery:")
-      ProgressBar(batteryPercent)
+  override val ui = UiHooks {
+    MainPanel { modifier ->
+      val batteryPercent by batteryPercentFlow.collectAsState()
+      Column(modifier = modifier) {
+        Text("Battery:")
+        ProgressBar(batteryPercent)
+      }
     }
   }
 }

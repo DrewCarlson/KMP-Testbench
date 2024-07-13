@@ -17,7 +17,7 @@ KMP Test Bench
 
 A modular tool for debugging Kotlin Multiplatform applications.
 
-<img src="img/screenshot.png" width="548px" height="292px">
+<img src="img/screenshot.png" width="805px" height="416px">
 
 
 **[Documentation](https://drewcarlson.github.io/kmp-testbench/latest/)**
