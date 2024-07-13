@@ -7,6 +7,7 @@ on:
 
 jobs:
   publish:
+    if: false
     runs-on: macos-latest
     env:
       ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.ORG_GRADLE_PROJECT_signingInMemoryKey }}
