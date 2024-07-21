@@ -9,12 +9,17 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.ui.theme.colorPalette
@@ -114,6 +119,7 @@ private fun HeaderCell(
     modifier: Modifier,
     divider: Boolean,
     handleColor: Color,
+    handleSize: DpSize = DpSize(2.dp, Dp.Infinity),
     onDrag: (dragAmountX: Float) -> Unit,
     body: @Composable () -> Unit,
 ) {
@@ -121,24 +127,35 @@ private fun HeaderCell(
         modifier = modifier,
         contentAlignment = Alignment.CenterStart,
     ) {
+        body()
         if (divider) {
-            Spacer(
+            Box(
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
                     .size(14.dp)
-                    .absoluteOffset(7.dp)
-                    .drawBehind {
-                        drawLine(
-                            color = handleColor,
-                            start = Offset(size.width / 2, 0f),
-                            end = Offset(size.width / 2, size.height),
-                            strokeWidth = 2f,
+                    .clipToBounds()
+                    .drawWithCache {
+                        val handleWidth = handleSize.width.toPx()
+                        val handleHeight = when (handleSize.height) {
+                            Dp.Unspecified, Dp.Infinity -> size.height
+                            else -> handleSize.height.toPx()
+                        }
+                        val adjustedHandleSize = Size(handleWidth, handleHeight)
+                        val handleOffset = Offset(
+                            x = size.width - handleWidth,
+                            y = size.height - handleHeight,
                         )
+                        onDrawBehind {
+                            drawRect(
+                                color = handleColor,
+                                topLeft = handleOffset,
+                                size = adjustedHandleSize,
+                            )
+                        }
                     }.onDrag { dragAmount -> onDrag(dragAmount.x) }
                     .pointerHoverIcon(PointerIcon(Cursor(Cursor.E_RESIZE_CURSOR))),
             )
         }
-        body()
     }
 }
 
