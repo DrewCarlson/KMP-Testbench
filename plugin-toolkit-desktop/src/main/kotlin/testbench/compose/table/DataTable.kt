@@ -17,13 +17,14 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.*
 import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.ui.theme.colorPalette
 import java.awt.Cursor
+import kotlin.ranges.coerceAtLeast
 
 @Composable
 public fun <T> DataTable(
@@ -34,10 +35,8 @@ public fun <T> DataTable(
     modifier: Modifier = Modifier,
 ) {
     val handleColor = JewelTheme.colorPalette.grey(5)
-    var tableWidth by remember { mutableStateOf(0f) }
-    var columnWeights by remember {
-        mutableStateOf(columns.map { if (it.expanded) 2f else 1f })
-    }
+    val columnWidths = remember { mutableStateOf(columns.map { 0.dp }) }
+    val columnWidthOverride = remember { mutableStateOf(columnWidths.value) }
     val lazyListState = rememberLazyListState()
     val scrollState = rememberScrollState()
     val scrollbarAdapter = if (lazyList) {
@@ -47,35 +46,12 @@ public fun <T> DataTable(
     }
 
     Column(modifier = modifier) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .drawBehind {
-                    drawLine(
-                        color = handleColor,
-                        start = Offset(0f, size.height),
-                        end = Offset(size.width, size.height),
-                        strokeWidth = 2f,
-                    )
-                }.onGloballyPositioned { coordinates ->
-                    tableWidth = coordinates.size.width.toFloat()
-                },
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            columns.forEachIndexed { index, column ->
-                HeaderCell(
-                    modifier = Modifier.weight(columnWeights[index]),
-                    divider = index < columns.lastIndex,
-                    handleColor = handleColor,
-                    onDrag = onDrag@{
-                        if (tableWidth == 0f) return@onDrag
-                        columnWeights = calculateColumnWeightsForDrag(columnWeights, it, tableWidth, index)
-                    },
-                    body = column.header,
-                )
-            }
-        }
+        ColumnHeaders(
+            columns = columns,
+            handleColor = handleColor,
+            columnWidths = columnWidths,
+            columnWidthOverride = columnWidthOverride,
+        )
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -88,7 +64,7 @@ public fun <T> DataTable(
                     state = lazyListState,
                 ) {
                     items(items) { item ->
-                        tableRow(onItemClick, item, handleColor, columns, columnWeights)
+                        TableRow(onItemClick, item, handleColor, columns, columnWidths.value)
                     }
                 }
             } else {
@@ -98,7 +74,7 @@ public fun <T> DataTable(
                         .verticalScroll(scrollState),
                 ) {
                     items.forEach { item ->
-                        tableRow(onItemClick, item, handleColor, columns, columnWeights)
+                        TableRow(onItemClick, item, handleColor, columns, columnWidths.value)
                     }
                 }
             }
@@ -113,14 +89,172 @@ public fun <T> DataTable(
     }
 }
 
+@Composable
+private fun <T> ColumnHeaders(
+    columns: List<DataTableColumn<T>>,
+    handleColor: Color,
+    columnWidths: MutableState<List<Dp>>,
+    columnWidthOverride: MutableState<List<Dp>>,
+) {
+    Layout(
+        modifier = Modifier
+            .fillMaxWidth()
+            .drawBehind {
+                drawLine(
+                    color = handleColor,
+                    start = Offset(0f, size.height),
+                    end = Offset(size.width, size.height),
+                    strokeWidth = 2f,
+                )
+            },
+        content = {
+            val density = LocalDensity.current
+            columns.forEachIndexed { index, column ->
+                if (index > 0) {
+                    HeaderHandle(
+                        modifier = Modifier.layoutId("handle"),
+                        handleColor = handleColor,
+                        onDrag = onDrag@{ x ->
+                            val delta = with(density) { x.toDp() }
+                            val newWidths = columnWidthOverride.value.toMutableList()
+                            if ((index == columns.lastIndex && !column.expanded) || columns[index - 1].expanded) {
+                                val newWidth = newWidths[index] - delta
+                                if (newWidth >= 0.dp) {
+                                    newWidths[index] = newWidth
+                                }
+                            } else {
+                                val newWidth = newWidths[index - 1] + delta
+                                if (newWidth >= 0.dp) {
+                                    newWidths[index - 1] = newWidth
+                                }
+                            }
+
+                            if (newWidths.any { it < 0.dp }) return@onDrag
+
+                            columnWidthOverride.value = newWidths
+                        },
+                    )
+                }
+                HeaderCell(
+                    modifier = Modifier,
+                    body = column.header,
+                )
+            }
+        },
+    ) { measurables, constraints ->
+        // Measure handles, keeping them as small as possible
+        val handlePlaceables = measurables
+            .filter { it.layoutId == "handle" }
+            .map { measurable -> measurable.measure(constraints.copy(minWidth = 0)) }
+        // Measure non-expanding columns to find remaining width for expanded columns
+        val headerMeasurables = measurables.filterNot { it.layoutId == "handle" }
+        val staticPlaceables = headerMeasurables
+            .mapIndexed { index, measurable ->
+                if (columns[index].expanded) {
+                    // expanded columns will have their size calculated after all other columns are measured
+                    null
+                } else {
+                    // measure the non-expanded column with its minimum width
+                    val min = measurable
+                        .maxIntrinsicWidth(0)
+                    val remainingMaxWidth = constraints.maxWidth - headerMeasurables
+                        .filterIndexed { i, _ -> i != index && !columns[i].expanded }
+                        .sumOf { it.maxIntrinsicWidth(0) }
+                    val actualMin = (min + columnWidthOverride.value[index].roundToPx())
+                        .coerceIn(0, (min + remainingMaxWidth).coerceAtLeast(0))
+                    measurable.measure(constraints.copy(minWidth = actualMin, maxWidth = actualMin))
+                }
+            }
+
+        // Calculate total fixed width and determine remaining width for expanded columns
+        val totalFixedWidth = staticPlaceables
+            .filterIndexed { index, _ -> !columns[index].expanded }
+            .sumOf { it?.width ?: 0 }
+        val remainingWidth = (constraints.maxWidth - totalFixedWidth).coerceAtLeast(0)
+        val expandedColumnCount = columns.count { it.expanded }
+
+        // Calculate the width for each column
+        columnWidths.value = staticPlaceables.mapIndexed { index, placeable ->
+            val minWidth = headerMeasurables[index].minIntrinsicWidth(0)
+            val remaining = remainingWidth.coerceAtLeast(minWidth)
+            if (columns[index].expanded) {
+                // Distribute remaining width among expanded columns
+                (remaining / expandedColumnCount + columnWidthOverride.value[index].roundToPx())
+                    .toDp()
+                    .coerceIn(0.dp, remaining.toDp())
+            } else {
+                // Use measured min width for non-expanded columns
+                (placeable?.measuredWidth ?: 0).toDp()
+            }
+        }
+
+        val placeables = staticPlaceables.mapIndexed { index, placeable ->
+            // return static placeable or calculate the expanding size and measure cell
+            placeable ?: headerMeasurables[index].measure(
+                Constraints.fixedWidth(
+                    (columnWidths.value[index].roundToPx())
+                        .coerceAtLeast(0),
+                ),
+            )
+        }
+
+        val maxHeight = placeables.maxOfOrNull { it.height } ?: constraints.minHeight
+        layout(constraints.maxWidth, maxHeight) {
+            placeables.foldIndexed(0) { index, xPosition, placeable ->
+                placeable.placeRelative(x = xPosition, y = 0)
+
+                if (index > 0) {
+                    val handle = handlePlaceables[index - 1]
+                    handle.placeRelative(
+                        x = xPosition - (handle.width / 2),
+                        y = ((maxHeight / 2) - (handle.height / 2)),
+                    )
+                }
+
+                xPosition + placeable.width
+            }
+        }
+    }
+}
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun HeaderCell(
+private fun HeaderHandle(
     modifier: Modifier,
-    divider: Boolean,
     handleColor: Color,
     handleSize: DpSize = DpSize(2.dp, Dp.Infinity),
     onDrag: (dragAmountX: Float) -> Unit,
+) {
+    Box(
+        modifier = modifier
+            .size(14.dp)
+            .clipToBounds()
+            .drawWithCache {
+                val handleWidth = handleSize.width.toPx()
+                val handleHeight = when (handleSize.height) {
+                    Dp.Unspecified, Dp.Infinity -> size.height
+                    else -> handleSize.height.toPx()
+                }
+                val adjustedHandleSize = Size(handleWidth, handleHeight)
+                val handleOffset = Offset(
+                    x = (size.width / 2) - (handleWidth / 2),
+                    y = size.height - handleHeight,
+                )
+                onDrawBehind {
+                    drawRect(
+                        color = handleColor,
+                        topLeft = handleOffset,
+                        size = adjustedHandleSize,
+                    )
+                }
+            }.onDrag { dragAmount -> onDrag(dragAmount.x) }
+            .pointerHoverIcon(PointerIcon(Cursor(Cursor.E_RESIZE_CURSOR))),
+    )
+}
+
+@Composable
+private fun HeaderCell(
+    modifier: Modifier,
     body: @Composable () -> Unit,
 ) {
     Box(
@@ -128,44 +262,16 @@ private fun HeaderCell(
         contentAlignment = Alignment.CenterStart,
     ) {
         body()
-        if (divider) {
-            Box(
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .size(14.dp)
-                    .clipToBounds()
-                    .drawWithCache {
-                        val handleWidth = handleSize.width.toPx()
-                        val handleHeight = when (handleSize.height) {
-                            Dp.Unspecified, Dp.Infinity -> size.height
-                            else -> handleSize.height.toPx()
-                        }
-                        val adjustedHandleSize = Size(handleWidth, handleHeight)
-                        val handleOffset = Offset(
-                            x = size.width - handleWidth,
-                            y = size.height - handleHeight,
-                        )
-                        onDrawBehind {
-                            drawRect(
-                                color = handleColor,
-                                topLeft = handleOffset,
-                                size = adjustedHandleSize,
-                            )
-                        }
-                    }.onDrag { dragAmount -> onDrag(dragAmount.x) }
-                    .pointerHoverIcon(PointerIcon(Cursor(Cursor.E_RESIZE_CURSOR))),
-            )
-        }
     }
 }
 
 @Composable
-private fun <T> tableRow(
+private fun <T> TableRow(
     onItemClick: (T) -> Unit,
     item: T,
     handleColor: Color,
     columns: List<DataTableColumn<T>>,
-    columnWeights: List<Float>,
+    columnWidths: List<Dp>,
 ) {
     Row(
         modifier = Modifier
@@ -182,52 +288,14 @@ private fun <T> tableRow(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         columns.forEachIndexed { index, dataTableColumn ->
+            val width = remember(index, dataTableColumn, columnWidths) { columnWidths[index] }
             Box(
                 modifier = Modifier
-                    .weight(columnWeights[index]),
+                    .width(width),
                 contentAlignment = Alignment.CenterStart,
             ) {
                 dataTableColumn.cell(item)
             }
         }
     }
-}
-
-private fun calculateColumnWeightsForDrag(
-    columnWeights: List<Float>,
-    dragAmountX: Float,
-    tableWidth: Float,
-    index: Int,
-): MutableList<Float> {
-    val columnWeightSum = columnWeights.sum()
-    val deltaWeight = dragAmountX / tableWidth * columnWeightSum
-
-    val newWidths = columnWeights.toMutableList()
-    val left = (newWidths[index] + deltaWeight).coerceAtLeast(0.1f)
-    val right = (newWidths[index + 1] - deltaWeight).coerceAtLeast(0.1f)
-
-    val adjustedDeltaWeight = if (deltaWeight > 0) {
-        minOf(
-            left - columnWeights[index],
-            columnWeights[index + 1] - right,
-        )
-    } else {
-        maxOf(
-            left - columnWeights[index],
-            columnWeights[index + 1] - right,
-        )
-    }
-
-    newWidths[index] =
-        (columnWeights[index] + adjustedDeltaWeight)
-            .coerceAtLeast(0.1f)
-    newWidths[index + 1] =
-        (columnWeights[index + 1] - adjustedDeltaWeight)
-            .coerceAtLeast(0.1f)
-
-    val correctedTotal = newWidths.sum()
-    val error = columnWeightSum - correctedTotal
-    newWidths[index] += error / 2
-    newWidths[index + 1] += error / 2
-    return newWidths
 }
