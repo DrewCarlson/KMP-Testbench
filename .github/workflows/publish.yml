@@ -19,7 +19,7 @@ jobs:
           download_url="https://cache-redirector.jetbrains.com/intellij-jbr/jbrsdk_jcef-17.0.11-osx-aarch64-b1312.2.tar.gz"
           wget -O $RUNNER_TEMP/java_package.tar.gz $download_url
       - name: Setup JBR 17
-        uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9
+        uses: actions/setup-java@8e04ddff28554375a9a1096c888a2ef2c9803cd7
         with:
           distribution: 'jdkfile'
           jdkFile: ${{ runner.temp }}/java_package.tar.gz
