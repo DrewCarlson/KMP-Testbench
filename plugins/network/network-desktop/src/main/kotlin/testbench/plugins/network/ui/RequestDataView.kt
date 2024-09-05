@@ -177,8 +177,9 @@ private fun BodyContainer(body: String? = null) {
     JsonTreeViewer(
         rootElement = json,
         modifier = Modifier
+            .defaultMinSize(minHeight = 400.dp)
             .fillMaxWidth()
-            .height(400.dp),
+            .fillMaxHeight(),
     )
 }
 
