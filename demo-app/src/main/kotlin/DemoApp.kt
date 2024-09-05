@@ -10,14 +10,21 @@ import androidx.compose.ui.window.application
 import coingecko.CoinGeckoClient
 import coingecko.models.coins.CoinList
 import io.ktor.client.*
+import io.ktor.client.engine.okhttp.*
 import testbench.client.TestBenchClient
 import testbench.plugins.network.KtorNetworkClientPlugin
+import testbench.plugins.network.OkHttpNetworkClientPlugin
 
 fun main() = application {
     val networkPlugin = remember { KtorNetworkClientPlugin() }
+    val okhttpNetworkPlugin = remember { OkHttpNetworkClientPlugin() }
     val coingecko = remember {
         CoinGeckoClient(
-            HttpClient {
+            HttpClient(
+                OkHttp.create {
+                    addInterceptor(okhttpNetworkPlugin.interceptor)
+                },
+            ) {
                 networkPlugin.install(this)
             },
         )
@@ -26,6 +33,7 @@ fun main() = application {
         TestBenchClient(
             plugins = listOf(
                 networkPlugin,
+                okhttpNetworkPlugin,
             ),
         )
     }

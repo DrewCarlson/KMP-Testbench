@@ -7,11 +7,12 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.datetime.Clock
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.ResponseBody.Companion.toResponseBody
 import okio.Buffer
 import testbench.plugin.client.ClientPlugin
 import kotlin.random.Random
 
-public class OkhttpNetworkClientPlugin :
+public class OkHttpNetworkClientPlugin :
     NetworkPlugin(),
     ClientPlugin<NetworkPluginMessage, Unit> {
     private val messageQueue = Channel<NetworkPluginMessage>(
@@ -69,15 +70,22 @@ public class OkhttpNetworkClientPlugin :
             throw e
         }
 
+        val responseBodyString = response.body?.string()
         messageQueue.trySend(
             NetworkResponseMessage.Completed(
                 id = requestId,
                 headers = response.headers.toMultimap(),
                 status = response.code,
-                body = response.body?.string(),
+                body = responseBodyString,
             ),
         )
 
         response
+            .newBuilder()
+            .apply {
+                if (responseBodyString != null) {
+                    body(responseBodyString.toResponseBody(response.body?.contentType()))
+                }
+            }.build()
     }
 }

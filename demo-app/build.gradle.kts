@@ -17,14 +17,18 @@ dependencies {
     implementation(libs.coroutines.core)
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.cio)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.okhttp)
 
     implementation(libs.serialization.core)
     implementation(libs.serialization.json)
 
     implementation(projects.clientCore)
     implementation(projects.plugins.network.networkClientKtor)
+    implementation(projects.plugins.network.networkClientOkhttp)
 
     implementation("org.drewcarlson:coingecko:1.0.0-rc01")
+    implementation("io.ktor:ktor-client-okhttp-jvm:2.3.12")
 }
 
 compose.desktop {
