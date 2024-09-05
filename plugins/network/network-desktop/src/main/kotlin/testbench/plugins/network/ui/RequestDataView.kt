@@ -183,6 +183,7 @@ private fun BodyContainer(body: String? = null) {
 }
 
 private val HeaderKeyColumn = DataTableColumn<Pair<String, List<String>>>(
+    expanded = true,
     header = {
         DataTableHeader("Key")
     },
@@ -196,6 +197,7 @@ private val HeaderKeyColumn = DataTableColumn<Pair<String, List<String>>>(
 )
 
 private val HeaderValueColumn = DataTableColumn<Pair<String, List<String>>>(
+    expanded = true,
     header = {
         DataTableHeader("Value")
     },
