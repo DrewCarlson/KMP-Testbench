@@ -1,5 +1,5 @@
 [versions]
-icons = "233.15619.7"
+icons = "242.21829.165"
 kotlin = { strictly = "2.0.20" }
 compose = { strictly = "1.7.0-beta01" }
 coroutines = "1.9.0-RC.2"
