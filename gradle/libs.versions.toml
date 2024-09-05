@@ -1,5 +1,4 @@
 [versions]
-icons = "233.15619.7"
 kotlin = { strictly = "2.0.20" }
 compose = { strictly = "1.7.0-beta01" }
 coroutines = "1.9.0-RC.2"
@@ -10,6 +9,7 @@ jewel = "0.23.1"
 dokka = "1.9.20"
 jvmTarget = "17"
 bcv = "0.16.3"
+icons = "242.21829.165"
 
 [plugins]
 multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
