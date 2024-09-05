@@ -34,7 +34,7 @@ public fun <T> DataTable(
     onItemClick: (T) -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
-    val handleColor = JewelTheme.colorPalette.grey(5)
+    val handleColor = JewelTheme.colorPalette.gray(5)
     val columnWidths = remember { mutableStateOf(columns.map { 0.dp }) }
     val columnWidthOverride = remember { mutableStateOf(columnWidths.value) }
     val lazyListState = rememberLazyListState()

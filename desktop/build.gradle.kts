@@ -32,6 +32,7 @@ dependencies {
     // Jewel (Intellij UI) Compose Theme
     implementation(libs.jewel)
     implementation(libs.jewel.decorated)
+    implementation(libs.intellij.icons)
 
     implementation(libs.coroutines.core)
 

@@ -19,6 +19,7 @@ import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonPrimitive
 import org.jetbrains.jewel.ui.Orientation
 import org.jetbrains.jewel.ui.component.*
+import org.jetbrains.jewel.ui.component.styling.LocalDefaultTabStyle
 import testbench.compose.JsonTreeViewer
 import testbench.compose.table.DataTable
 import testbench.compose.table.DataTableColumn
@@ -51,6 +52,7 @@ public fun RequestDataView(
                     verticalArrangement = Arrangement.Top,
                 ) {
                     TabStrip(
+                        style = LocalDefaultTabStyle.current,
                         tabs = listOf(
                             TabData.Default(
                                 selected = !viewingResponse,
@@ -104,6 +106,7 @@ public fun RequestDataView(
                     verticalArrangement = Arrangement.spacedBy(6.dp),
                 ) {
                     TabStrip(
+                        style = LocalDefaultTabStyle.current,
                         tabs = listOf(
                             TabData.Default(
                                 selected = !viewingResponse,

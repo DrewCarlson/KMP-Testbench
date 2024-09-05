@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.sp
 import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.ui.component.Icon
 import org.jetbrains.jewel.ui.component.Text
+import org.jetbrains.jewel.ui.icon.PathIconKey
 import org.jetbrains.jewel.ui.theme.colorPalette
 import org.jetbrains.jewel.ui.util.thenIf
 import testbench.desktop.resources.TestBenchIcons
@@ -117,16 +118,15 @@ private fun PluginRow(
                     if (enabled) {
                         JewelTheme.colorPalette.blue(4)
                     } else {
-                        JewelTheme.colorPalette.grey(4)
+                        JewelTheme.colorPalette.gray(4)
                     },
                     shape = RoundedCornerShape(4.dp),
                 ),
             contentAlignment = Alignment.Center,
         ) {
             Icon(
-                icon,
-                null,
-                TestBenchIcons::class.java,
+                key = PathIconKey(icon, TestBenchIcons::class.java),
+                contentDescription = null,
                 modifier = Modifier.size(14.dp),
             )
         }

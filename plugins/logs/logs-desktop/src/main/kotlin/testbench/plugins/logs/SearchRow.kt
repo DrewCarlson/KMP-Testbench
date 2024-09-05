@@ -4,7 +4,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -12,6 +14,7 @@ import org.jetbrains.jewel.ui.component.Icon
 import org.jetbrains.jewel.ui.component.OutlinedButton
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.component.TextField
+import org.jetbrains.jewel.ui.icon.PathIconKey
 
 @Composable
 public fun SearchRow(
@@ -19,6 +22,10 @@ public fun SearchRow(
     onSearchQueryChange: (String) -> Unit,
     onClearEntries: () -> Unit,
 ) {
+    val textFieldState = rememberTextFieldState(searchQuery)
+    LaunchedEffect(textFieldState) {
+        onSearchQueryChange(textFieldState.text.toString())
+    }
     Row(
         modifier = Modifier.padding(horizontal = 6.dp, vertical = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -26,8 +33,7 @@ public fun SearchRow(
     ) {
         TextField(
             modifier = Modifier.weight(1f, fill = true),
-            value = searchQuery,
-            onValueChange = onSearchQueryChange,
+            state = textFieldState,
             placeholder = {
                 Text(
                     text = "Search...",
@@ -36,9 +42,11 @@ public fun SearchRow(
             },
             leadingIcon = {
                 Icon(
-                    resource = "icons/search_dark.svg",
+                    key = PathIconKey(
+                        "icons/search_dark.svg",
+                        LogsPlaceholderPlugin::class.java,
+                    ),
                     contentDescription = null,
-                    iconClass = LogsPlaceholderPlugin::class.java,
                     modifier = Modifier.size(16.dp),
                 )
             },

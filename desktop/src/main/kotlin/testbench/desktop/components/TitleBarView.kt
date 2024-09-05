@@ -6,6 +6,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.jetbrains.jewel.ui.component.*
+import org.jetbrains.jewel.ui.icon.PathIconKey
 import org.jetbrains.jewel.window.DecoratedWindowScope
 import org.jetbrains.jewel.window.TitleBar
 import org.jetbrains.jewel.window.newFullscreenControls
@@ -25,25 +26,28 @@ fun DecoratedWindowScope.TitleBarView(
         modifier = Modifier.newFullscreenControls(),
     ) {
         Row(Modifier.align(Alignment.Start)) {
-            Dropdown(Modifier.height(30.dp), menuContent = {
-                sessions.forEach { (_, session) ->
-                    selectableItem(
-                        selected = session.sessionId == activeSession.sessionId,
-                        onClick = { onSessionSelected(session.sessionId) },
-                    ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(4.dp),
-                            verticalAlignment = Alignment.CenterVertically,
+            Dropdown(
+                modifier = Modifier.height(30.dp),
+                menuContent = {
+                    sessions.forEach { (_, session) ->
+                        selectableItem(
+                            selected = session.sessionId == activeSession.sessionId,
+                            onClick = { onSessionSelected(session.sessionId) },
                         ) {
-                            DeviceInfoIcon(
-                                deviceInfo = session.deviceInfo,
-                                isConnected = session.isConnected,
-                            )
-                            Text(session.title)
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                DeviceInfoIcon(
+                                    deviceInfo = session.deviceInfo,
+                                    isConnected = session.isConnected,
+                                )
+                                Text(session.title)
+                            }
                         }
                     }
-                }
-            }) {
+                },
+            ) {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(3.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -78,9 +82,11 @@ fun DecoratedWindowScope.TitleBarView(
                     onClick = { Desktop.getDesktop().browse(URI.create("https://github.com/squareup/KMP-Testbench")) },
                 ) {
                     Icon(
-                        "icons/github@20x20_dark.svg",
-                        "Github",
-                        TestBenchIcons::class.java,
+                        PathIconKey(
+                            "icons/github@20x20_dark.svg",
+                            TestBenchIcons::class.java,
+                        ),
+                        contentDescription = "Github",
                     )
                 }
             }
