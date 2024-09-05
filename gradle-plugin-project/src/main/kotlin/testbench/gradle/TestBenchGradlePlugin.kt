@@ -4,6 +4,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.attributes.Attribute
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.maven
 import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
 import testbench.gradle.plugins.configureCustomPlugins
 import testbench.gradle.tasks.RunTestbenchTask
@@ -18,6 +19,16 @@ public open class TestBenchGradlePlugin : Plugin<Project> {
         setupTestbenchRuntime(project)
 
         project.tasks.create(RUN_TASK_NAME, RunTestbenchTask::class.java)
+
+        project.repositories
+            .apply {
+                mavenCentral()
+                google()
+                maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+                maven("https://www.jetbrains.com/intellij-repository/releases")
+                maven("https://packages.jetbrains.team/maven/p/kpm/public/")
+                maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+            }
     }
 
     private fun setupTestbenchRuntime(project: Project) {
