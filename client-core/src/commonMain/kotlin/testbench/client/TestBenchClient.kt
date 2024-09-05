@@ -4,10 +4,8 @@ import io.ktor.client.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.serialization.kotlinx.*
-import io.ktor.websocket.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import testbench.communication.ClientConnectMessage
@@ -20,9 +18,11 @@ import kotlin.time.Duration.Companion.seconds
 
 public class TestBenchClient(
     private val plugins: List<ClientPlugin<*, *>>,
+    autoConnect: Boolean = true,
 ) {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private val connected = MutableStateFlow(false)
+    private val isEnabled = MutableStateFlow(autoConnect)
 
     @OptIn(ExperimentalStdlibApi::class)
     private val sessionId = Random.Default.nextBytes(4).toHexString()
@@ -43,11 +43,21 @@ public class TestBenchClient(
 
     init {
         scope.launch {
-            while (true) {
-                establishConnection()
-                delay(3.seconds)
+            isEnabled.collectLatest { tryConnect ->
+                while (tryConnect) {
+                    establishConnection()
+                    delay(3.seconds)
+                }
             }
         }
+    }
+
+    public fun enable() {
+        isEnabled.value = true
+    }
+
+    public fun disable() {
+        isEnabled.value = false
     }
 
     private suspend fun establishConnection() {
