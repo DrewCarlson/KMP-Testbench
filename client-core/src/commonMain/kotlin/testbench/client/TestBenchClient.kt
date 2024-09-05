@@ -45,26 +45,38 @@ public class TestBenchClient(
     }.shareIn(scope, SharingStarted.Lazily, replay = 1)
 
     init {
-        scope.launch {
-            isEnabled.collectLatest { tryConnect ->
-                while (tryConnect) {
-                    establishConnection()
-                    delay(3.seconds)
-                }
-            }
-        }
+        scope.launch { setupClientHandling() }
     }
 
     public fun enable() {
-        isEnabled.value = true
+        isEnabled.update { true }
     }
 
     public fun disable() {
-        isEnabled.value = false
+        isEnabled.update { false }
     }
 
     private suspend fun http(): HttpClient {
         return httpFlow.first()
+    }
+
+    private suspend fun setupClientHandling() {
+        isEnabled.collectLatest { tryConnect ->
+            if (tryConnect) {
+                while (true) {
+                    establishConnection()
+                    delay(3.seconds)
+                }
+            } else {
+                // Sink plugin messages to prevent queueing while client is disabled
+                @OptIn(ExperimentalCoroutinesApi::class)
+                plugins
+                    .map { it.outgoingMessages }
+                    .asFlow()
+                    .flattenMerge(concurrency = plugins.size)
+                    .collect()
+            }
+        }
     }
 
     private suspend fun establishConnection() {
