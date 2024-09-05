@@ -18,8 +18,8 @@ jobs:
       - name: Setup JBR 17
         uses: gmitch215/setup-java@6d2c5e1f82f180ae79f799f0ed6e3e5efb4e664d
         with:
-          distribution: 'jdkfile'
-          java-version: '17.0.11'
+          distribution: 'jetbrains'
+          java-version: 17
           cache: 'gradle'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
