@@ -23,7 +23,7 @@ jobs:
           cache: 'gradle'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: gradle/actions/setup-gradle@v3
+      - uses: gradle/actions/setup-gradle@v4
       - name: Cache Build files
         uses: actions/cache@v4
         if: ${{ !startsWith(matrix.os, 'windows') }}
