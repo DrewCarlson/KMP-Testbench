@@ -11,6 +11,11 @@ plugins {
     alias(libs.plugins.binaryCompat)
 }
 
+System
+    .getenv("GITHUB_REF_NAME")
+    ?.takeIf { it.startsWith("v") }
+    ?.let { version = it.removePrefix("v") }
+
 kotlin {
     explicitApi()
     compilerOptions {
@@ -37,6 +42,12 @@ buildConfig {
     buildConfigField("VERSION", version.toString())
     buildConfigField("COMPOSE_VERSION", libs.versions.compose)
     buildConfigField("SERIALIZATION_VERSION", libs.versions.serialization)
+
+    forClass("TestbenchDeps") {
+        buildConfigField("clientCore", "org.drewcarlson.testbench:client-core:$version")
+        buildConfigField("clientNetworkKtor", "org.drewcarlson.testbench:network-client-ktor:$version")
+        buildConfigField("clientNetworkOkhttp", "org.drewcarlson.testbench:network-client-okhttp:$version")
+    }
 }
 
 gradlePlugin {
@@ -49,8 +60,3 @@ gradlePlugin {
         }
     }
 }
-
-System
-    .getenv("GITHUB_REF_NAME")
-    ?.takeIf { it.startsWith("v") }
-    ?.let { version = it.removePrefix("v") }

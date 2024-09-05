@@ -56,5 +56,6 @@ testbench {
     includePlugin(":plugins:preferences")
     includePlugin(":plugins:network") {
         clientVariations("ktor")
+        clientVariations("okhttp")
     }
 }
