@@ -45,10 +45,9 @@ public fun RequestDataView(
         VerticalSplitLayout(
             modifier = Modifier
                 .fillMaxSize(),
-            first = { modifier ->
+            first = {
                 var viewingResponse by remember { mutableStateOf(false) }
                 Column(
-                    modifier = modifier,
                     verticalArrangement = Arrangement.Top,
                 ) {
                     TabStrip(
@@ -99,7 +98,7 @@ public fun RequestDataView(
                     }
                 }
             },
-            second = { modifier ->
+            second = {
                 var viewingResponse by remember { mutableStateOf(true) }
                 Column(
                     modifier = modifier,
