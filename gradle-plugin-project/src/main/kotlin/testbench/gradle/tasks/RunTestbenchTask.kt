@@ -1,5 +1,6 @@
 package testbench.gradle.tasks
 
+import org.gradle.api.internal.provider.AbstractProperty.PropertyQueryException
 import org.gradle.api.tasks.JavaExec
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.jvm.toolchain.JavaToolchainService
@@ -23,7 +24,17 @@ public abstract class RunTestbenchTask : JavaExec() {
                 languageVersion.set(JavaLanguageVersion.of(17))
             },
         )
-        setExecutable(javaLauncher.map { it.executablePath.asFile.absolutePath }.get())
-        classpath(project.configurations.getByName(RUNTIME_CONFIG))
+        val launcherBin = try {
+            javaLauncher.map { it.executablePath.asFile.absolutePath }.orNull
+        } catch (e: PropertyQueryException) {
+            project.logger.warn("Jetbrains Runtime 17 not found, disabling testbench.")
+            null
+        }
+        if (launcherBin == null) {
+            enabled = false
+        } else {
+            setExecutable(launcherBin)
+            classpath(project.configurations.getByName(RUNTIME_CONFIG))
+        }
     }
 }
