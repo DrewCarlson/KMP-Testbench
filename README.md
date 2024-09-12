@@ -14,8 +14,10 @@ KMP Testbench
 ![](https://img.shields.io/static/v1?label=&message=tvOS&color=blue)
 ![](https://img.shields.io/static/v1?label=&message=watchOS&color=blue)
 
-**[Documentation](https://drewcarlson.github.io/kmp-testbench/latest/)** |
-**[Getting Started](https://drewcarlson.github.io/kmp-testbench/latest/getting-started/)**
+**This project is still in early development, it may be missing functionality or break at any time (see [this issue](https://github.com/DrewCarlson/KMP-Testbench/issues/19)).**
+
+**[Documentation](https://drewcarlson.github.io/KMP-Testbench/dev-snapshot/)** |
+**[Getting Started](https://drewcarlson.github.io/KMP-Testbench/dev-snapshot/getting-started/)**
 
 A modular tool for debugging Kotlin Multiplatform applications.
 
