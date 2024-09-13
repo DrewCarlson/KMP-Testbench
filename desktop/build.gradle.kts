@@ -24,6 +24,7 @@ dependencies {
     implementation(projects.plugins.logs.logsDesktop)
     implementation(projects.plugins.preferences.preferencesDesktop)
     implementation(projects.plugins.databases.databasesDesktop)
+    implementation(projects.plugins.composeDebug.composeDebugDesktop)
 
     implementation(compose.desktop.common) {
         exclude(group = "org.jetbrains.compose.material")

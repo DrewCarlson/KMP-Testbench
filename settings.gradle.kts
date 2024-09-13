@@ -58,4 +58,5 @@ testbench {
         clientVariations("ktor")
         clientVariations("okhttp")
     }
+    includePlugin(":plugins:compose-debug")
 }
