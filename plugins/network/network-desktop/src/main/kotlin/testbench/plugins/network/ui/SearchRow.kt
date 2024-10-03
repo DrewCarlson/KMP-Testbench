@@ -21,7 +21,7 @@ public fun SearchRow(
     onClearEntries: () -> Unit,
 ) {
     val textFieldState = rememberTextFieldState(searchQuery)
-    LaunchedEffect(textFieldState) {
+    LaunchedEffect(textFieldState.text) {
         onSearchQueryChange(textFieldState.text.toString())
     }
     Row(
