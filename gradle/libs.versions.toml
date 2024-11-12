@@ -1,6 +1,6 @@
 [versions]
 kotlin = { strictly = "2.0.20" }
-compose = { strictly = "1.7.0-beta01" }
+compose = { strictly = "1.7.1" }
 coroutines = "1.9.0"
 serialization = "1.7.2"
 ktorio = "2.3.12"
