@@ -29,7 +29,7 @@ fun main() = application {
             },
         )
     }
-    LaunchedEffect(Unit) {
+    val testbenchClient = remember {
         TestBenchClient(
             plugins = listOf(
                 networkPlugin,
@@ -48,12 +48,34 @@ fun main() = application {
                 // value = coingecko.getCoinList()
             }
 
+            val isConnected by testbenchClient.isConnected.collectAsState()
+            val isEnabled by testbenchClient.isEnabled.collectAsState()
+
             Column {
-                Button(onClick = { refresh += 1 }) {
-                    Text("Refresh")
+                if (isConnected) {
+                    Text("Connected")
+                } else {
+                    Text("Disconnected")
                 }
-                coins.forEach { coin ->
-                    Text(text = coin.name)
+
+                Button(
+                    onClick = {
+                        if (testbenchClient.isEnabled.value) {
+                            testbenchClient.disable()
+                        } else {
+                            testbenchClient.enable()
+                        }
+                    },
+                ) {
+                    if (isEnabled) {
+                        Text("Disable")
+                    } else {
+                        Text("Enable")
+                    }
+                }
+
+                Button(onClick = { refresh += 1 }) {
+                    Text("Load Data")
                 }
             }
         }

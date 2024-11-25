@@ -1,8 +1,8 @@
 package testbench.plugins.databases
 
-import org.jetbrains.jewel.ui.component.Text
 import testbench.plugin.desktop.DesktopPlugin
 import testbench.plugin.desktop.UiHooks
+import testbench.ui.testbench
 
 public class DatabasesPlaceholderPlugin : DesktopPlugin<String, String> {
     override val id: String = "databases"
@@ -11,7 +11,7 @@ public class DatabasesPlaceholderPlugin : DesktopPlugin<String, String> {
 
     override val ui: UiHooks = UiHooks {
         MainPanel {
-            Text(text = "$name Placeholder")
+            testbench.Text(text = "$name Placeholder")
         }
     }
 

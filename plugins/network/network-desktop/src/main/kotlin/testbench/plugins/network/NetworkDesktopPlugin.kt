@@ -1,9 +1,11 @@
 package testbench.plugins.network
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
-import testbench.plugin.desktop.*
+import testbench.plugin.desktop.DesktopPlugin
+import testbench.plugin.desktop.UiHooks
 import testbench.plugins.network.ui.NetworkMainPanel
 
 public data class NetworkEntryHolder(

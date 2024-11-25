@@ -8,17 +8,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
-import org.jetbrains.jewel.foundation.theme.JewelTheme
-import org.jetbrains.jewel.ui.Orientation
-import org.jetbrains.jewel.ui.component.Divider
-import org.jetbrains.jewel.window.DecoratedWindow
 import testbench.desktop.components.MainContentContainer
 import testbench.desktop.components.SidebarContainer
-import testbench.desktop.components.TitleBarView
 import testbench.desktop.server.SessionData
 import testbench.plugin.desktop.DesktopPlugin
+import testbench.ui.TestbenchTheme
+import testbench.ui.testbench
 import java.awt.Toolkit
 
 @Composable
@@ -42,43 +40,55 @@ fun MainWindow(
                 value.takeIf { it.id == activePlugin?.id }
             }
     }
-    DecoratedWindow(
+    Window(
         title = "Testbench",
         state = windowState,
         onCloseRequest = onCloseRequest,
     ) {
-        TitleBarView(
+        MainWindowContent(
+            activePlugin = activePlugin,
+            onPluginSelected = { activePlugin = it },
             activeSession = activeSession,
             sessions = sessions,
             onSessionSelected = onSessionSelected,
         )
+    }
+}
 
-        Column(
+@Composable
+fun MainWindowContent(
+    activePlugin: DesktopPlugin<*, *>?,
+    onPluginSelected: (plugin: DesktopPlugin<*, *>) -> Unit,
+    activeSession: SessionData,
+    sessions: Map<String, SessionData>,
+    onSessionSelected: (id: String) -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(TestbenchTheme.colors.background),
+    ) {
+        Row(
             modifier = Modifier
-                .fillMaxSize()
-                .background(JewelTheme.globalColors.panelBackground),
+                .weight(1f),
         ) {
-            Row(
+            SidebarContainer(
                 modifier = Modifier
+                    .width(200.dp)
+                    .fillMaxHeight(),
+                onPluginSelected = onPluginSelected,
+                onSessionSelected = onSessionSelected,
+                activeSession = activeSession,
+            )
+
+            testbench.VerticalDivider()
+
+            MainContentContainer(
+                modifier = Modifier
+                    .fillMaxHeight()
                     .weight(1f),
-            ) {
-                SidebarContainer(
-                    modifier = Modifier
-                        .width(200.dp)
-                        .fillMaxHeight(),
-                    onPluginSelected = { activePlugin = it },
-                    activeSession = activeSession,
-                )
-                Divider(
-                    orientation = Orientation.Vertical,
-                )
-                MainContentContainer(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .weight(1f),
-                    activePlugin = activePlugin,
-                )
-            }
+                activePlugin = activePlugin,
+            )
         }
     }
 }

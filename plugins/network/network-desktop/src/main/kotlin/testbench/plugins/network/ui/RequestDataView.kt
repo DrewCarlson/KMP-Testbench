@@ -17,15 +17,14 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonPrimitive
-import org.jetbrains.jewel.ui.Orientation
-import org.jetbrains.jewel.ui.component.*
-import org.jetbrains.jewel.ui.component.styling.LocalDefaultTabStyle
-import testbench.compose.JsonTreeViewer
 import testbench.compose.table.DataTable
 import testbench.compose.table.DataTableColumn
 import testbench.compose.table.DataTableHeader
 import testbench.plugins.network.NetworkRequestMessage
 import testbench.plugins.network.NetworkResponseMessage
+import testbench.ui.components.ButtonType
+import testbench.ui.components.JsonTreeViewer
+import testbench.ui.testbench
 import java.awt.Cursor
 import androidx.compose.foundation.gestures.Orientation as DragOrientation
 
@@ -42,7 +41,7 @@ public fun RequestDataView(
         modifier = modifier
             .fillMaxHeight(),
     ) {
-        VerticalSplitLayout(
+        testbench.VerticalSplitLayout(
             modifier = Modifier
                 .fillMaxSize(),
             first = {
@@ -50,33 +49,20 @@ public fun RequestDataView(
                 Column(
                     verticalArrangement = Arrangement.Top,
                 ) {
-                    TabStrip(
-                        style = LocalDefaultTabStyle.current,
-                        tabs = listOf(
-                            TabData.Default(
-                                selected = !viewingResponse,
-                                closable = false,
-                                onClick = { viewingResponse = false },
-                                content = { tabState ->
-                                    SimpleTabContent(
-                                        label = "Request Headers",
-                                        state = tabState,
-                                    )
-                                },
-                            ),
-                            TabData.Default(
-                                selected = viewingResponse,
-                                closable = false,
-                                onClick = { viewingResponse = true },
-                                content = { tabState ->
-                                    SimpleTabContent(
-                                        label = "Response Headers",
-                                        state = tabState,
-                                    )
-                                },
-                            ),
-                        ),
-                    )
+                    Row(modifier = Modifier.height(IntrinsicSize.Min)) {
+                        testbench.TextButton(
+                            onClick = { viewingResponse = false },
+                            buttonType = if (viewingResponse) ButtonType.STANDARD else ButtonType.PRIMARY,
+                            content = { testbench.Text("Request Headers") },
+                        )
+                        testbench.VerticalDivider()
+                        testbench.TextButton(
+                            onClick = { viewingResponse = true },
+                            buttonType = if (viewingResponse) ButtonType.PRIMARY else ButtonType.STANDARD,
+                            content = { testbench.Text("Response Headers") },
+                        )
+                    }
+                    testbench.HorizontalDivider()
 
                     if (viewingResponse) {
                         val responseHeaders = remember(responseData) {
@@ -101,36 +87,22 @@ public fun RequestDataView(
             second = {
                 var viewingResponse by remember { mutableStateOf(true) }
                 Column(
-                    modifier = modifier,
                     verticalArrangement = Arrangement.spacedBy(6.dp),
+                    modifier = Modifier.fillMaxSize(),
                 ) {
-                    TabStrip(
-                        style = LocalDefaultTabStyle.current,
-                        tabs = listOf(
-                            TabData.Default(
-                                selected = !viewingResponse,
-                                closable = false,
-                                onClick = { viewingResponse = false },
-                                content = { tabState ->
-                                    SimpleTabContent(
-                                        label = "Request Body",
-                                        state = tabState,
-                                    )
-                                },
-                            ),
-                            TabData.Default(
-                                selected = viewingResponse,
-                                closable = false,
-                                onClick = { viewingResponse = true },
-                                content = { tabState ->
-                                    SimpleTabContent(
-                                        label = "Response Body",
-                                        state = tabState,
-                                    )
-                                },
-                            ),
-                        ),
-                    )
+                    Row(modifier = Modifier.height(IntrinsicSize.Min)) {
+                        testbench.TextButton(
+                            onClick = { viewingResponse = false },
+                            buttonType = if (viewingResponse) ButtonType.STANDARD else ButtonType.PRIMARY,
+                            content = { testbench.Text("Request Body") },
+                        )
+                        testbench.VerticalDivider()
+                        testbench.TextButton(
+                            onClick = { viewingResponse = true },
+                            buttonType = if (viewingResponse) ButtonType.PRIMARY else ButtonType.STANDARD,
+                            content = { testbench.Text("Response Body") },
+                        )
+                    }
 
                     val body = if (viewingResponse) {
                         (responseData as? NetworkResponseMessage.Completed)?.body
@@ -138,16 +110,14 @@ public fun RequestDataView(
                         requestData.body
                     }
 
-                    BodyContainer(
-                        body = body,
-                    )
+                    BodyContainer(body)
                 }
             },
         )
 
-        Divider(
-            orientation = Orientation.Vertical,
+        testbench.VerticalDivider(
             modifier = Modifier
+                .width(4.dp)
                 .align(Alignment.CenterStart)
                 .draggable(
                     interactionSource = dividerInteractionSource,
@@ -163,7 +133,10 @@ public fun RequestDataView(
 }
 
 @Composable
-private fun BodyContainer(body: String? = null) {
+private fun BodyContainer(
+    body: String? = null,
+    modifier: Modifier = Modifier,
+) {
     val json = try {
         if (body == null) {
             JsonNull
@@ -173,13 +146,20 @@ private fun BodyContainer(body: String? = null) {
     } catch (e: SerializationException) {
         JsonPrimitive(body)
     }
-    JsonTreeViewer(
-        rootElement = json,
-        modifier = Modifier
-            .defaultMinSize(minHeight = 400.dp)
-            .fillMaxWidth()
-            .fillMaxHeight(),
-    )
+    Box(
+        modifier = modifier
+            .fillMaxSize(),
+    ) {
+        JsonTreeViewer(
+            rootElement = json,
+            modifier = Modifier
+                .fillMaxWidth(),
+        )
+        /*VerticalScrollbar(
+            adapter = rememberScrollbarAdapter(scrollState),
+            modifier = Modifier.align(Alignment.TopEnd),
+        )*/
+    }
 }
 
 private val HeaderKeyColumn = DataTableColumn<Pair<String, List<String>>>(
@@ -189,7 +169,7 @@ private val HeaderKeyColumn = DataTableColumn<Pair<String, List<String>>>(
     },
     cell = { data ->
         val (key, _) = data
-        Text(
+        testbench.Text(
             text = key,
             modifier = Modifier.padding(6.dp),
         )
@@ -203,7 +183,7 @@ private val HeaderValueColumn = DataTableColumn<Pair<String, List<String>>>(
     },
     cell = { data ->
         val (_, value) = data
-        Text(
+        testbench.Text(
             text = value.joinToString("\n"),
             modifier = Modifier.padding(6.dp),
         )

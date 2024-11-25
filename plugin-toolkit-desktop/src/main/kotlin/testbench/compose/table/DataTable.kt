@@ -6,7 +6,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -21,10 +24,7 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.*
-import org.jetbrains.jewel.foundation.theme.JewelTheme
-import org.jetbrains.jewel.ui.theme.colorPalette
 import java.awt.Cursor
-import kotlin.ranges.coerceAtLeast
 
 @Composable
 public fun <T> DataTable(
@@ -34,7 +34,7 @@ public fun <T> DataTable(
     onItemClick: (T) -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
-    val handleColor = JewelTheme.colorPalette.gray(5)
+    val handleColor = Color.Gray
     val columnWidths = remember { mutableStateOf(columns.map { 0.dp }) }
     val columnWidthOverride = remember { mutableStateOf(columnWidths.value) }
     val lazyListState = rememberLazyListState()

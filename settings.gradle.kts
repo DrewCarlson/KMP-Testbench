@@ -3,6 +3,7 @@ pluginManagement {
         google()
         gradlePluginPortal()
         mavenCentral()
+        maven("https://packages.jetbrains.team/maven/p/firework/dev")
     }
 
     includeBuild("build-logic")
@@ -21,6 +22,7 @@ include(
     ":plugin-toolkit-core",
     ":plugin-toolkit-client",
     ":plugin-toolkit-desktop",
+    ":plugin-toolkit-ui",
     ":plugins",
     ":service-compiler-plugin",
 )
@@ -30,6 +32,7 @@ includeBuild("gradle-plugin-settings") {
         substitute(module("org.drewcarlson.testbench:gradle-plugin-settings")).using(project(":"))
     }
 }
+
 includeBuild("gradle-plugin-project") {
     dependencySubstitution {
         substitute(module("org.drewcarlson.testbench:gradle-plugin-project")).using(project(":"))
@@ -40,9 +43,7 @@ dependencyResolutionManagement {
     repositories {
         mavenCentral()
         google()
-        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-        maven("https://packages.jetbrains.team/maven/p/kpm/public/")
-        maven("https://www.jetbrains.com/intellij-repository/releases")
+        maven("https://packages.jetbrains.team/maven/p/firework/dev")
     }
 }
 

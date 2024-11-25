@@ -1,6 +1,8 @@
 package testbench.device
 
-import kotlinx.cinterop.*
+import kotlinx.cinterop.alloc
+import kotlinx.cinterop.memScoped
+import kotlinx.cinterop.sizeOf
 import platform.windows.OSVERSIONINFOW
 
 internal actual fun getDeviceInfo(): DeviceInfo = DeviceInfo(
