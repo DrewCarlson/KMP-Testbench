@@ -27,8 +27,8 @@ public class TestBenchClient(
     @OptIn(ExperimentalStdlibApi::class)
     private val sessionId = Random.Default.nextBytes(4).toHexString()
 
-    private val httpFlow = flow {
-        val http = HttpClient {
+    private val http = scope.async(start = CoroutineStart.LAZY) {
+        HttpClient {
             defaultRequest {
                 if (DeviceInfo.host.platform == DevicePlatform.ANDROID) {
                     url(host = "10.0.2.2", port = 8182)
@@ -41,8 +41,7 @@ public class TestBenchClient(
                 contentConverter = KotlinxWebsocketSerializationConverter(Json)
             }
         }
-        emit(http)
-    }.shareIn(scope, SharingStarted.Lazily, replay = 1)
+    }
 
     init {
         scope.launch { setupClientHandling() }
@@ -54,10 +53,6 @@ public class TestBenchClient(
 
     public fun disable() {
         isEnabled.update { false }
-    }
-
-    private suspend fun http(): HttpClient {
-        return httpFlow.first()
     }
 
     private suspend fun setupClientHandling() {
@@ -96,7 +91,7 @@ public class TestBenchClient(
     }
 
     private suspend fun createWsConnection(onConnected: () -> Unit) {
-        http().ws {
+        http.await().ws {
             onConnected()
 
             sendSerialized(

@@ -7,12 +7,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import kotlinx.datetime.format
-import org.jetbrains.jewel.ui.component.Text
-import org.jetbrains.jewel.ui.util.thenIf
 import testbench.compose.table.DataTable
 import testbench.compose.table.DataTableColumn
 import testbench.compose.table.DataTableHeader
 import testbench.plugins.network.*
+import testbench.ui.testbench
 
 @Composable
 internal fun NetworkMainPanel(
@@ -29,10 +28,10 @@ internal fun NetworkMainPanel(
         }
 
         Column(
-            modifier = Modifier
-                .thenIf(selectedRequest != null) {
+            modifier = Modifier,
+                /*.thenIf(selectedRequest != null) {
                     padding(end = sidebarWidth)
-                },
+                },*/
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
             SearchRow(
@@ -82,7 +81,7 @@ internal fun NetworkMainPanel(
 private val requestTimeColumn = DataTableColumn<NetworkEntryHolder>(
     header = { DataTableHeader(text = "Request Time") },
     cell = { entry ->
-        Text(
+        testbench.Text(
             text = entry.request.initiatedAt.format(timeFormat),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -95,7 +94,7 @@ private val domainColumn = DataTableColumn<NetworkEntryHolder>(
     expanded = true,
     header = { DataTableHeader(text = "Domain") },
     cell = { entry ->
-        Text(
+        testbench.Text(
             text = entry.request.url,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -107,7 +106,7 @@ private val domainColumn = DataTableColumn<NetworkEntryHolder>(
 private val methodColumn = DataTableColumn<NetworkEntryHolder>(
     header = { DataTableHeader(text = "Method") },
     cell = { entry ->
-        Text(
+        testbench.Text(
             text = entry.request.method,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -128,7 +127,7 @@ private val statusColumn = DataTableColumn<NetworkEntryHolder>(
             }
         }
 
-        Text(
+        testbench.Text(
             text = labelText,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,

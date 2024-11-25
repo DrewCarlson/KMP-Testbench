@@ -15,11 +15,11 @@ kotlin {
 
 dependencies {
     api(projects.pluginToolkitCore)
+    api(projects.pluginToolkitUi)
 
     api(libs.serialization.json)
     api(libs.datetime)
 
-    api(libs.jewel)
     api(compose.ui)
     api(compose.desktop.common) {
         exclude(group = "org.jetbrains.compose.material")

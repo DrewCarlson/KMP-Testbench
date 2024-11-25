@@ -5,18 +5,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.jetbrains.jewel.ui.component.*
-import org.jetbrains.jewel.ui.icon.PathIconKey
-import org.jetbrains.jewel.window.DecoratedWindowScope
-import org.jetbrains.jewel.window.TitleBar
-import org.jetbrains.jewel.window.newFullscreenControls
 import testbench.desktop.resources.TestBenchIcons
 import testbench.desktop.server.SessionData
-import testbench.testbench.desktop.components.DeviceInfoIcon
+import testbench.desktop.components.DeviceInfoIcon
 import java.awt.Desktop
 import java.net.URI
 
-@Composable
+/*@Composable
 fun DecoratedWindowScope.TitleBarView(
     activeSession: SessionData,
     sessions: Map<String, SessionData>,
@@ -140,3 +135,4 @@ fun DecoratedWindowScope.TitleBarView(
         }
     }
 }
+*/

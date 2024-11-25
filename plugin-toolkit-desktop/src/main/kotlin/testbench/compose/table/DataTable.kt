@@ -21,8 +21,6 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.*
-import org.jetbrains.jewel.foundation.theme.JewelTheme
-import org.jetbrains.jewel.ui.theme.colorPalette
 import java.awt.Cursor
 import kotlin.ranges.coerceAtLeast
 
@@ -34,7 +32,7 @@ public fun <T> DataTable(
     onItemClick: (T) -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
-    val handleColor = JewelTheme.colorPalette.gray(5)
+    val handleColor = Color.Gray
     val columnWidths = remember { mutableStateOf(columns.map { 0.dp }) }
     val columnWidthOverride = remember { mutableStateOf(columnWidths.value) }
     val lazyListState = rememberLazyListState()

@@ -13,26 +13,18 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.serialization.json.*
-import org.jetbrains.jewel.foundation.ExperimentalJewelApi
-import org.jetbrains.jewel.foundation.lazy.tree.*
-import org.jetbrains.jewel.foundation.theme.JewelTheme
-import org.jetbrains.jewel.foundation.theme.LocalTextStyle
-import org.jetbrains.jewel.intui.standalone.theme.IntUiTheme
-import org.jetbrains.jewel.ui.component.LazyTree
-import org.jetbrains.jewel.ui.component.Text
-import org.jetbrains.jewel.ui.theme.colorPalette
 
 private data class JsonKeyValue(
     val key: String,
     val value: JsonElement,
 )
 
-@OptIn(ExperimentalJewelApi::class)
 @Composable
 public fun JsonTreeViewer(
     rootElement: JsonElement,
     modifier: Modifier = Modifier,
 ) {
+    /*
     val tree = remember(rootElement) { jsonToTree(rootElement) }
     val treeState = rememberTreeState()
     val openNodes = remember(treeState.openNodes) { treeState.openNodes }
@@ -89,9 +81,9 @@ public fun JsonTreeViewer(
                 }
             }
         }
-    }
+    }*/
 }
-
+/*
 @Composable
 private fun JsonArrayNode(
     key: String?,
@@ -337,3 +329,4 @@ public fun JsonTreeViewerPreview() {
         }
     }
 }
+*/

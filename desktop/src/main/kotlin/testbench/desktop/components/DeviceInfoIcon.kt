@@ -1,28 +1,12 @@
-package testbench.testbench.desktop.components
+package testbench.desktop.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import org.jetbrains.jewel.foundation.theme.JewelTheme
-import org.jetbrains.jewel.intui.standalone.theme.IntUiTheme
-import org.jetbrains.jewel.ui.component.Icon
-import org.jetbrains.jewel.ui.painter.badge.DotBadgeShape
-import org.jetbrains.jewel.ui.painter.hints.Badge
-import org.jetbrains.jewel.ui.painter.hints.Size
-import org.jetbrains.jewel.ui.painter.rememberResourcePainterProvider
-import org.jetbrains.jewel.ui.theme.colorPalette
-import org.jetbrains.jewel.ui.util.thenIf
-import testbench.desktop.resources.TestBenchIcons
 import testbench.device.DeviceInfo
 import testbench.device.DevicePlatform
 
@@ -99,7 +83,7 @@ fun DeviceInfoIcon(
             else -> Color(0xFF0FB5EE) to "browser"
         }
     }
-    val painterProvider = rememberResourcePainterProvider(
+    /*val painterProvider = rememberResourcePainterProvider(
         "icons/$icon.svg",
         TestBenchIcons::class.java,
     )
@@ -129,31 +113,27 @@ fun DeviceInfoIcon(
                 .thenIf(withBackground) { size(14.dp) },
             tint = color.takeUnless { withBackground } ?: Color.Unspecified,
         )
-    }
+    }*/
 }
 
 @Preview
 @Composable
 private fun DeviceInfoIconPreview() {
-    IntUiTheme(
-        isDark = true,
+    Column(
+        verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(6.dp),
-        ) {
-            DevicePlatform.entries.forEach { platform ->
-                when (platform) {
-                    DevicePlatform.BROWSER -> {
-                        DeviceInfoIcon(platform, "opera", isConnected = true)
-                        DeviceInfoIcon(platform, "chrome", isConnected = true)
-                        DeviceInfoIcon(platform, "edge", isConnected = true)
-                        DeviceInfoIcon(platform, "safari", isConnected = true)
-                        DeviceInfoIcon(platform, "firefox", isConnected = true)
-                    }
+        DevicePlatform.entries.forEach { platform ->
+            when (platform) {
+                DevicePlatform.BROWSER -> {
+                    DeviceInfoIcon(platform, "opera", isConnected = true)
+                    DeviceInfoIcon(platform, "chrome", isConnected = true)
+                    DeviceInfoIcon(platform, "edge", isConnected = true)
+                    DeviceInfoIcon(platform, "safari", isConnected = true)
+                    DeviceInfoIcon(platform, "firefox", isConnected = true)
+                }
 
-                    else -> {
-                        DeviceInfoIcon(platform, "")
-                    }
+                else -> {
+                    DeviceInfoIcon(platform, "")
                 }
             }
         }

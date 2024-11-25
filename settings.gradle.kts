@@ -21,6 +21,7 @@ include(
     ":plugin-toolkit-core",
     ":plugin-toolkit-client",
     ":plugin-toolkit-desktop",
+    ":plugin-toolkit-ui",
     ":plugins",
     ":service-compiler-plugin",
 )
@@ -40,9 +41,6 @@ dependencyResolutionManagement {
     repositories {
         mavenCentral()
         google()
-        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-        maven("https://packages.jetbrains.team/maven/p/kpm/public/")
-        maven("https://www.jetbrains.com/intellij-repository/releases")
     }
 }
 

@@ -8,16 +8,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
-import org.jetbrains.jewel.foundation.theme.JewelTheme
-import org.jetbrains.jewel.ui.Orientation
-import org.jetbrains.jewel.ui.component.Divider
-import org.jetbrains.jewel.window.DecoratedWindow
 import testbench.desktop.components.MainContentContainer
 import testbench.desktop.components.SidebarContainer
-import testbench.desktop.components.TitleBarView
 import testbench.desktop.server.SessionData
+import testbench.desktop.theme.TestbenchTheme
 import testbench.plugin.desktop.DesktopPlugin
 import java.awt.Toolkit
 
@@ -42,21 +39,21 @@ fun MainWindow(
                 value.takeIf { it.id == activePlugin?.id }
             }
     }
-    DecoratedWindow(
+    Window(
         title = "Testbench",
         state = windowState,
         onCloseRequest = onCloseRequest,
     ) {
-        TitleBarView(
+        /*TitleBarView(
             activeSession = activeSession,
             sessions = sessions,
             onSessionSelected = onSessionSelected,
-        )
+        )*/
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(JewelTheme.globalColors.panelBackground),
+                .background(TestbenchTheme.colors.background),
         ) {
             Row(
                 modifier = Modifier
@@ -69,9 +66,9 @@ fun MainWindow(
                     onPluginSelected = { activePlugin = it },
                     activeSession = activeSession,
                 )
-                Divider(
+                /*Divider(
                     orientation = Orientation.Vertical,
-                )
+                )*/
                 MainContentContainer(
                     modifier = Modifier
                         .fillMaxHeight()

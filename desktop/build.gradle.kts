@@ -7,18 +7,15 @@ plugins {
 }
 
 kotlin {
-    jvmToolchain {
-        vendor = JvmVendorSpec.JETBRAINS
-        languageVersion = JavaLanguageVersion.of(17)
-    }
+    jvmToolchain(17)
 
     compilerOptions {
-        optIn.add("org.jetbrains.jewel.foundation.ExperimentalJewelApi")
         optIn.add("androidx.compose.foundation.ExperimentalFoundationApi")
     }
 }
 
 dependencies {
+    implementation(projects.pluginToolkitUi)
     implementation(projects.pluginToolkitDesktop)
     implementation(projects.plugins.network.networkDesktop)
     implementation(projects.plugins.logs.logsDesktop)
@@ -28,11 +25,6 @@ dependencies {
     implementation(compose.desktop.common) {
         exclude(group = "org.jetbrains.compose.material")
     }
-
-    // Jewel (Intellij UI) Compose Theme
-    implementation(libs.jewel)
-    implementation(libs.jewel.decorated)
-    implementation(libs.intellij.icons)
 
     implementation(libs.coroutines.core)
 
@@ -64,7 +56,6 @@ tasks.withType<JavaExec> {
         dependencies.implementation(dependencies.compose.desktop.currentOs)
         javaLauncher = project.javaToolchains.launcherFor {
             languageVersion = JavaLanguageVersion.of(17)
-            vendor = JvmVendorSpec.JETBRAINS
         }
         jvmArgs("-Xmx2048m")
         setExecutable(javaLauncher.map { it.executablePath.asFile.absolutePath }.get())

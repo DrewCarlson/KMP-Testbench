@@ -7,10 +7,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import kotlinx.datetime.format
 import kotlinx.datetime.format.DateTimeComponents
-import org.jetbrains.jewel.ui.component.Text
 import testbench.compose.table.DataTable
 import testbench.compose.table.DataTableColumn
 import testbench.compose.table.DataTableHeader
+import testbench.ui.testbench
 
 @Composable
 internal fun LogsMainPanel(
@@ -55,7 +55,7 @@ internal fun LogsMainPanel(
 private val timeColumn = DataTableColumn<LogEntry>(
     header = { DataTableHeader(text = "Time") },
     cell = { entry ->
-        Text(
+        testbench.Text(
             text = entry.timestamp.format(DateTimeComponents.Formats.RFC_1123),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -67,7 +67,7 @@ private val timeColumn = DataTableColumn<LogEntry>(
 private val tagColumn = DataTableColumn<LogEntry>(
     header = { DataTableHeader(text = "Tag") },
     cell = { entry ->
-        Text(
+        testbench.Text(
             text = entry.tag,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -79,7 +79,7 @@ private val tagColumn = DataTableColumn<LogEntry>(
 private val pidColumn = DataTableColumn<LogEntry>(
     header = { DataTableHeader(text = "PID") },
     cell = { entry ->
-        Text(
+        testbench.Text(
             text = entry.pid,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -92,7 +92,7 @@ private val messageColumn = DataTableColumn<LogEntry>(
     expanded = true,
     header = { DataTableHeader(text = "Message") },
     cell = { entry ->
-        Text(
+        testbench.Text(
             text = entry.message,
             overflow = TextOverflow.Visible,
             modifier = Modifier.padding(6.dp),

@@ -1,14 +1,9 @@
 package testbench.plugins.network.ui
 
-import androidx.compose.foundation.gestures.draggable
-import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.PointerIcon
-import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -17,15 +12,13 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonPrimitive
-import org.jetbrains.jewel.ui.Orientation
-import org.jetbrains.jewel.ui.component.*
-import org.jetbrains.jewel.ui.component.styling.LocalDefaultTabStyle
 import testbench.compose.JsonTreeViewer
 import testbench.compose.table.DataTable
 import testbench.compose.table.DataTableColumn
 import testbench.compose.table.DataTableHeader
 import testbench.plugins.network.NetworkRequestMessage
 import testbench.plugins.network.NetworkResponseMessage
+import testbench.ui.testbench
 import java.awt.Cursor
 import androidx.compose.foundation.gestures.Orientation as DragOrientation
 
@@ -42,7 +35,7 @@ public fun RequestDataView(
         modifier = modifier
             .fillMaxHeight(),
     ) {
-        VerticalSplitLayout(
+        /*VerticalSplitLayout(
             modifier = Modifier
                 .fillMaxSize(),
             first = {
@@ -158,7 +151,7 @@ public fun RequestDataView(
                         }
                     },
                 ).pointerHoverIcon(PointerIcon(Cursor(Cursor.E_RESIZE_CURSOR))),
-        )
+        )*/
     }
 }
 
@@ -189,7 +182,7 @@ private val HeaderKeyColumn = DataTableColumn<Pair<String, List<String>>>(
     },
     cell = { data ->
         val (key, _) = data
-        Text(
+        testbench.Text(
             text = key,
             modifier = Modifier.padding(6.dp),
         )
@@ -203,7 +196,7 @@ private val HeaderValueColumn = DataTableColumn<Pair<String, List<String>>>(
     },
     cell = { data ->
         val (_, value) = data
-        Text(
+        testbench.Text(
             text = value.joinToString("\n"),
             modifier = Modifier.padding(6.dp),
         )

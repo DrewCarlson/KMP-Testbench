@@ -15,9 +15,6 @@ public class TestBenchGradleSettingsPlugin : Plugin<Settings> {
 
         settings.dependencyResolutionManagement
             .repositories {
-                maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-                maven("https://www.jetbrains.com/intellij-repository/releases")
-                maven("https://packages.jetbrains.team/maven/p/kpm/public/")
                 maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
             }
         settings.gradle.settingsEvaluated {
