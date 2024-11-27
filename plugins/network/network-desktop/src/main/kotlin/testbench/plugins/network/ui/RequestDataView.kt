@@ -1,14 +1,20 @@
 package testbench.plugins.network.ui
 
+import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.rememberScrollbarAdapter
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -17,12 +23,12 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonPrimitive
-import testbench.compose.JsonTreeViewer
 import testbench.compose.table.DataTable
 import testbench.compose.table.DataTableColumn
 import testbench.compose.table.DataTableHeader
 import testbench.plugins.network.NetworkRequestMessage
 import testbench.plugins.network.NetworkResponseMessage
+import testbench.ui.components.JsonTreeViewer
 import testbench.ui.testbench
 import java.awt.Cursor
 import androidx.compose.foundation.gestures.Orientation as DragOrientation
@@ -40,7 +46,7 @@ public fun RequestDataView(
         modifier = modifier
             .fillMaxHeight(),
     ) {
-        /*VerticalSplitLayout(
+        testbench.VerticalSplitLayout(
             modifier = Modifier
                 .fillMaxSize(),
             first = {
@@ -48,7 +54,7 @@ public fun RequestDataView(
                 Column(
                     verticalArrangement = Arrangement.Top,
                 ) {
-                    TabStrip(
+                    /*TabStrip(
                         style = LocalDefaultTabStyle.current,
                         tabs = listOf(
                             TabData.Default(
@@ -74,7 +80,7 @@ public fun RequestDataView(
                                 },
                             ),
                         ),
-                    )
+                    )*/
 
                     if (viewingResponse) {
                         val responseHeaders = remember(responseData) {
@@ -99,10 +105,9 @@ public fun RequestDataView(
             second = {
                 var viewingResponse by remember { mutableStateOf(true) }
                 Column(
-                    modifier = modifier,
                     verticalArrangement = Arrangement.spacedBy(6.dp),
                 ) {
-                    TabStrip(
+                    /*TabStrip(
                         style = LocalDefaultTabStyle.current,
                         tabs = listOf(
                             TabData.Default(
@@ -128,7 +133,7 @@ public fun RequestDataView(
                                 },
                             ),
                         ),
-                    )
+                    )*/
 
                     val body = if (viewingResponse) {
                         (responseData as? NetworkResponseMessage.Completed)?.body
@@ -136,15 +141,14 @@ public fun RequestDataView(
                         requestData.body
                     }
 
-                    BodyContainer(
-                        body = body,
-                    )
+                    BodyContainer(body)
                 }
             },
-        )*/
+        )
 
         testbench.VerticalDivider(
             modifier = Modifier
+                .width(4.dp)
                 .align(Alignment.CenterStart)
                 .draggable(
                     interactionSource = dividerInteractionSource,
@@ -160,7 +164,10 @@ public fun RequestDataView(
 }
 
 @Composable
-private fun BodyContainer(body: String? = null) {
+private fun BodyContainer(
+    body: String? = null,
+    modifier: Modifier = Modifier,
+) {
     val json = try {
         if (body == null) {
             JsonNull
@@ -170,13 +177,26 @@ private fun BodyContainer(body: String? = null) {
     } catch (e: SerializationException) {
         JsonPrimitive(body)
     }
-    JsonTreeViewer(
-        rootElement = json,
-        modifier = Modifier
-            .defaultMinSize(minHeight = 400.dp)
-            .fillMaxWidth()
-            .fillMaxHeight(),
-    )
+    val scrollState = rememberScrollState()
+    var size by remember { mutableStateOf(1) }
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .onSizeChanged { size = it.height }
+    ) {
+        val density = LocalDensity.current
+        JsonTreeViewer(
+            rootElement = json,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(with(density) { size.toDp() })
+                .verticalScroll(scrollState),
+        )
+        VerticalScrollbar(
+            adapter = rememberScrollbarAdapter(scrollState),
+            modifier = Modifier.align(Alignment.TopEnd)
+        )
+    }
 }
 
 private val HeaderKeyColumn = DataTableColumn<Pair<String, List<String>>>(

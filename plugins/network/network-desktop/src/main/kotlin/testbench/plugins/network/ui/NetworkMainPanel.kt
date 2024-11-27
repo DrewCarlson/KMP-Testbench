@@ -12,6 +12,7 @@ import testbench.compose.table.DataTableColumn
 import testbench.compose.table.DataTableHeader
 import testbench.plugins.network.*
 import testbench.ui.testbench
+import testbench.ui.thenIf
 
 @Composable
 internal fun NetworkMainPanel(
@@ -28,10 +29,10 @@ internal fun NetworkMainPanel(
         }
 
         Column(
-            modifier = Modifier,
-                /*.thenIf(selectedRequest != null) {
+            modifier = Modifier
+                .thenIf(selectedRequest != null) {
                     padding(end = sidebarWidth)
-                },*/
+                },
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
             SearchRow(

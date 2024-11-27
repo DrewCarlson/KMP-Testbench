@@ -28,7 +28,7 @@ fun SessionSelector(
     ) {
         testbench.Dropdown(
             modifier = Modifier.fillMaxWidth(),
-            menu = {
+            menu = { close ->
                 if (sessions.isEmpty()) {
                     Box(
                         modifier = Modifier
@@ -44,10 +44,13 @@ fun SessionSelector(
                 }
                 sessions.forEach { (_, session) ->
                     testbench.TextButton(
-                        onClick = { onSessionSelected(session.sessionId) },
+                        onClick = {
+                            onSessionSelected(session.sessionId)
+                            close()
+                        },
                         modifier = Modifier.fillMaxWidth(),
                         buttonType = if (session.sessionId == activeSession.sessionId) {
-                            ButtonType.ACCENT
+                            ButtonType.PRIMARY
                         } else {
                             ButtonType.STANDARD
                         }

@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import testbench.ui.LocalTestbenchColors
 import testbench.ui.LocalTestbenchTextStyles
+import testbench.ui.TestbenchTheme
 
 @Composable
 internal fun TestbenchTextField(
@@ -40,7 +41,7 @@ internal fun TestbenchTextField(
     leadingIcon: (@Composable () -> Unit)? = null,
     trailingIcon: (@Composable () -> Unit)? = null,
 ) {
-    val colors = LocalTestbenchColors.current
+    val colors = TestbenchTheme.colors
     var isFocused by remember { mutableStateOf(false) }
     val cursorBrush = remember(colors, isFocused) {
         if (isFocused) {

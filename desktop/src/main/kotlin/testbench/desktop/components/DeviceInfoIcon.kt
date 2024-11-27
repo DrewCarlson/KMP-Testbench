@@ -95,9 +95,9 @@ fun DeviceInfoIcon(
         }
     }
     val badgeColor = if (isConnected == true) {
-        LocalTestbenchColors.current.success
+        TestbenchTheme.colors.success
     } else {
-        LocalTestbenchColors.current.error
+        TestbenchTheme.colors.error
     }
     Box(
         modifier = modifier

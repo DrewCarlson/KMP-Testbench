@@ -6,6 +6,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import testbench.desktop.LocalSessionHolder
@@ -24,7 +25,7 @@ fun SidebarContainer(
     val sessions by LocalSessionHolder.current.sessions.collectAsState()
     Box(
         modifier = modifier
-            .background(LocalTestbenchColors.current.surface),
+            .background(TestbenchTheme.colors.surface),
     ) {
         val scrollState = rememberScrollState()
 
@@ -129,11 +130,7 @@ private fun PluginRow(
             Modifier
                 .size(20.dp)
                 .background(
-                    if (enabled) {
-                        LocalTestbenchColors.current.primary
-                    } else {
-                        LocalTestbenchColors.current.secondary // TODO: Disabled color
-                    },
+                    TestbenchTheme.colors.primary,
                     shape = RoundedCornerShape(4.dp),
                 ),
             contentAlignment = Alignment.Center,
@@ -141,16 +138,10 @@ private fun PluginRow(
             testbench.Icon(
                 icon = icon,
                 modifier = Modifier.size(14.dp),
-                tint = if (enabled) {
-                    LocalTestbenchColors.current.onPrimary
-                } else {
-                    LocalTestbenchColors.current.onSecondary
-                }
+                tint = TestbenchTheme.colors.onPrimary
             )
         }
 
-        testbench.Text(
-            text = name,
-        )
+        testbench.Text(name)
     }
 }

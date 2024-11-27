@@ -26,6 +26,7 @@ kotlin {
                 implementation(compose.ui)
                 implementation(compose.components.resources)
                 implementation(compose.components.uiToolingPreview)
+                implementation(libs.jsontree)
                 implementation(libs.serialization.core)
                 implementation(libs.serialization.json)
             }

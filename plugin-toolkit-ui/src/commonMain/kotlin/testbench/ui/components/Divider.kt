@@ -8,6 +8,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import testbench.ui.LocalTestbenchColors
+import testbench.ui.TestbenchTheme
 import testbench.ui.thenIf
 
 
@@ -20,18 +21,36 @@ internal fun Divider(
     orientation: Orientation,
     modifier: Modifier = Modifier,
 ) {
-    val color = LocalTestbenchColors.current.onSurface
+    val color = TestbenchTheme.colors.onSurface
     Box(
         modifier = modifier
-            .thenIf(orientation == Orientation.VERTICAL) { fillMaxHeight() }
-            .thenIf(orientation == Orientation.HORIZONTAL) { fillMaxWidth() }
+            .defaultMinSize(1.dp, 1.dp)
+            .run {
+                when (orientation) {
+                    Orientation.VERTICAL -> fillMaxHeight()
+                    Orientation.HORIZONTAL -> fillMaxWidth()
+                }
+            }
             .drawBehind {
-                drawLine(
-                    color = color,
-                    start = Offset.Zero,
-                    end = Offset(size.width, size.height),
-                    strokeWidth = 4f
-                )
+                when (orientation) {
+                    Orientation.VERTICAL -> {
+                        drawLine(
+                            color = color,
+                            start = Offset(0f, 0f),
+                            end = Offset(0f, size.height),
+                            strokeWidth = 1f
+                        )
+                    }
+                    Orientation.HORIZONTAL -> {
+                        val y = size.height / 2
+                        drawLine(
+                            color = color,
+                            start = Offset(0f, y),
+                            end = Offset(size.width, y),
+                            strokeWidth = 1f
+                        )
+                    }
+                }
             },
     )
 }

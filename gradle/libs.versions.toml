@@ -74,3 +74,5 @@ ktor-server-cors = { module = "io.ktor:ktor-server-cors", version.ref = "ktorio"
 ktor-server-auth = { module = "io.ktor:ktor-server-auth", version.ref = "ktorio" }
 ktor-server-authJwt = { module = "io.ktor:ktor-server-auth-jwt", version.ref = "ktorio" }
 ktor-server-websockets = { module = "io.ktor:ktor-server-websockets", version.ref = "ktorio" }
+
+jsontree = { module = "com.sebastianneubauer.jsontree:jsontree", version = "2.3.0" }

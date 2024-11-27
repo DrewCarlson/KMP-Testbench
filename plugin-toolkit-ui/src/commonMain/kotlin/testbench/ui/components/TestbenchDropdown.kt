@@ -22,7 +22,7 @@ import kotlin.math.roundToInt
 
 @Composable
 internal fun TestbenchDropdown(
-    menu: @Composable () -> Unit,
+    menu: @Composable (close: () -> Unit) -> Unit,
     modifier: Modifier = Modifier,
     matchContentWidth: Boolean = true,
     enabled: Boolean = true,
@@ -62,7 +62,7 @@ internal fun TestbenchDropdown(
                             }
                             .shadow(8.dp, shape = RoundedCornerShape(4.dp))
                             .background(TestbenchTheme.colors.surface),
-                        content = { menu() }
+                        content = { menu { expanded = false } }
                     )
                 }
             )

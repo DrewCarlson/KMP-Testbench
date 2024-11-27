@@ -21,6 +21,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.painterResource
 import testbench.ui.components.*
@@ -196,7 +197,7 @@ public class TestbenchComponents {
 
     @Composable
     public fun Dropdown(
-        menu: @Composable () -> Unit,
+        menu: @Composable (close: () -> Unit) -> Unit,
         modifier: Modifier = Modifier,
         matchContentWidth: Boolean = true,
         enabled: Boolean = true,
@@ -208,6 +209,51 @@ public class TestbenchComponents {
             matchContentWidth = matchContentWidth,
             enabled = enabled,
             content = content
+        )
+    }
+
+
+    @Composable
+    public fun HorizontalSplitLayout(
+        first: @Composable () -> Unit,
+        second: @Composable () -> Unit,
+        modifier: Modifier = Modifier,
+        draggableWidth: Dp = 8.dp,
+        firstPaneMinWidth: Dp = Dp.Unspecified,
+        secondPaneMinWidth: Dp = Dp.Unspecified,
+        state: SplitLayoutState = rememberSplitLayoutState(),
+    ) {
+        TestbenchSplitLayout(
+            first = first,
+            second = second,
+            modifier = modifier,
+            draggableWidth = draggableWidth,
+            firstPaneMinWidth = firstPaneMinWidth,
+            secondPaneMinWidth = secondPaneMinWidth,
+            strategy = horizontalTwoPaneStrategy(),
+            state = state,
+        )
+    }
+
+    @Composable
+    public fun VerticalSplitLayout(
+        first: @Composable () -> Unit,
+        second: @Composable () -> Unit,
+        modifier: Modifier = Modifier,
+        draggableWidth: Dp = 8.dp,
+        firstPaneMinWidth: Dp = Dp.Unspecified,
+        secondPaneMinWidth: Dp = Dp.Unspecified,
+        state: SplitLayoutState = rememberSplitLayoutState(),
+    ) {
+        TestbenchSplitLayout(
+            first = first,
+            second = second,
+            modifier = modifier,
+            draggableWidth = draggableWidth,
+            firstPaneMinWidth = firstPaneMinWidth,
+            secondPaneMinWidth = secondPaneMinWidth,
+            strategy = verticalTwoPaneStrategy(),
+            state = state,
         )
     }
 }
