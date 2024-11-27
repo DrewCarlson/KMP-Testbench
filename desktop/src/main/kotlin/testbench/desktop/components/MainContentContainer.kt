@@ -8,7 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import testbench.plugin.desktop.DesktopPlugin
 import testbench.plugin.desktop.UiHookLocation
-import testbench.desktop.theme.TestbenchTheme
+import testbench.ui.TestbenchTheme
 
 @Composable
 fun MainContentContainer(

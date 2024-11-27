@@ -3,6 +3,7 @@ pluginManagement {
         google()
         gradlePluginPortal()
         mavenCentral()
+        maven("https://packages.jetbrains.team/maven/p/firework/dev")
     }
 
     includeBuild("build-logic")
@@ -31,6 +32,7 @@ includeBuild("gradle-plugin-settings") {
         substitute(module("org.drewcarlson.testbench:gradle-plugin-settings")).using(project(":"))
     }
 }
+
 includeBuild("gradle-plugin-project") {
     dependencySubstitution {
         substitute(module("org.drewcarlson.testbench:gradle-plugin-project")).using(project(":"))
@@ -41,6 +43,7 @@ dependencyResolutionManagement {
     repositories {
         mavenCentral()
         google()
+        maven("https://packages.jetbrains.team/maven/p/firework/dev")
     }
 }
 

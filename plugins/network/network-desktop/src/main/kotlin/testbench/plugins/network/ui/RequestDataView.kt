@@ -1,9 +1,14 @@
 package testbench.plugins.network.ui
 
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -136,10 +141,9 @@ public fun RequestDataView(
                     )
                 }
             },
-        )
+        )*/
 
-        Divider(
-            orientation = Orientation.Vertical,
+        testbench.VerticalDivider(
             modifier = Modifier
                 .align(Alignment.CenterStart)
                 .draggable(
@@ -151,7 +155,7 @@ public fun RequestDataView(
                         }
                     },
                 ).pointerHoverIcon(PointerIcon(Cursor(Cursor.E_RESIZE_CURSOR))),
-        )*/
+        )
     }
 }
 

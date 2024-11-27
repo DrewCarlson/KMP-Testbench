@@ -2,6 +2,7 @@ plugins {
     kotlin("jvm")
     alias(libs.plugins.compose.jetbrains)
     alias(libs.plugins.compose.compiler)
+    //alias(libs.plugins.compose.hotReload)
     alias(libs.plugins.serialization)
     id("publish-library")
 }

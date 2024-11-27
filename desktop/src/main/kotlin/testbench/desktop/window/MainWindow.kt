@@ -14,8 +14,9 @@ import androidx.compose.ui.window.rememberWindowState
 import testbench.desktop.components.MainContentContainer
 import testbench.desktop.components.SidebarContainer
 import testbench.desktop.server.SessionData
-import testbench.desktop.theme.TestbenchTheme
+import testbench.ui.TestbenchTheme
 import testbench.plugin.desktop.DesktopPlugin
+import testbench.ui.testbench
 import java.awt.Toolkit
 
 @Composable
@@ -44,38 +45,50 @@ fun MainWindow(
         state = windowState,
         onCloseRequest = onCloseRequest,
     ) {
-        /*TitleBarView(
+        MainWindowContent(
+            activePlugin = activePlugin,
+            onPluginSelected = { activePlugin = it },
             activeSession = activeSession,
             sessions = sessions,
             onSessionSelected = onSessionSelected,
-        )*/
+        )
+    }
+}
 
-        Column(
+@Composable
+fun MainWindowContent(
+    activePlugin: DesktopPlugin<*, *>?,
+    onPluginSelected: (plugin: DesktopPlugin<*, *>) -> Unit,
+    activeSession: SessionData,
+    sessions: Map<String, SessionData>,
+    onSessionSelected: (id: String) -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(TestbenchTheme.colors.background),
+    ) {
+        Row(
             modifier = Modifier
-                .fillMaxSize()
-                .background(TestbenchTheme.colors.background),
+                .weight(1f),
         ) {
-            Row(
+            SidebarContainer(
                 modifier = Modifier
+                    .width(200.dp)
+                    .fillMaxHeight(),
+                onPluginSelected = onPluginSelected,
+                onSessionSelected = onSessionSelected,
+                activeSession = activeSession,
+            )
+
+            testbench.VerticalDivider()
+
+            MainContentContainer(
+                modifier = Modifier
+                    .fillMaxHeight()
                     .weight(1f),
-            ) {
-                SidebarContainer(
-                    modifier = Modifier
-                        .width(200.dp)
-                        .fillMaxHeight(),
-                    onPluginSelected = { activePlugin = it },
-                    activeSession = activeSession,
-                )
-                /*Divider(
-                    orientation = Orientation.Vertical,
-                )*/
-                MainContentContainer(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .weight(1f),
-                    activePlugin = activePlugin,
-                )
-            }
+                activePlugin = activePlugin,
+            )
         }
     }
 }

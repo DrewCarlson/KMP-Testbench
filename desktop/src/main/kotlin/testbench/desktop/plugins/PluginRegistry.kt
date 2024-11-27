@@ -1,5 +1,6 @@
 package testbench.desktop.plugins
 
+import testbench.desktop.preview.PreviewPlugin
 import testbench.device.DeviceInfo
 import testbench.plugin.desktop.DesktopPlugin
 import java.util.ServiceLoader
@@ -41,7 +42,7 @@ class PluginRegistry(
 
     companion object {
         fun loadPlugins(): List<DesktopPlugin<*, *>> {
-            return ServiceLoader.load(DesktopPlugin::class.java).toList()
+            return ServiceLoader.load(DesktopPlugin::class.java).toList() + PreviewPlugin()
         }
     }
 }

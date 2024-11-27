@@ -4,8 +4,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.window.application
 import testbench.desktop.server.SessionHolder
 import testbench.desktop.server.TestBenchServer
-import testbench.desktop.theme.TestbenchTheme
 import testbench.desktop.window.MainWindow
+import testbench.ui.TestbenchTheme
 
 val LocalSessionHolder = compositionLocalOf<SessionHolder> { error("SessionHolder not found") }
 

@@ -6,6 +6,10 @@ plugins {
     id("publish-library")
 }
 
+compose.resources {
+    packageOfResClass = "testbench.ui"
+}
+
 kotlin {
     sourceSets {
         all {
@@ -20,6 +24,8 @@ kotlin {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.ui)
+                implementation(compose.components.resources)
+                implementation(compose.components.uiToolingPreview)
                 implementation(libs.serialization.core)
                 implementation(libs.serialization.json)
             }

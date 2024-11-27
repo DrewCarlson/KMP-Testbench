@@ -7,6 +7,8 @@ public class LogsPlaceholderPlugin : DesktopPlugin<String, String> {
     override val id: String = "logs"
     override val name: String = "Logs"
 
+    override val pluginIcon: String = "file_text"
+
     override val requiresClient: Boolean = false
 
     override val ui: UiHooks = UiHooks {

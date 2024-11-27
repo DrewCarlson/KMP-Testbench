@@ -1,18 +1,16 @@
 package testbench.ui
 
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 
-val LocalTestbenchColors = staticCompositionLocalOf<TestbenchColors> { error("TestbenchTheme not configured") }
-val LocalTestbenchTextStyles = staticCompositionLocalOf<TestbenchTextStyles> { error("TestbenchTheme not configured") }
+public val LocalTestbenchColors: ProvidableCompositionLocal<TestbenchColors> =
+    compositionLocalOf { error("TestbenchTheme not configured") }
+public val LocalTestbenchTextStyles: ProvidableCompositionLocal<TestbenchTextStyles> =
+    compositionLocalOf { error("TestbenchTheme not configured") }
 
 @Composable
-fun TestbenchTheme(
-    enableDarkMode: Boolean = isSystemInDarkTheme(),
+public fun TestbenchTheme(
+    enableDarkMode: Boolean = true,
     content: @Composable () -> Unit
 ) {
     val colors = remember(enableDarkMode) {
@@ -26,17 +24,17 @@ fun TestbenchTheme(
     )
 }
 
-object TestbenchTheme {
-    val colors: TestbenchColors
+public object TestbenchTheme {
+    public val colors: TestbenchColors
         @Composable
         get() = LocalTestbenchColors.current
 
-    val textStyles: TestbenchTextStyles
+    public val textStyles: TestbenchTextStyles
         @Composable
         get() = LocalTestbenchTextStyles.current
 }
 
-data class TestbenchColors(
+public data class TestbenchColors(
     val primary: Color,
     val secondary: Color,
     val accent: Color,
@@ -52,17 +50,17 @@ data class TestbenchColors(
 )
 
 private val TestbenchDarkColors = TestbenchColors(
-    primary = ColorPalette.geekblue9,
-    secondary = ColorPalette.blue4,
+    primary = ColorPalette.geekblue7,
+    secondary = ColorPalette.blue5,
     accent = ColorPalette.blue6,
-    background = ColorPalette.backgroundDark,
-    surface = Color.LightGray, //
+    background = ColorPalette.gray3,
+    surface = ColorPalette.gray2,
     error = ColorPalette.red5,
     success = ColorPalette.green5,
     onPrimary = ColorPalette.textDark,
-    onSecondary = ColorPalette.backgroundDark,
-    onBackground = ColorPalette.backgroundDark,
-    onSurface = Color.Black, //
+    onSecondary = ColorPalette.textDark,
+    onBackground = ColorPalette.textDark,
+    onSurface = ColorPalette.gray7,
     onError = ColorPalette.textDark,
 )
 

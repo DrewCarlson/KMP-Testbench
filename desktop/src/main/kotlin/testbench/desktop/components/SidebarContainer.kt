@@ -2,46 +2,63 @@ package testbench.desktop.components
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import testbench.desktop.resources.TestBenchIcons
+import testbench.desktop.LocalSessionHolder
 import testbench.desktop.server.SessionData
 import testbench.plugin.desktop.DesktopPlugin
 import testbench.plugin.desktop.UiHookLocation
-import testbench.ui.testbench
+import testbench.ui.*
 
 @Composable
 fun SidebarContainer(
     activeSession: SessionData,
+    onSessionSelected: (String) -> Unit,
     modifier: Modifier = Modifier,
     onPluginSelected: (DesktopPlugin<*, *>) -> Unit,
 ) {
+    val sessions by LocalSessionHolder.current.sessions.collectAsState()
     Box(
         modifier = modifier
-            //.background(JewelTheme.globalColors.panelBackground),
+            .background(LocalTestbenchColors.current.surface),
     ) {
         val scrollState = rememberScrollState()
 
         Column(
             modifier = Modifier
+                .fillMaxWidth()
                 .verticalScroll(scrollState),
         ) {
+            testbench.Text(
+                text = "Session",
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = TestbenchTheme.textStyles.h4,
+                modifier = Modifier
+                    .padding(top = 8.dp)
+                    .padding(horizontal = 8.dp),
+            )
+
+            SessionSelector(
+                activeSession = activeSession,
+                sessions = sessions,
+                onSessionSelected = onSessionSelected
+            )
+
+            testbench.HorizontalDivider()
+
             testbench.Text(
                 text = "Plugins",
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                style = TextStyle.Default.copy(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 12.sp,
-                ),
+                style = TestbenchTheme.textStyles.h4,
                 modifier = Modifier
-                    .padding(8.dp),
+                    .padding(top = 8.dp)
+                    .padding(horizontal = 8.dp),
             )
 
             remember(activeSession) {
@@ -52,7 +69,7 @@ fun SidebarContainer(
             }.forEach { (_, plugin) ->
                 PluginRow(
                     name = plugin.name,
-                    icon = "icons/${plugin.pluginIcon}.svg",
+                    icon = TestbenchIcon.forName(plugin.pluginIcon),
                     onClick = { onPluginSelected(plugin) },
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -63,12 +80,10 @@ fun SidebarContainer(
                     text = "Disabled",
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    style = TextStyle.Default.copy(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 12.sp,
-                    ),
+                    style = TestbenchTheme.textStyles.h4,
                     modifier = Modifier
-                        .padding(8.dp),
+                        .padding(top = 8.dp)
+                        .padding(horizontal = 8.dp),
                 )
             }
 
@@ -77,7 +92,7 @@ fun SidebarContainer(
                 .forEach { (plugin, _) ->
                     PluginRow(
                         name = plugin.name,
-                        icon = "icons/${plugin.pluginIcon}.svg",
+                        icon = TestbenchIcon.forName(plugin.pluginIcon),
                         enabled = false,
                         onClick = { onPluginSelected(plugin) },
                         modifier = Modifier
@@ -98,36 +113,40 @@ fun SidebarContainer(
 @Composable
 private fun PluginRow(
     name: String,
-    icon: String,
+    icon: TestbenchIcon,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
 ) {
     Row(
         modifier = modifier
-            //.thenIf(enabled) { clickable(onClick = onClick) }
+            .thenIf(enabled) { clickable(onClick = onClick) }
             .padding(horizontal = 10.dp, vertical = 6.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
             Modifier
-                .size(20.dp),
-                /*.background(
+                .size(20.dp)
+                .background(
                     if (enabled) {
-                        JewelTheme.colorPalette.blue(4)
+                        LocalTestbenchColors.current.primary
                     } else {
-                        JewelTheme.colorPalette.gray(4)
+                        LocalTestbenchColors.current.secondary // TODO: Disabled color
                     },
                     shape = RoundedCornerShape(4.dp),
-                ),*/
+                ),
             contentAlignment = Alignment.Center,
         ) {
-            /*Icon(
-                key = PathIconKey(icon, TestBenchIcons::class.java),
-                contentDescription = null,
+            testbench.Icon(
+                icon = icon,
                 modifier = Modifier.size(14.dp),
-            )*/
+                tint = if (enabled) {
+                    LocalTestbenchColors.current.onPrimary
+                } else {
+                    LocalTestbenchColors.current.onSecondary
+                }
+            )
         }
 
         testbench.Text(

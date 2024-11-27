@@ -129,5 +129,15 @@ internal object ColorPalette {
     val magenta8 = Color(0xFFF37FB7)
     val magenta9 = Color(0xFFF8A8CC)
     val magenta10 = Color(0xFFFAD2E3)
+    val gray1 = Color(0XFF212121)
+    val gray2 = Color(0XFF424242)
+    val gray3 = Color(0XFF616161)
+    val gray4 = Color(0XFF757575)
+    val gray5 = Color(0XFF9E9E9E)
+    val gray6 = Color(0XFFBDBDBD)
+    val gray7 = Color(0XFFE0E0E0)
+    val gray8 = Color(0XFFEEEEEE)
+    val gray9 = Color(0XFFF5F5F5)
+    val gray10 = Color(0XFFFAFAFA)
 }
 

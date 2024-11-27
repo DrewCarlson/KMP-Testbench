@@ -11,6 +11,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import testbench.ui.TestbenchIcon
+import testbench.ui.components.ButtonType
 import testbench.ui.testbench
 
 @Composable
@@ -28,30 +30,24 @@ public fun SearchRow(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        BasicTextField(
+        testbench.TextField(
             modifier = Modifier.weight(1f, fill = true),
             state = textFieldState,
-            /*placeholder = {
-                Text(
+            placeholder = {
+                testbench.Text(
                     text = "Search...",
                     maxLines = 1,
                 )
             },
             leadingIcon = {
-                Icon(
-                    key = PathIconKey(
-                        "icons/search_dark.svg",
-                        LogsPlaceholderPlugin::class.java,
-                    ),
-                    contentDescription = null,
-                    modifier = Modifier.size(16.dp),
-                )
-            },*/
+                testbench.Icon(TestbenchIcon.SEARCH)
+            },
         )
-        testbench.Text(
-            text = "Clear",
-            maxLines = 1,
-            modifier = Modifier.clickable(onClick = onClearEntries)
-        )
+        testbench.OutlineButton(
+            onClick = onClearEntries,
+            buttonType = ButtonType.STANDARD
+        ) {
+            testbench.Text("Clear")
+        }
     }
 }
