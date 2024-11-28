@@ -79,7 +79,7 @@ internal fun TestbenchButton(
                     ButtonStyle.TEXT -> this
                 }
             }.clickable(onClick = onClick, role = Role.Button)
-            .padding(vertical = 6.dp, horizontal = 8.dp),
+            .padding(vertical = 4.dp, horizontal = 8.dp),
     ) {
         CompositionLocalProvider(
             LocalTestbenchColors provides TestbenchTheme.colors.copy(
