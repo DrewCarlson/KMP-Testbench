@@ -41,7 +41,7 @@ public enum class TestbenchIcon(
 
     public companion object {
         public fun forName(pluginName: String): TestbenchIcon {
-            return runCatching { valueOf(pluginName) }.getOrElse { BOX }
+            return runCatching { valueOf(pluginName.uppercase()) }.getOrElse { BOX }
         }
     }
 }
