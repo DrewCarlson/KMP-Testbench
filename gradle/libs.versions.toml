@@ -18,7 +18,7 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 compose-jetbrains = { id = "org.jetbrains.compose", version.ref = "compose" }
 compose-hotReload = { id = "org.jetbrains.compose-hot-reload", version = "1.0.0-dev.28.4" }
 buildKonfig = { id = "com.codingfeline.buildkonfig", version = "0.15.2" }
-gradleBuildConfig = { id = "com.github.gmazzo.buildconfig", version = "5.4.0" }
+gradleBuildConfig = { id = "com.github.gmazzo.buildconfig", version = "5.5.1" }
 mavenPublish = { id = "com.vanniktech.maven.publish", version.ref = "mavenPublish" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 binaryCompat = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version.ref = "bcv" }
