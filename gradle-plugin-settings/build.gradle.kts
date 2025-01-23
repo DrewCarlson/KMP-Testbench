@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
-    kotlin("jvm") version "1.9.22"
+    kotlin("jvm") version "2.1.20-firework.34"
     `java-gradle-plugin`
     `kotlin-dsl`
     alias(libs.plugins.gradleBuildConfig)
