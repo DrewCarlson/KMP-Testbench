@@ -201,16 +201,31 @@ class PreviewPlugin : DesktopPlugin<Unit, Unit> {
                     testbench.HorizontalDivider()
 
                     testbench.Text(
-                        text = "Dropdown",
+                        text = "Menus",
                         style = TestbenchTheme.textStyles.h1,
                     )
-                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    ) {
                         testbench.Dropdown(
                             menu = {
                                 testbench.Text("Test")
                             },
                         ) {
                             testbench.Text("Dropdown")
+                        }
+                        testbench.ContextMenu(
+                            menu = {
+                                testbench.Text("Test")
+                            },
+                        ) {
+                            testbench.Surface(
+                                modifier = Modifier.fillMaxWidth(),
+                                color = TestbenchTheme.colors.background,
+                            ) {
+                                testbench.Text("Context Menu")
+                            }
                         }
                     }
 

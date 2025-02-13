@@ -205,6 +205,19 @@ public class TestbenchComponents {
     }
 
     @Composable
+    public fun ContextMenu(
+        menu: @Composable (close: () -> Unit) -> Unit,
+        modifier: Modifier = Modifier,
+        body: @Composable () -> Unit,
+    ) {
+        TestbenchContextMenu(
+            menu = menu,
+            modifier = modifier,
+            body = body,
+        )
+    }
+
+    @Composable
     public fun HorizontalSplitLayout(
         first: @Composable () -> Unit,
         second: @Composable () -> Unit,
