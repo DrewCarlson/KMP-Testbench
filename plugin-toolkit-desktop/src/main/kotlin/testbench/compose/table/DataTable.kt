@@ -25,6 +25,8 @@ import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.*
 import java.awt.Cursor
+import kotlin.math.ceil
+import kotlin.math.floor
 
 @Composable
 public fun <T> DataTable(
@@ -106,7 +108,7 @@ private fun <T> ColumnHeaders(
                     end = Offset(size.width, size.height),
                     strokeWidth = 2f,
                 )
-            },
+            }.clipToBounds(),
         content = {
             val density = LocalDensity.current
             columns.forEachIndexed { index, column ->
@@ -114,8 +116,8 @@ private fun <T> ColumnHeaders(
                     HeaderHandle(
                         modifier = Modifier.layoutId("handle"),
                         handleColor = handleColor,
-                        onDrag = onDrag@{ x ->
-                            val delta = with(density) { x.toDp() }
+                        onDrag = onDrag@{ x: Float ->
+                            val delta = with(density) { floor(x).toDp() }
                             val newWidths = columnWidthOverride.value.toMutableList()
                             if ((index == columns.lastIndex && !column.expanded) || columns[index - 1].expanded) {
                                 val newWidth = newWidths[index] - delta
@@ -155,13 +157,15 @@ private fun <T> ColumnHeaders(
                     null
                 } else {
                     // measure the non-expanded column with its minimum width
-                    val min = measurable
-                        .maxIntrinsicWidth(0)
                     val remainingMaxWidth = constraints.maxWidth - headerMeasurables
-                        .filterIndexed { i, _ -> i != index && !columns[i].expanded }
+                        .drop(index)
                         .sumOf { it.maxIntrinsicWidth(0) }
-                    val actualMin = (min + columnWidthOverride.value[index].roundToPx())
-                        .coerceIn(0, (min + remainingMaxWidth).coerceAtLeast(0))
+                        .coerceAtLeast(0)
+                    val overrideWidth = ceil(columnWidthOverride.value[index].toPx()).toInt()
+                    val minWidth = measurable.maxIntrinsicWidth(0)
+                    val maxWidth = (remainingMaxWidth).coerceAtLeast(0)
+                    val desiredSize = minWidth + overrideWidth
+                    val actualMin = desiredSize.coerceIn(minOf(minWidth, maxWidth), maxOf(maxWidth, minWidth))
                     measurable.measure(constraints.copy(minWidth = actualMin, maxWidth = actualMin))
                 }
             }
@@ -207,7 +211,7 @@ private fun <T> ColumnHeaders(
                     val handle = handlePlaceables[index - 1]
                     handle.placeRelative(
                         x = xPosition - (handle.width / 2),
-                        y = ((maxHeight / 2) - (handle.height / 2)),
+                        y = (maxHeight / 2) - (handle.height / 2),
                     )
                 }
 
