@@ -59,8 +59,8 @@ internal fun TestbenchTextField(
                 color = if (isFocused) {
                     colors.primary
                 } else {
-                    colors.background.copy(
-                        alpha = if (enabled) 1f else 0.6f,
+                    colors.onSurface.copy(
+                        alpha = if (enabled) 0.6f else 0.4f,
                     )
                 },
                 shape = RoundedCornerShape(4.dp),
@@ -95,8 +95,8 @@ internal fun TestbenchTextField(
                         if (state.text.isEmpty() && !isFocused) {
                             CompositionLocalProvider(
                                 LocalTestbenchColors provides colors.copy(
-                                    onSurface = colors.background.copy(
-                                        alpha = if (enabled) 1f else 0.6f,
+                                    onSurface = colors.onSurface.copy(
+                                        alpha = if (enabled) 0.6f else 0.4f,
                                     ),
                                 ),
                             ) {

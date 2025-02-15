@@ -1,5 +1,6 @@
 package testbench.plugins.network.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -22,6 +23,7 @@ import testbench.compose.table.DataTableColumn
 import testbench.compose.table.DataTableHeader
 import testbench.plugins.network.NetworkRequestMessage
 import testbench.plugins.network.NetworkResponseMessage
+import testbench.ui.TestbenchTheme
 import testbench.ui.components.ButtonType
 import testbench.ui.components.JsonTreeViewer
 import testbench.ui.testbench
@@ -39,7 +41,8 @@ public fun RequestDataView(
     val dividerInteractionSource = remember { MutableInteractionSource() }
     Box(
         modifier = modifier
-            .fillMaxHeight(),
+            .fillMaxHeight()
+            .background(TestbenchTheme.colors.background),
     ) {
         testbench.VerticalSplitLayout(
             modifier = Modifier

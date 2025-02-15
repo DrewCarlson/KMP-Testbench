@@ -30,7 +30,7 @@ fun SidebarContainer(
     val sessions by LocalSessionHolder.current.sessions.collectAsState()
     Box(
         modifier = modifier
-            .background(TestbenchTheme.colors.surface),
+            .background(TestbenchTheme.colors.background),
     ) {
         val scrollState = rememberScrollState()
 
