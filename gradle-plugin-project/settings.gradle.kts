@@ -15,3 +15,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+
+rootProject.name = "gradle-plugin-project"
