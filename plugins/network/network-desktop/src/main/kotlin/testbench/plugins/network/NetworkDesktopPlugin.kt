@@ -15,7 +15,7 @@ public data class NetworkEntryHolder(
 
 public class NetworkDesktopPlugin :
     NetworkPlugin(),
-    DesktopPlugin<NetworkPluginMessage, Unit> {
+    DesktopPlugin<Unit, NetworkPluginMessage> {
     private val networkEntries = MutableStateFlow(emptyMap<String, NetworkEntryHolder>())
 
     override val ui: UiHooks = UiHooks {

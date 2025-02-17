@@ -11,8 +11,9 @@ kotlin {
 
         commonMain {
             dependencies {
-                implementation(projects.pluginToolkitClient)
-
+                api(projects.pluginToolkitClient)
+                api(libs.coroutines.core)
+                api(libs.ktor.http)
                 implementation(libs.ktor.client.core)
                 implementation(libs.ktor.client.contentNegotiation)
                 implementation(libs.ktor.client.websockets)

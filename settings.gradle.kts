@@ -25,6 +25,7 @@ include(
     ":plugin-toolkit-ui",
     ":plugins",
     ":service-compiler-plugin",
+    ":integration-tests",
 )
 
 includeBuild("gradle-plugin-settings") {

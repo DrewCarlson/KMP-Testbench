@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.datetime.Clock
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.Response
 import okhttp3.ResponseBody.Companion.toResponseBody
 import okio.Buffer
 import testbench.plugin.client.ClientPlugin
@@ -14,7 +15,8 @@ import kotlin.random.Random
 
 public class OkHttpNetworkClientPlugin :
     NetworkPlugin(),
-    ClientPlugin<NetworkPluginMessage, Unit> {
+    ClientPlugin<Unit, NetworkPluginMessage>,
+    Interceptor {
     private val messageQueue = Channel<NetworkPluginMessage>(
         capacity = Int.MAX_VALUE,
         onBufferOverflow = BufferOverflow.DROP_OLDEST,
@@ -26,18 +28,24 @@ public class OkHttpNetworkClientPlugin :
     }
 
     @OptIn(ExperimentalStdlibApi::class)
-    public val interceptor: Interceptor = Interceptor { chain ->
+    override fun intercept(chain: Interceptor.Chain): Response {
         val requestId = Random.nextBytes(8).toHexString()
         val requestTime = Clock.System.now()
         val request = chain.request()
 
         val requestBody = request.body
         val body = when {
-            requestBody == null -> null
+            requestBody == null -> {
+                null
+            }
 
-            requestBody.isDuplex() -> "(duplex request body omitted)"
+            requestBody.isDuplex() -> {
+                "(duplex request body omitted)"
+            }
 
-            requestBody.isOneShot() -> "(one-shot body omitted)"
+            requestBody.isOneShot() -> {
+                "(one-shot body omitted)"
+            }
 
             requestBody.contentType() == "application/json".toMediaType() -> {
                 val buffer = Buffer()
@@ -45,7 +53,9 @@ public class OkHttpNetworkClientPlugin :
                 buffer.readUtf8()
             }
 
-            else -> null
+            else -> {
+                null
+            }
         }
         messageQueue.trySend(
             NetworkRequestMessage(
@@ -80,7 +90,7 @@ public class OkHttpNetworkClientPlugin :
             ),
         )
 
-        response
+        return response
             .newBuilder()
             .apply {
                 if (responseBodyString != null) {

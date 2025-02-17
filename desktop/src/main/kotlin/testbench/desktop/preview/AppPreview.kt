@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import testbench.desktop.LocalSessionHolder
 import testbench.desktop.plugins.PluginRegistry
+import testbench.desktop.plugins.PluginRegistry.Companion.loadPlugins
 import testbench.desktop.server.SessionData
 import testbench.desktop.server.SessionHolder
 import testbench.desktop.window.MainWindowContent
@@ -33,5 +34,5 @@ private val defaultSession = SessionData(
     sessionId = "default",
     isConnected = false,
     deviceInfo = DeviceInfo.host,
-    pluginRegistry = PluginRegistry(emptyList()),
+    pluginRegistry = PluginRegistry(emptyList(), loadPlugins()),
 )

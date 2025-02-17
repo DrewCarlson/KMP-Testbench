@@ -11,25 +11,28 @@ import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import org.slf4j.LoggerFactory
 import org.slf4j.event.Level
 import testbench.communication.ClientConnectMessage
+import testbench.communication.DesktopConnectMessage
 import testbench.communication.PluginMessage
 import testbench.desktop.plugins.PluginRegistry
+import testbench.desktop.plugins.PluginRegistry.Companion.loadPlugins
+import testbench.device.DeviceInfo
 import testbench.plugin.desktop.DesktopPlugin
 import java.time.Duration
 
 class TestBenchServer(
     private val sessionHolder: SessionHolder,
+    private val plugins: List<DesktopPlugin<*, *>> = loadPlugins(),
 ) {
     private lateinit var server: ApplicationEngine
     private val serverStarted = MutableStateFlow(false)
+    val serverStartedFlow = serverStarted.asStateFlow()
 
     fun setupServer(port: Int) {
         check(!serverStarted.value) { "Server is already running, stopServer() must be called first." }
@@ -58,13 +61,16 @@ class TestBenchServer(
                     val connectMessage = receiveDeserialized<ClientConnectMessage>()
 
                     val session = sessionHolder.updateOrCreate(
-                        connectMessage.sessionId,
+                        id = connectMessage.sessionId,
                         update = { it.copy(isConnected = true) },
                     ) {
                         SessionData(
                             sessionId = connectMessage.sessionId,
                             isConnected = true,
-                            pluginRegistry = PluginRegistry(connectMessage.pluginIds),
+                            pluginRegistry = PluginRegistry(
+                                clientPluginIds = connectMessage.pluginIds,
+                                plugins = plugins,
+                            ),
                             deviceInfo = connectMessage.deviceInfo,
                         )
                     }
@@ -74,10 +80,35 @@ class TestBenchServer(
                         sessionHolder.remove("default")
                     }
 
+                    sendSerialized(
+                        DesktopConnectMessage(
+                            deviceInfo = DeviceInfo.host,
+                            pluginIds = session.pluginRegistry
+                                .enabledPlugins
+                                .keys
+                                .toList(),
+                        ),
+                    )
+
+                    session.pluginRegistry
+                        .enabledPlugins
+                        .forEach { (_, plugin) ->
+                            plugin.outgoingMessages
+                                .onEach { message ->
+                                    val serializer = serializer(plugin.clientMessageType)
+                                    val messageContent = Json.encodeToString(serializer, message)
+                                    val pluginMessage = PluginMessage(
+                                        pluginId = plugin.id,
+                                        content = messageContent,
+                                    )
+                                    sendSerialized(pluginMessage)
+                                }.launchIn(this)
+                        }
+
                     try {
                         while (isActive) {
                             val message = receiveDeserialized<PluginMessage>()
-                            dispatchPluginMessage(session, message)
+                            session.pluginRegistry.handleMessage(message)
                         }
                     } finally {
                         sessionHolder.update(connectMessage.sessionId) {
@@ -87,25 +118,6 @@ class TestBenchServer(
                 }
             }
         }
-    }
-
-    private suspend fun DefaultWebSocketServerSession.dispatchPluginMessage(
-        session: SessionData,
-        message: PluginMessage,
-    ) {
-        @Suppress("UNCHECKED_CAST")
-        val plugin = session.pluginRegistry.enabledPlugins[message.pluginId] as? DesktopPlugin<Any, Any>
-        if (plugin == null) {
-            call.application.log.warn("Received unhandled plugin message: $message")
-            return
-        }
-
-        val content =
-            Json.decodeFromString(serializer(plugin.serverMessageType), message.content)
-        val typedContent = checkNotNull(content) {
-            "Failed to process message (plugin:${plugin.id}): ${message.content}"
-        }
-        launch { plugin.handleMessage(typedContent) }
     }
 
     fun startSever() {

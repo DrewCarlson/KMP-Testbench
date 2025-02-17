@@ -5,8 +5,8 @@ import kotlinx.coroutines.flow.emptyFlow
 import testbench.plugin.BenchPlugin
 
 public interface ClientPlugin<ServerMessage : Any, ClientMessage : Any> : BenchPlugin<ServerMessage, ClientMessage> {
-    public val outgoingMessages: Flow<ServerMessage>
+    public val outgoingMessages: Flow<ClientMessage>
         get() = emptyFlow()
 
-    public suspend fun handleMessage(message: ClientMessage)
+    public suspend fun handleMessage(message: ServerMessage)
 }

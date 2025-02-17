@@ -22,7 +22,7 @@ fun main() = application {
         CoinGeckoClient(
             HttpClient(
                 OkHttp.create {
-                    addInterceptor(okhttpNetworkPlugin.interceptor)
+                    addInterceptor(okhttpNetworkPlugin)
                 },
             ) {
                 networkPlugin.install(this)

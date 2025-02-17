@@ -3,12 +3,15 @@ package testbench.client
 import io.ktor.client.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.websocket.*
+import io.ktor.http.*
 import io.ktor.serialization.kotlinx.*
+import io.ktor.websocket.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import testbench.communication.ClientConnectMessage
+import testbench.communication.DesktopConnectMessage
 import testbench.communication.PluginMessage
 import testbench.device.DeviceInfo
 import testbench.device.DevicePlatform
@@ -27,12 +30,14 @@ import kotlin.random.Random
  * @param autoConnect When true (default), automatically attempt to connect to the desktop app.
  * @param reconnectHandler An optional [ReconnectHandler] to customize reconnection behavior.
  * @param coroutineContext A [CoroutineContext] to customize how the client manages async work, default [Dispatchers.Default].
+ * @param serverUrl The Desktop App server URL to pair with, for testing only.
  */
 public class TestBenchClient(
     private val plugins: List<ClientPlugin<*, *>>,
     autoConnect: Boolean = true,
     private val reconnectHandler: ReconnectHandler = ReconnectHandler.default(),
     coroutineContext: CoroutineContext = Dispatchers.Default,
+    private val serverUrl: Url = Url("http://127.0.0.1:8182"),
 ) {
     private val scope = CoroutineScope(SupervisorJob() + coroutineContext)
 
@@ -44,6 +49,7 @@ public class TestBenchClient(
 
     @OptIn(ExperimentalStdlibApi::class)
     private val sessionId = Random.Default.nextBytes(4).toHexString()
+    private val pluginMap = plugins.associateBy { it.id }
 
     // HttpClient may read disk to find the client engine so create it
     // async in case the TestbenchClient is created on the main thread.
@@ -52,9 +58,9 @@ public class TestBenchClient(
         HttpClient {
             defaultRequest {
                 if (DeviceInfo.host.platform == DevicePlatform.ANDROID) {
-                    url(host = "10.0.2.2", port = 8182)
+                    url(host = "10.0.2.2", port = serverUrl.port)
                 } else {
-                    url(host = "127.0.0.1", port = 8182)
+                    url.takeFrom(serverUrl)
                 }
             }
             WebSockets {
@@ -128,19 +134,23 @@ public class TestBenchClient(
     private suspend fun createWsConnection(onConnected: suspend () -> Unit) {
         http.await().ws {
             onConnected()
-            sendConnectMessage()
+            sendClientConnectMessage()
+            awaitDesktopConnectMessage()
             sendOutgoingMessages()
-            closeReason.await()
-            cancel()
+            awaitIncomingMessages()
         }
     }
 
-    private suspend fun DefaultClientWebSocketSession.sendConnectMessage() {
+    private suspend fun DefaultClientWebSocketSession.awaitDesktopConnectMessage() {
+        val (deviceInfo, pluginIds) = receiveDeserialized<DesktopConnectMessage>()
+    }
+
+    private suspend fun DefaultClientWebSocketSession.sendClientConnectMessage() {
         sendSerialized(
             ClientConnectMessage(
                 sessionId = sessionId,
                 deviceInfo = DeviceInfo.host,
-                pluginIds = plugins.map { it.id },
+                pluginIds = pluginMap.keys.toList(),
             ),
         )
     }
@@ -148,15 +158,33 @@ public class TestBenchClient(
     private fun DefaultClientWebSocketSession.sendOutgoingMessages() {
         plugins.forEach { plugin ->
             plugin.outgoingMessages
-                .onEach { message -> sendSerialized(plugin.serializeMessage(message)) }
-                .launchIn(this)
+                .onEach { message ->
+                    val messageContent = Json.encodeToString(serializer(plugin.clientMessageType), message)
+                    val pluginMessage = PluginMessage(
+                        pluginId = plugin.id,
+                        content = messageContent,
+                    )
+                    sendSerialized(pluginMessage)
+                }.launchIn(this)
         }
     }
 
-    private fun ClientPlugin<*, *>.serializeMessage(content: Any): PluginMessage {
-        return PluginMessage(
-            pluginId = id,
-            content = Json.encodeToString(serializer(serverMessageType), content),
-        )
+    private suspend fun DefaultClientWebSocketSession.awaitIncomingMessages() {
+        launch {
+            while (isActive) {
+                try {
+                    val (pluginId, content) = receiveDeserialized<PluginMessage>()
+                    val plugin = pluginMap[pluginId] ?: continue
+                    val deserialized = Json.decodeFromString(serializer(plugin.serverMessageType), content)
+                    @Suppress("UNCHECKED_CAST")
+                    (plugin as ClientPlugin<Any, Any>).handleMessage(deserialized!!)
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Throwable) {
+                    e.printStackTrace()
+                }
+            }
+        }
+        closeReason.await()
     }
 }

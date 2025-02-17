@@ -22,7 +22,7 @@ private val KtorRequestTime = AttributeKey<Instant>("KMP-Testbench-Time")
 
 public class KtorNetworkClientPlugin :
     NetworkPlugin(),
-    ClientPlugin<NetworkPluginMessage, Unit> {
+    ClientPlugin<Unit, NetworkPluginMessage> {
     private val messageQueue = Channel<NetworkPluginMessage>(
         capacity = Int.MAX_VALUE,
         onBufferOverflow = BufferOverflow.DROP_OLDEST,

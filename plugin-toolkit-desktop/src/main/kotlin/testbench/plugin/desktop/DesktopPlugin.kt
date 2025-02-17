@@ -6,7 +6,7 @@ import testbench.device.DevicePlatform
 import testbench.plugin.BenchPlugin
 
 public interface DesktopPlugin<ServerMessage : Any, ClientMessage : Any> : BenchPlugin<ServerMessage, ClientMessage> {
-    public val outgoingMessages: Flow<ClientMessage>
+    public val outgoingMessages: Flow<ServerMessage>
         get() = emptyFlow()
 
     public val supportedPlatforms: List<DevicePlatform>
@@ -18,7 +18,7 @@ public interface DesktopPlugin<ServerMessage : Any, ClientMessage : Any> : Bench
     public val ui: UiHooks
         get() = UiHooks(emptyMap())
 
-    public suspend fun handleMessage(message: ServerMessage)
+    public suspend fun handleMessage(message: ClientMessage)
 }
 
 @Suppress("UnusedReceiverParameter")

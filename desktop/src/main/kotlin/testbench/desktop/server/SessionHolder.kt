@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import testbench.desktop.plugins.PluginRegistry
+import testbench.desktop.plugins.PluginRegistry.Companion.loadPlugins
 import testbench.device.DeviceInfo
 
 class SessionHolder {
@@ -17,7 +18,7 @@ class SessionHolder {
         sessionId = "default",
         isConnected = false,
         deviceInfo = DeviceInfo.host,
-        pluginRegistry = PluginRegistry(emptyList()),
+        pluginRegistry = PluginRegistry(emptyList(), loadPlugins()),
     )
 
     private val _activeSession = MutableStateFlow(defaultSessionData)
