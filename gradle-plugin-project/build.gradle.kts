@@ -44,9 +44,10 @@ buildConfig {
     buildConfigField("SERIALIZATION_VERSION", libs.versions.serialization)
 
     forClass("TestbenchDeps") {
-        buildConfigField("clientCore", "org.drewcarlson.testbench:client-core:$version")
-        buildConfigField("clientNetworkKtor", "org.drewcarlson.testbench:network-client-ktor:$version")
-        buildConfigField("clientNetworkOkhttp", "org.drewcarlson.testbench:network-client-okhttp:$version")
+        buildConfigField("client", "org.drewcarlson.testbench:client-core:$version")
+        buildConfigField("networkClientCore", "org.drewcarlson.testbench:network-client-core:$version")
+        buildConfigField("networkClientKtor", "org.drewcarlson.testbench:network-client-ktor:$version")
+        buildConfigField("networkClientOkhttp", "org.drewcarlson.testbench:network-client-okhttp:$version")
     }
 }
 
