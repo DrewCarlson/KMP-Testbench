@@ -7,10 +7,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import coingecko.CoinGeckoClient
-import coingecko.models.coins.CoinList
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import testbench.client.TestbenchClient
 import testbench.plugins.network.KtorNetworkClientPlugin
 import testbench.plugins.network.OkHttpNetworkClientPlugin
@@ -18,16 +18,14 @@ import testbench.plugins.network.OkHttpNetworkClientPlugin
 fun main() = application {
     val networkPlugin = remember { KtorNetworkClientPlugin() }
     val okhttpNetworkPlugin = remember { OkHttpNetworkClientPlugin() }
-    val coingecko = remember {
-        CoinGeckoClient(
-            HttpClient(
-                OkHttp.create {
-                    addInterceptor(okhttpNetworkPlugin)
-                },
-            ) {
-                networkPlugin.install(this)
+    val http = remember {
+        HttpClient(
+            OkHttp.create {
+                addInterceptor(okhttpNetworkPlugin)
             },
-        )
+        ) {
+            networkPlugin.install(this)
+        }
     }
     val testbenchClient = remember {
         TestbenchClient(
@@ -43,9 +41,8 @@ fun main() = application {
             title = "Demo App",
         ) {
             var refresh by remember { mutableStateOf(0) }
-            val coins by produceState(emptyList<CoinList>(), refresh) {
-                kotlin.runCatching { coingecko.getCoinById("bitcoin") }
-                // value = coingecko.getCoinList()
+            LaunchedEffect(refresh) {
+                http.get("https://pokeapi.co/api/v2/pokemon/").bodyAsText()
             }
 
             val isConnected by testbenchClient.isConnectedFlow.collectAsState()

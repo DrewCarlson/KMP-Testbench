@@ -26,9 +26,6 @@ dependencies {
     implementation(projects.clientCore)
     implementation(projects.plugins.network.networkClientKtor)
     implementation(projects.plugins.network.networkClientOkhttp)
-
-    implementation("org.drewcarlson:coingecko:1.0.0-rc01")
-    implementation("io.ktor:ktor-client-okhttp-jvm:2.3.12")
 }
 
 compose.desktop {
