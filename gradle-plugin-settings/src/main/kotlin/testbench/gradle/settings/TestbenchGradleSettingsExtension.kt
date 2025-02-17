@@ -4,16 +4,16 @@ import org.gradle.api.initialization.Settings
 import org.gradle.kotlin.dsl.extra
 
 private val PLUGIN_MODULE_NAMES = listOf("core", "desktop")
-internal const val TEST_BENCH_PLUGIN_MODULE = "TEST_BENCH_PLUGIN_MODULE"
+internal const val TESTBENCH_PLUGIN_MODULE = "TESTBENCH_PLUGIN_MODULE"
 
 public open class TestbenchGradleSettingsExtension(
     private val settings: Settings,
 ) {
-    public fun includePlugin(
+    public fun registerPlugin(
         pluginPath: String,
-        block: TestbenchIncludePluginBuilder.() -> Unit = {},
+        block: TestbenchRegisterPluginBuilder.() -> Unit = {},
     ) {
-        val config = TestbenchIncludePluginBuilder().apply(block)
+        val config = TestbenchRegisterPluginBuilder().apply(block)
         val baseName = pluginPath.substringAfterLast(":")
         val newModulePaths = when {
             config.desktopOnly -> listOf("desktop")
@@ -32,9 +32,9 @@ public open class TestbenchGradleSettingsExtension(
             }
         }
 
-        val existing = if (settings.gradle.extra.has(TEST_BENCH_PLUGIN_MODULE)) {
+        val existing = if (settings.gradle.extra.has(TESTBENCH_PLUGIN_MODULE)) {
             @Suppress("UNCHECKED_CAST")
-            settings.gradle.extra.get(TEST_BENCH_PLUGIN_MODULE) as List<String>
+            settings.gradle.extra.get(TESTBENCH_PLUGIN_MODULE) as List<String>
         } else {
             emptyList()
         }
@@ -58,11 +58,11 @@ public open class TestbenchGradleSettingsExtension(
                 newModulePaths[1],
             )
         }.serialize()
-        settings.gradle.extra.set(TEST_BENCH_PLUGIN_MODULE, existing + new)
+        settings.gradle.extra.set(TESTBENCH_PLUGIN_MODULE, existing + new)
     }
 }
 
-public class TestbenchIncludePluginBuilder {
+public class TestbenchRegisterPluginBuilder {
     internal val clientVariations = mutableListOf<String>()
 
     internal var desktopOnly: Boolean = false

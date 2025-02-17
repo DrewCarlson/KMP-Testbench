@@ -13,7 +13,7 @@ plugins {
 }
 
 testbench {
-  includePlugin(":plugins:my-plugin") {
+  registerPlugin(":plugins:my-plugin") {
     // optional: Create multiple client implementation variations
     clientVariations("ktor", "okhttp", "fuel")
     // optional: Create only a desktop module without client or core modules

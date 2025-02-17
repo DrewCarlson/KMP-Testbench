@@ -53,10 +53,10 @@ plugins {
 }
 
 testbench {
-    includePlugin(":plugins:logs")
-    includePlugin(":plugins:databases")
-    includePlugin(":plugins:preferences")
-    includePlugin(":plugins:network") {
+    registerPlugin(":plugins:logs")
+    registerPlugin(":plugins:databases")
+    registerPlugin(":plugins:preferences")
+    registerPlugin(":plugins:network") {
         clientVariations("ktor")
         clientVariations("okhttp")
     }

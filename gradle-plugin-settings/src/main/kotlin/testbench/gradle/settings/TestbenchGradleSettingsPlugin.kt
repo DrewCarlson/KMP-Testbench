@@ -13,10 +13,10 @@ public class TestbenchGradleSettingsPlugin : Plugin<Settings> {
         )
 
         settings.gradle.settingsEvaluated {
-            if (settings.gradle.extraProperties.has(TEST_BENCH_PLUGIN_MODULE)) {
+            if (settings.gradle.extraProperties.has(TESTBENCH_PLUGIN_MODULE)) {
                 @Suppress("UNCHECKED_CAST")
                 val text =
-                    (settings.gradle.extraProperties.get(TEST_BENCH_PLUGIN_MODULE) as List<String>).joinToString("\n")
+                    (settings.gradle.extraProperties.get(TESTBENCH_PLUGIN_MODULE) as List<String>).joinToString("\n")
                 val modulesListFile = settings.rootDir.resolve(".gradle/testbench.modules")
                 modulesListFile.parentFile.mkdirs()
                 modulesListFile.bufferedWriter().use { out ->
