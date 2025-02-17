@@ -48,8 +48,8 @@ fun main() = application {
                 // value = coingecko.getCoinList()
             }
 
-            val isConnected by testbenchClient.isConnected.collectAsState()
-            val isEnabled by testbenchClient.isEnabled.collectAsState()
+            val isConnected by testbenchClient.isConnectedFlow.collectAsState()
+            val isEnabled by testbenchClient.isEnabledFlow.collectAsState()
 
             Column {
                 if (isConnected) {
@@ -60,7 +60,7 @@ fun main() = application {
 
                 Button(
                     onClick = {
-                        if (testbenchClient.isEnabled.value) {
+                        if (testbenchClient.isEnabled) {
                             testbenchClient.disable()
                         } else {
                             testbenchClient.enable()
