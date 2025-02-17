@@ -11,9 +11,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.dp
 import testbench.ui.TestbenchTheme
 
-
 internal enum class Orientation {
-    VERTICAL, HORIZONTAL;
+    VERTICAL,
+    HORIZONTAL,
 }
 
 @Composable
@@ -30,24 +30,24 @@ internal fun Divider(
                     Orientation.VERTICAL -> fillMaxHeight()
                     Orientation.HORIZONTAL -> fillMaxWidth()
                 }
-            }
-            .drawBehind {
+            }.drawBehind {
                 when (orientation) {
                     Orientation.VERTICAL -> {
                         drawLine(
                             color = color,
                             start = Offset(0f, 0f),
                             end = Offset(0f, size.height),
-                            strokeWidth = 1f
+                            strokeWidth = 0.5f,
                         )
                     }
+
                     Orientation.HORIZONTAL -> {
                         val y = size.height / 2
                         drawLine(
                             color = color,
                             start = Offset(0f, y),
                             end = Offset(size.width, y),
-                            strokeWidth = 1f
+                            strokeWidth = 0.5f,
                         )
                     }
                 }
