@@ -1,0 +1,154 @@
+public abstract class testbench/plugins/network/NetworkPlugin : testbench/plugin/BenchPlugin {
+	public fun <init> ()V
+	public fun getClientMessageType ()Lkotlin/reflect/KType;
+	public fun getId ()Ljava/lang/String;
+	public fun getName ()Ljava/lang/String;
+	public fun getPluginIcon ()Ljava/lang/String;
+	public fun getServerMessageType ()Lkotlin/reflect/KType;
+}
+
+public abstract class testbench/plugins/network/NetworkPluginMessage {
+	public static final field Companion Ltestbench/plugins/network/NetworkPluginMessage$Companion;
+	public synthetic fun <init> (ILkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public static final synthetic fun write$Self (Ltestbench/plugins/network/NetworkPluginMessage;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class testbench/plugins/network/NetworkPluginMessage$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class testbench/plugins/network/NetworkRequestMessage : testbench/plugins/network/NetworkPluginMessage {
+	public static final field Companion Ltestbench/plugins/network/NetworkRequestMessage$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;Ljava/lang/String;Lkotlinx/datetime/Instant;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/util/Map;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Lkotlinx/datetime/Instant;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;Ljava/lang/String;Lkotlinx/datetime/Instant;)Ltestbench/plugins/network/NetworkRequestMessage;
+	public static synthetic fun copy$default (Ltestbench/plugins/network/NetworkRequestMessage;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;Ljava/lang/String;Lkotlinx/datetime/Instant;ILjava/lang/Object;)Ltestbench/plugins/network/NetworkRequestMessage;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBody ()Ljava/lang/String;
+	public final fun getHeaders ()Ljava/util/Map;
+	public final fun getId ()Ljava/lang/String;
+	public final fun getInitiatedAt ()Lkotlinx/datetime/Instant;
+	public final fun getMethod ()Ljava/lang/String;
+	public final fun getUrl ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class testbench/plugins/network/NetworkRequestMessage$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltestbench/plugins/network/NetworkRequestMessage$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltestbench/plugins/network/NetworkRequestMessage;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltestbench/plugins/network/NetworkRequestMessage;)V
+}
+
+public final class testbench/plugins/network/NetworkRequestMessage$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract class testbench/plugins/network/NetworkResponseMessage : testbench/plugins/network/NetworkPluginMessage {
+	public static final field Companion Ltestbench/plugins/network/NetworkResponseMessage$Companion;
+	public synthetic fun <init> (ILkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public abstract fun getId ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Ltestbench/plugins/network/NetworkResponseMessage;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class testbench/plugins/network/NetworkResponseMessage$Cancelled : testbench/plugins/network/NetworkResponseMessage {
+	public static final field Companion Ltestbench/plugins/network/NetworkResponseMessage$Cancelled$Companion;
+	public fun <init> (Ljava/lang/String;Z)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Z
+	public final fun copy (Ljava/lang/String;Z)Ltestbench/plugins/network/NetworkResponseMessage$Cancelled;
+	public static synthetic fun copy$default (Ltestbench/plugins/network/NetworkResponseMessage$Cancelled;Ljava/lang/String;ZILjava/lang/Object;)Ltestbench/plugins/network/NetworkResponseMessage$Cancelled;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getId ()Ljava/lang/String;
+	public final fun getSent ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class testbench/plugins/network/NetworkResponseMessage$Cancelled$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltestbench/plugins/network/NetworkResponseMessage$Cancelled$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltestbench/plugins/network/NetworkResponseMessage$Cancelled;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltestbench/plugins/network/NetworkResponseMessage$Cancelled;)V
+}
+
+public final class testbench/plugins/network/NetworkResponseMessage$Cancelled$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class testbench/plugins/network/NetworkResponseMessage$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class testbench/plugins/network/NetworkResponseMessage$Completed : testbench/plugins/network/NetworkResponseMessage {
+	public static final field Companion Ltestbench/plugins/network/NetworkResponseMessage$Completed$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/util/Map;ILjava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/Map;
+	public final fun component3 ()I
+	public final fun component4 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/util/Map;ILjava/lang/String;)Ltestbench/plugins/network/NetworkResponseMessage$Completed;
+	public static synthetic fun copy$default (Ltestbench/plugins/network/NetworkResponseMessage$Completed;Ljava/lang/String;Ljava/util/Map;ILjava/lang/String;ILjava/lang/Object;)Ltestbench/plugins/network/NetworkResponseMessage$Completed;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBody ()Ljava/lang/String;
+	public final fun getHeaders ()Ljava/util/Map;
+	public fun getId ()Ljava/lang/String;
+	public final fun getStatus ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class testbench/plugins/network/NetworkResponseMessage$Completed$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltestbench/plugins/network/NetworkResponseMessage$Completed$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltestbench/plugins/network/NetworkResponseMessage$Completed;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltestbench/plugins/network/NetworkResponseMessage$Completed;)V
+}
+
+public final class testbench/plugins/network/NetworkResponseMessage$Completed$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class testbench/plugins/network/NetworkResponseMessage$Failed : testbench/plugins/network/NetworkResponseMessage {
+	public static final field Companion Ltestbench/plugins/network/NetworkResponseMessage$Failed$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Ltestbench/plugins/network/NetworkResponseMessage$Failed;
+	public static synthetic fun copy$default (Ltestbench/plugins/network/NetworkResponseMessage$Failed;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ltestbench/plugins/network/NetworkResponseMessage$Failed;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getId ()Ljava/lang/String;
+	public final fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class testbench/plugins/network/NetworkResponseMessage$Failed$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltestbench/plugins/network/NetworkResponseMessage$Failed$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltestbench/plugins/network/NetworkResponseMessage$Failed;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltestbench/plugins/network/NetworkResponseMessage$Failed;)V
+}
+
+public final class testbench/plugins/network/NetworkResponseMessage$Failed$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+

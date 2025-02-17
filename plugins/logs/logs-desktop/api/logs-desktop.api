@@ -1,3 +1,30 @@
+public final class testbench/plugins/logs/ComposableSingletons$LogsMainPanelKt {
+	public static final field INSTANCE Ltestbench/plugins/logs/ComposableSingletons$LogsMainPanelKt;
+	public fun <init> ()V
+	public final fun getLambda-1$logs_desktop ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda-2$logs_desktop ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda-3$logs_desktop ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda-4$logs_desktop ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda-5$logs_desktop ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda-6$logs_desktop ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda-7$logs_desktop ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda-8$logs_desktop ()Lkotlin/jvm/functions/Function3;
+}
+
+public final class testbench/plugins/logs/ComposableSingletons$LogsPlaceholderPluginKt {
+	public static final field INSTANCE Ltestbench/plugins/logs/ComposableSingletons$LogsPlaceholderPluginKt;
+	public fun <init> ()V
+	public final fun getLambda-1$logs_desktop ()Lkotlin/jvm/functions/Function3;
+}
+
+public final class testbench/plugins/logs/ComposableSingletons$SearchRowKt {
+	public static final field INSTANCE Ltestbench/plugins/logs/ComposableSingletons$SearchRowKt;
+	public fun <init> ()V
+	public final fun getLambda-1$logs_desktop ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda-2$logs_desktop ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda-3$logs_desktop ()Lkotlin/jvm/functions/Function2;
+}
+
 public final class testbench/plugins/logs/LogsPlaceholderPlugin : testbench/plugin/desktop/DesktopPlugin {
 	public static final field $stable I
 	public fun <init> ()V
@@ -6,9 +33,15 @@ public final class testbench/plugins/logs/LogsPlaceholderPlugin : testbench/plug
 	public fun getName ()Ljava/lang/String;
 	public fun getOutgoingMessages ()Lkotlinx/coroutines/flow/Flow;
 	public fun getPluginIcon ()Ljava/lang/String;
+	public fun getRequiresClient ()Z
 	public fun getServerMessageType ()Lkotlin/reflect/KType;
+	public fun getSupportedPlatforms ()Ljava/util/List;
+	public fun getUi ()Ltestbench/plugin/desktop/UiHooks;
 	public synthetic fun handleMessage (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun handleMessage (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public fun renderPanel (Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;I)V
+}
+
+public final class testbench/plugins/logs/SearchRowKt {
+	public static final fun SearchRow (Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;Landroidx/compose/runtime/Composer;I)V
 }
 

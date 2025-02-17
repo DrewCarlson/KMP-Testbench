@@ -1,0 +1,8 @@
+public final class testbench/plugins/network/OkHttpNetworkClientPlugin : testbench/plugins/network/NetworkPlugin, testbench/plugin/client/ClientPlugin {
+	public fun <init> ()V
+	public final fun getInterceptor ()Lokhttp3/Interceptor;
+	public fun getOutgoingMessages ()Lkotlinx/coroutines/flow/Flow;
+	public synthetic fun handleMessage (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun handleMessage (Lkotlin/Unit;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+

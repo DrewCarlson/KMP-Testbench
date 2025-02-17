@@ -6,9 +6,11 @@ public final class testbench/plugins/databases/DatabasesPlaceholderPlugin : test
 	public fun getName ()Ljava/lang/String;
 	public fun getOutgoingMessages ()Lkotlinx/coroutines/flow/Flow;
 	public fun getPluginIcon ()Ljava/lang/String;
+	public fun getRequiresClient ()Z
 	public fun getServerMessageType ()Lkotlin/reflect/KType;
+	public fun getSupportedPlatforms ()Ljava/util/List;
+	public fun getUi ()Ltestbench/plugin/desktop/UiHooks;
 	public synthetic fun handleMessage (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun handleMessage (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public fun renderPanel (Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;I)V
 }
 

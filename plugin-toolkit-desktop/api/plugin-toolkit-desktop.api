@@ -1,8 +1,3 @@
-public final class testbench/compose/JsonTreeViewerKt {
-	public static final fun JsonTreeViewer (Lkotlinx/serialization/json/JsonElement;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
-	public static final fun JsonTreeViewerPreview (Landroidx/compose/runtime/Composer;I)V
-}
-
 public final class testbench/compose/table/DataTableColumn {
 	public static final field $stable I
 	public fun <init> (ZLkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function3;)V
@@ -30,14 +25,78 @@ public final class testbench/compose/table/DataTableKt {
 
 public abstract interface class testbench/plugin/desktop/DesktopPlugin : testbench/plugin/BenchPlugin {
 	public abstract fun getOutgoingMessages ()Lkotlinx/coroutines/flow/Flow;
+	public abstract fun getRequiresClient ()Z
+	public abstract fun getSupportedPlatforms ()Ljava/util/List;
+	public abstract fun getUi ()Ltestbench/plugin/desktop/UiHooks;
 	public abstract fun handleMessage (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun renderPanel (Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;I)V
 }
 
 public final class testbench/plugin/desktop/DesktopPlugin$DefaultImpls {
 	public static fun getClientMessageType (Ltestbench/plugin/desktop/DesktopPlugin;)Lkotlin/reflect/KType;
 	public static fun getOutgoingMessages (Ltestbench/plugin/desktop/DesktopPlugin;)Lkotlinx/coroutines/flow/Flow;
 	public static fun getPluginIcon (Ltestbench/plugin/desktop/DesktopPlugin;)Ljava/lang/String;
+	public static fun getRequiresClient (Ltestbench/plugin/desktop/DesktopPlugin;)Z
 	public static fun getServerMessageType (Ltestbench/plugin/desktop/DesktopPlugin;)Lkotlin/reflect/KType;
+	public static fun getSupportedPlatforms (Ltestbench/plugin/desktop/DesktopPlugin;)Ljava/util/List;
+	public static fun getUi (Ltestbench/plugin/desktop/DesktopPlugin;)Ltestbench/plugin/desktop/UiHooks;
+}
+
+public final class testbench/plugin/desktop/DesktopPluginKt {
+	public static final fun UiHooks (Ltestbench/plugin/desktop/DesktopPlugin;Lkotlin/jvm/functions/Function1;)Ltestbench/plugin/desktop/UiHooks;
+}
+
+public final class testbench/plugin/desktop/UiHookLocation : java/lang/Enum {
+	public static final field MAIN_PANEL Ltestbench/plugin/desktop/UiHookLocation;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Ltestbench/plugin/desktop/UiHookLocation;
+	public static fun values ()[Ltestbench/plugin/desktop/UiHookLocation;
+}
+
+public final class testbench/plugin/desktop/UiHookMapBuilder {
+	public static final field $stable I
+	public fun <init> ()V
+	public final fun MainPanel (Lkotlin/jvm/functions/Function3;)V
+}
+
+public final class testbench/plugin/desktop/UiHooks : java/util/Map, kotlin/jvm/internal/markers/KMappedMarker {
+	public static final field $stable I
+	public fun clear ()V
+	public synthetic fun compute (Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;
+	public fun compute (Ltestbench/plugin/desktop/UiHookLocation;Ljava/util/function/BiFunction;)Lkotlin/jvm/functions/Function3;
+	public synthetic fun computeIfAbsent (Ljava/lang/Object;Ljava/util/function/Function;)Ljava/lang/Object;
+	public fun computeIfAbsent (Ltestbench/plugin/desktop/UiHookLocation;Ljava/util/function/Function;)Lkotlin/jvm/functions/Function3;
+	public synthetic fun computeIfPresent (Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;
+	public fun computeIfPresent (Ltestbench/plugin/desktop/UiHookLocation;Ljava/util/function/BiFunction;)Lkotlin/jvm/functions/Function3;
+	public final fun containsKey (Ljava/lang/Object;)Z
+	public fun containsKey (Ltestbench/plugin/desktop/UiHookLocation;)Z
+	public final fun containsValue (Ljava/lang/Object;)Z
+	public fun containsValue (Lkotlin/jvm/functions/Function3;)Z
+	public final fun entrySet ()Ljava/util/Set;
+	public final synthetic fun get (Ljava/lang/Object;)Ljava/lang/Object;
+	public final fun get (Ljava/lang/Object;)Lkotlin/jvm/functions/Function3;
+	public fun get (Ltestbench/plugin/desktop/UiHookLocation;)Lkotlin/jvm/functions/Function3;
+	public fun getEntries ()Ljava/util/Set;
+	public fun getKeys ()Ljava/util/Set;
+	public fun getSize ()I
+	public fun getValues ()Ljava/util/Collection;
+	public fun isEmpty ()Z
+	public final fun keySet ()Ljava/util/Set;
+	public synthetic fun merge (Ljava/lang/Object;Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;
+	public fun merge (Ltestbench/plugin/desktop/UiHookLocation;Lkotlin/jvm/functions/Function3;Ljava/util/function/BiFunction;)Lkotlin/jvm/functions/Function3;
+	public synthetic fun put (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun put (Ltestbench/plugin/desktop/UiHookLocation;Lkotlin/jvm/functions/Function3;)Lkotlin/jvm/functions/Function3;
+	public fun putAll (Ljava/util/Map;)V
+	public synthetic fun putIfAbsent (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun putIfAbsent (Ltestbench/plugin/desktop/UiHookLocation;Lkotlin/jvm/functions/Function3;)Lkotlin/jvm/functions/Function3;
+	public synthetic fun remove (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun remove (Ljava/lang/Object;)Lkotlin/jvm/functions/Function3;
+	public fun remove (Ljava/lang/Object;Ljava/lang/Object;)Z
+	public synthetic fun replace (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun replace (Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Z
+	public fun replace (Ltestbench/plugin/desktop/UiHookLocation;Lkotlin/jvm/functions/Function3;)Lkotlin/jvm/functions/Function3;
+	public fun replace (Ltestbench/plugin/desktop/UiHookLocation;Lkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function3;)Z
+	public fun replaceAll (Ljava/util/function/BiFunction;)V
+	public final fun size ()I
+	public final fun values ()Ljava/util/Collection;
 }
 

@@ -1,0 +1,31 @@
+public final class testbench/plugins/logs/LogEntry {
+	public fun <init> (Lkotlinx/datetime/Instant;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ltestbench/plugins/logs/LogLevel;)V
+	public final fun component1 ()Lkotlinx/datetime/Instant;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ltestbench/plugins/logs/LogLevel;
+	public final fun copy (Lkotlinx/datetime/Instant;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ltestbench/plugins/logs/LogLevel;)Ltestbench/plugins/logs/LogEntry;
+	public static synthetic fun copy$default (Ltestbench/plugins/logs/LogEntry;Lkotlinx/datetime/Instant;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ltestbench/plugins/logs/LogLevel;ILjava/lang/Object;)Ltestbench/plugins/logs/LogEntry;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getLogLevel ()Ltestbench/plugins/logs/LogLevel;
+	public final fun getMessage ()Ljava/lang/String;
+	public final fun getPid ()Ljava/lang/String;
+	public final fun getTag ()Ljava/lang/String;
+	public final fun getTimestamp ()Lkotlinx/datetime/Instant;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class testbench/plugins/logs/LogLevel : java/lang/Enum {
+	public static final field DEBUG Ltestbench/plugins/logs/LogLevel;
+	public static final field ERROR Ltestbench/plugins/logs/LogLevel;
+	public static final field INFO Ltestbench/plugins/logs/LogLevel;
+	public static final field TRACE Ltestbench/plugins/logs/LogLevel;
+	public static final field VERBOSE Ltestbench/plugins/logs/LogLevel;
+	public static final field WARNING Ltestbench/plugins/logs/LogLevel;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Ltestbench/plugins/logs/LogLevel;
+	public static fun values ()[Ltestbench/plugins/logs/LogLevel;
+}
+
