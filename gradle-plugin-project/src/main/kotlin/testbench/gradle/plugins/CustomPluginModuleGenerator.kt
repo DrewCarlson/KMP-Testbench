@@ -7,10 +7,13 @@ import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import testbench.gradle.BuildConfig
 import testbench.gradle.subplugin.ServiceGeneratorSubplugin
+
+internal const val TESTBENCH_PLUGIN_MODULE = "TESTBENCH_PLUGIN_MODULE"
 
 internal data class CustomPluginModuleGroup(
     val client: List<Project>,
@@ -39,12 +42,12 @@ private val TestbenchPluginGroup.desktopModulePath: String
     get() = third
 
 internal fun configureCustomPlugins(project: Project): List<CustomPluginModuleGroup> {
-    val modulesListFile = project.rootProject.rootDir.resolve(".gradle/testbench.modules")
-    val benchPluginModules = if (modulesListFile.exists()) {
-        modulesListFile.readText().lines()
-    } else {
-        return emptyList()
-    }.map { it.deserialize() }
+    @Suppress("UNCHECKED_CAST")
+    val customPluginModules = (
+        project.rootProject.gradle.extra
+            .get(TESTBENCH_PLUGIN_MODULE) as? List<String>
+    ).orEmpty()
+    val benchPluginModules = customPluginModules.map { it.deserialize() }
 
     return benchPluginModules.map { moduleGroup ->
         val coreProject = moduleGroup.coreModulePath
