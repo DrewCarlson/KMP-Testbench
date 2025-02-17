@@ -189,5 +189,6 @@ public class TestbenchClient(
             }
         }
         closeReason.await()
+        cancel()
     }
 }

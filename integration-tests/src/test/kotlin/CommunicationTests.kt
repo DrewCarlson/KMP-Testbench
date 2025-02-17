@@ -79,7 +79,7 @@ class CommunicationTests {
         awaitConnect()
 
         desktopPlugin.receivedMessages.test {
-            val expected = TestMessage.IntMessage(0)
+            val expected = ClientTestMessage.IntMessage(0)
             clientPlugin.sendMessage(expected)
             val actual = awaitItem()
             assertEquals(expected, actual)
@@ -93,7 +93,7 @@ class CommunicationTests {
         awaitConnect()
 
         clientPlugin.receivedMessages.test {
-            val expected = TestMessage.IntMessage(0)
+            val expected = DesktopTestMessage.IntMessage(0)
             desktopPlugin.sendMessage(expected)
             val actual = awaitItem()
             assertEquals(expected, actual)
@@ -110,10 +110,10 @@ class CommunicationTests {
             val desktopReceived = desktopPlugin.receivedMessages.testIn(this)
             val clientReceived = clientPlugin.receivedMessages.testIn(this)
 
-            clientPlugin.sendMessage(TestMessage.Ping)
+            clientPlugin.sendMessage(ClientTestMessage.Ping)
 
-            assertEquals(TestMessage.Ping, desktopReceived.awaitItem())
-            assertEquals(TestMessage.Pong, clientReceived.awaitItem())
+            assertEquals(ClientTestMessage.Ping, desktopReceived.awaitItem())
+            assertEquals(DesktopTestMessage.Pong, clientReceived.awaitItem())
 
             desktopReceived.cancelAndIgnoreRemainingEvents()
             clientReceived.cancelAndIgnoreRemainingEvents()
@@ -121,67 +121,78 @@ class CommunicationTests {
     }
 
     @Serializable
-    sealed class TestMessage {
+    sealed class ClientTestMessage {
         @Serializable
         data class IntMessage(
             val int: Int,
-        ) : TestMessage()
+        ) : ClientTestMessage()
 
         @Serializable
-        data object Ping : TestMessage()
-
-        @Serializable
-        data object Pong : TestMessage()
+        data object Ping : ClientTestMessage()
     }
 
-    inner class TestDesktopPlugin : DesktopPlugin<TestMessage, TestMessage> {
+    @Serializable
+    sealed class DesktopTestMessage {
+        @Serializable
+        data class IntMessage(
+            val int: Int,
+        ) : DesktopTestMessage()
+
+        @Serializable
+        data object Pong : DesktopTestMessage()
+    }
+
+    inner class TestDesktopPlugin : DesktopPlugin<DesktopTestMessage, ClientTestMessage> {
         override val id: String = "test-plugin"
         override val name: String = "Test Plugin"
 
-        override val serverMessageType: KType = typeOf<TestMessage>()
-        override val clientMessageType: KType = typeOf<TestMessage>()
+        override val serverMessageType: KType = typeOf<DesktopTestMessage>()
+        override val clientMessageType: KType = typeOf<ClientTestMessage>()
 
-        val receivedMessages = MutableSharedFlow<TestMessage>(
+        val receivedMessages = MutableSharedFlow<ClientTestMessage>(
             extraBufferCapacity = Int.MAX_VALUE,
             onBufferOverflow = BufferOverflow.DROP_OLDEST,
         )
-        private val messageQueue = Channel<TestMessage>(
+        private val messageQueue = Channel<DesktopTestMessage>(
             capacity = Int.MAX_VALUE,
             onBufferOverflow = BufferOverflow.DROP_OLDEST,
         )
-        override val outgoingMessages: Flow<TestMessage> = messageQueue.receiveAsFlow()
+        override val outgoingMessages: Flow<DesktopTestMessage> = messageQueue.receiveAsFlow()
 
-        override suspend fun handleMessage(message: TestMessage) {
+        override suspend fun handleMessage(message: ClientTestMessage) {
             receivedMessages.emit(message)
-            if (message is TestMessage.Ping) {
-                messageQueue.send(TestMessage.Pong)
+            if (message is ClientTestMessage.Ping) {
+                messageQueue.send(DesktopTestMessage.Pong)
             }
         }
 
-        suspend fun sendMessage(message: TestMessage) {
+        suspend fun sendMessage(message: DesktopTestMessage) {
             messageQueue.send(message)
         }
     }
 
-    inner class TestClientPlugin : ClientPlugin<TestMessage, TestMessage> {
+    inner class TestClientPlugin : ClientPlugin<DesktopTestMessage, ClientTestMessage> {
         override val id: String = "test-plugin"
         override val name: String = "Test Plugin"
 
-        override val serverMessageType: KType = typeOf<TestMessage>()
-        override val clientMessageType: KType = typeOf<TestMessage>()
+        override val serverMessageType: KType = typeOf<DesktopTestMessage>()
+        override val clientMessageType: KType = typeOf<ClientTestMessage>()
 
-        val receivedMessages = MutableSharedFlow<TestMessage>()
-        private val messageQueue = Channel<TestMessage>(
+        val receivedMessages = MutableSharedFlow<DesktopTestMessage>(
+            extraBufferCapacity = Int.MAX_VALUE,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST,
+        )
+        private val messageQueue = Channel<ClientTestMessage>(
             capacity = Int.MAX_VALUE,
             onBufferOverflow = BufferOverflow.DROP_OLDEST,
         )
-        override val outgoingMessages: Flow<TestMessage> = messageQueue.receiveAsFlow()
+        override val outgoingMessages: Flow<ClientTestMessage> = messageQueue.receiveAsFlow()
 
-        override suspend fun handleMessage(message: TestMessage) {
+        override suspend fun handleMessage(message: DesktopTestMessage) {
             receivedMessages.emit(message)
         }
 
-        suspend fun sendMessage(message: TestMessage) {
+        suspend fun sendMessage(message: ClientTestMessage) {
             messageQueue.send(message)
         }
     }

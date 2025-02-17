@@ -90,20 +90,24 @@ class TestbenchServer(
                         ),
                     )
 
-                    session.pluginRegistry
-                        .enabledPlugins
-                        .forEach { (_, plugin) ->
-                            plugin.outgoingMessages
-                                .onEach { message ->
-                                    val serializer = serializer(plugin.clientMessageType)
-                                    val messageContent = Json.encodeToString(serializer, message)
-                                    val pluginMessage = PluginMessage(
-                                        pluginId = plugin.id,
-                                        content = messageContent,
-                                    )
-                                    sendSerialized(pluginMessage)
-                                }.launchIn(this)
-                        }
+                    val plugins = session.pluginRegistry.enabledPlugins.values
+                    plugins.forEach { plugin ->
+                        plugin.outgoingMessages
+                            .onEach { message ->
+                                val serializer = serializer(plugin.serverMessageType)
+                                val messageContent = Json.encodeToString(serializer, message)
+                                val pluginMessage = PluginMessage(
+                                    pluginId = plugin.id,
+                                    content = messageContent,
+                                )
+                                sendSerialized(pluginMessage)
+                            }.catch { error ->
+                                call.application.log.error(
+                                    "Failed to process outgoing message: plugin=${plugin.id}",
+                                    error,
+                                )
+                            }.launchIn(this)
+                    }
 
                     try {
                         while (isActive) {
