@@ -12,9 +12,9 @@ import testbench.gradle.tasks.RunTestbenchTask
 internal const val RUNTIME_CONFIG = "testBenchRuntime"
 internal const val RUN_TASK_NAME = "runTestbench"
 
-public open class TestBenchGradlePlugin : Plugin<Project> {
+public open class TestbenchGradlePlugin : Plugin<Project> {
     override fun apply(project: Project) {
-        project.extensions.create("testbench", TestBenchExtension::class.java)
+        project.extensions.create("testbench", TestbenchExtension::class.java)
 
         setupTestbenchRuntime(project)
 

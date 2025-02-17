@@ -1,22 +1,17 @@
-package testbench.gradle
+package testbench.gradle.settings
 
 import org.gradle.api.Plugin
 import org.gradle.api.initialization.Settings
-import org.gradle.kotlin.dsl.maven
 import org.jetbrains.kotlin.gradle.plugin.extraProperties
 
-public class TestBenchGradleSettingsPlugin : Plugin<Settings> {
+public class TestbenchGradleSettingsPlugin : Plugin<Settings> {
     override fun apply(settings: Settings) {
         settings.extensions.create(
             "testbench",
-            TestBenchGradleSettingsExtension::class.java,
+            TestbenchGradleSettingsExtension::class.java,
             settings,
         )
 
-        settings.dependencyResolutionManagement
-            .repositories {
-                maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-            }
         settings.gradle.settingsEvaluated {
             if (settings.gradle.extraProperties.has(TEST_BENCH_PLUGIN_MODULE)) {
                 @Suppress("UNCHECKED_CAST")

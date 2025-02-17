@@ -120,7 +120,7 @@ fun SessionSelector(
                 Icon(
                     PathIconKey(
                         "icons/github@20x20_dark.svg",
-                        TestBenchIcons::class.java,
+                        TestbenchIcons::class.java,
                     ),
                     contentDescription = "Github",
                 )

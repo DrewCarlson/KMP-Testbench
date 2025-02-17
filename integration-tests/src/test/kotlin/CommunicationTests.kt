@@ -10,9 +10,9 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.Serializable
 import testbench.client.ReconnectHandler
-import testbench.client.TestBenchClient
+import testbench.client.TestbenchClient
 import testbench.desktop.server.SessionHolder
-import testbench.desktop.server.TestBenchServer
+import testbench.desktop.server.TestbenchServer
 import testbench.plugin.client.ClientPlugin
 import testbench.plugin.desktop.DesktopPlugin
 import kotlin.reflect.KType
@@ -23,19 +23,19 @@ class CommunicationTests {
     private lateinit var sessionHolder: SessionHolder
     private lateinit var clientPlugin: TestClientPlugin
     private lateinit var desktopPlugin: TestDesktopPlugin
-    private lateinit var server: TestBenchServer
-    private lateinit var client: TestBenchClient
+    private lateinit var server: TestbenchServer
+    private lateinit var client: TestbenchClient
 
     fun setup(backgroundScope: CoroutineScope) {
         clientPlugin = TestClientPlugin()
         desktopPlugin = TestDesktopPlugin()
         sessionHolder = SessionHolder()
-        server = TestBenchServer(
+        server = TestbenchServer(
             sessionHolder = sessionHolder,
             plugins = listOf(desktopPlugin),
         )
         server.setupServer(48345)
-        client = TestBenchClient(
+        client = TestbenchClient(
             plugins = listOf(clientPlugin),
             autoConnect = false,
             reconnectHandler = ReconnectHandler.never(),

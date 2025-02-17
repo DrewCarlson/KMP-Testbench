@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.config.CompilerConfiguration
 import java.io.File
 
 @OptIn(ExperimentalCompilerApi::class)
-class TestBenchCompilerPluginRegistrar : CompilerPluginRegistrar() {
+class TestbenchCompilerPluginRegistrar : CompilerPluginRegistrar() {
     override val supportsK2: Boolean = true
 
     override fun ExtensionStorage.registerExtensions(configuration: CompilerConfiguration) {

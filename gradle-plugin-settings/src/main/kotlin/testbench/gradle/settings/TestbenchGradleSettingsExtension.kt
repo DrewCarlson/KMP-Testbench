@@ -1,4 +1,4 @@
-package testbench.gradle
+package testbench.gradle.settings
 
 import org.gradle.api.initialization.Settings
 import org.gradle.kotlin.dsl.extra
@@ -6,14 +6,14 @@ import org.gradle.kotlin.dsl.extra
 private val PLUGIN_MODULE_NAMES = listOf("core", "desktop")
 internal const val TEST_BENCH_PLUGIN_MODULE = "TEST_BENCH_PLUGIN_MODULE"
 
-public open class TestBenchGradleSettingsExtension(
+public open class TestbenchGradleSettingsExtension(
     private val settings: Settings,
 ) {
     public fun includePlugin(
         pluginPath: String,
-        block: TestBenchIncludePluginBuilder.() -> Unit = {},
+        block: TestbenchIncludePluginBuilder.() -> Unit = {},
     ) {
-        val config = TestBenchIncludePluginBuilder().apply(block)
+        val config = TestbenchIncludePluginBuilder().apply(block)
         val baseName = pluginPath.substringAfterLast(":")
         val newModulePaths = when {
             config.desktopOnly -> listOf("desktop")
@@ -40,7 +40,7 @@ public open class TestBenchGradleSettingsExtension(
         }
 
         val new = if (config.desktopOnly) {
-            TestBenchPluginGroup(
+            TestbenchPluginGroup(
                 // coreModulePath =
                 null,
                 // clientModulePaths =
@@ -49,7 +49,7 @@ public open class TestBenchGradleSettingsExtension(
                 newModulePaths[0],
             )
         } else {
-            TestBenchPluginGroup(
+            TestbenchPluginGroup(
                 // coreModulePath =
                 newModulePaths[0],
                 // clientModulePaths =e
@@ -62,7 +62,7 @@ public open class TestBenchGradleSettingsExtension(
     }
 }
 
-public class TestBenchIncludePluginBuilder {
+public class TestbenchIncludePluginBuilder {
     internal val clientVariations = mutableListOf<String>()
 
     internal var desktopOnly: Boolean = false
@@ -76,6 +76,6 @@ public class TestBenchIncludePluginBuilder {
     }
 }
 
-public typealias TestBenchPluginGroup = Triple<String?, List<String>, String>
+internal typealias TestbenchPluginGroup = Triple<String?, List<String>, String>
 
-public fun TestBenchPluginGroup.serialize(): String = "$first/${second.joinToString(separator = ",")}/$third"
+internal fun TestbenchPluginGroup.serialize(): String = "$first/${second.joinToString(separator = ",")}/$third"

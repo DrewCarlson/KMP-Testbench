@@ -26,7 +26,7 @@ import testbench.device.DeviceInfo
 import testbench.plugin.desktop.DesktopPlugin
 import java.time.Duration
 
-class TestBenchServer(
+class TestbenchServer(
     private val sessionHolder: SessionHolder,
     private val plugins: List<DesktopPlugin<*, *>> = loadPlugins(),
 ) {
@@ -46,7 +46,7 @@ class TestBenchServer(
             }
             install(CallLogging) {
                 level = Level.TRACE
-                logger = LoggerFactory.getLogger("TestBenchServer")
+                logger = LoggerFactory.getLogger("TestbenchServer")
             }
             install(ContentNegotiation) {
                 json(Json)

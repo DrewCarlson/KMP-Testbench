@@ -5,7 +5,7 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 /**
- * Provides control over how [TestBenchClient] decides when to reconnect.
+ * Provides control over how [TestbenchClient] decides when to reconnect.
  */
 public interface ReconnectHandler {
     /**

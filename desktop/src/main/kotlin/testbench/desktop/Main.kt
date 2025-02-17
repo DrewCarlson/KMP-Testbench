@@ -3,7 +3,7 @@ package testbench.desktop
 import androidx.compose.runtime.*
 import androidx.compose.ui.window.application
 import testbench.desktop.server.SessionHolder
-import testbench.desktop.server.TestBenchServer
+import testbench.desktop.server.TestbenchServer
 import testbench.desktop.window.MainWindow
 import testbench.ui.TestbenchTheme
 
@@ -11,7 +11,7 @@ val LocalSessionHolder = compositionLocalOf<SessionHolder> { error("SessionHolde
 
 fun main() = application {
     val sessionHolder = remember { SessionHolder() }
-    val server = remember { TestBenchServer(sessionHolder) }
+    val server = remember { TestbenchServer(sessionHolder) }
 
     LaunchedEffect(Unit) {
         server.setupServer(8182)

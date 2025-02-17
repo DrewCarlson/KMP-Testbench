@@ -172,7 +172,7 @@ public final class testbench/desktop/server/SessionHolder {
 	public final fun updateOrCreate (Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;)Ltestbench/desktop/server/SessionData;
 }
 
-public final class testbench/desktop/server/TestBenchServer {
+public final class testbench/desktop/server/TestbenchServer {
 	public static final field $stable I
 	public fun <init> (Ltestbench/desktop/server/SessionHolder;)V
 	public final fun setupServer (I)V

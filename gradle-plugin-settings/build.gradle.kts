@@ -47,7 +47,7 @@ gradlePlugin {
     plugins {
         create("testbenchSettingsPlugin") {
             id = "org.drewcarlson.testbench.plugin-toolkit"
-            implementationClass = "testbench.gradle.TestBenchGradleSettingsPlugin"
+            implementationClass = "testbench.gradle.settings.TestbenchGradleSettingsPlugin"
             description = "Create custom plugins for kmp-testbench"
             tags.set(listOf("kotlin", "debugging", "multiplatform"))
         }

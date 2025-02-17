@@ -54,7 +54,7 @@ gradlePlugin {
     plugins {
         create("testbenchPlugin") {
             id = "org.drewcarlson.testbench"
-            implementationClass = "testbench.gradle.TestBenchGradlePlugin"
+            implementationClass = "testbench.gradle.TestbenchGradlePlugin"
             description = "Configure and run the KMP Testbench Desktop client"
             tags.set(listOf("kotlin", "debugging", "multiplatform"))
         }

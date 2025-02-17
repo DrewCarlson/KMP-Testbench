@@ -18,24 +18,24 @@ internal data class CustomPluginModuleGroup(
     val core: Project?,
 )
 
-public typealias TestBenchPluginGroup = Triple<String?, List<String>, String>
+public typealias TestbenchPluginGroup = Triple<String?, List<String>, String>
 
-public fun String.deserialize(): TestBenchPluginGroup {
+public fun String.deserialize(): TestbenchPluginGroup {
     val (first, second, third) = split('/')
-    return TestBenchPluginGroup(
+    return TestbenchPluginGroup(
         first.takeIf { it.isNotBlank() },
         second.split(",").filter { it.isNotBlank() },
         third,
     )
 }
 
-private val TestBenchPluginGroup.coreModulePath: String?
+private val TestbenchPluginGroup.coreModulePath: String?
     get() = first
 
-private val TestBenchPluginGroup.clientModulePaths: List<String>
+private val TestbenchPluginGroup.clientModulePaths: List<String>
     get() = second
 
-private val TestBenchPluginGroup.desktopModulePath: String
+private val TestbenchPluginGroup.desktopModulePath: String
     get() = third
 
 internal fun configureCustomPlugins(project: Project): List<CustomPluginModuleGroup> {

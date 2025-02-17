@@ -11,7 +11,7 @@ import coingecko.CoinGeckoClient
 import coingecko.models.coins.CoinList
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
-import testbench.client.TestBenchClient
+import testbench.client.TestbenchClient
 import testbench.plugins.network.KtorNetworkClientPlugin
 import testbench.plugins.network.OkHttpNetworkClientPlugin
 
@@ -30,7 +30,7 @@ fun main() = application {
         )
     }
     val testbenchClient = remember {
-        TestBenchClient(
+        TestbenchClient(
             plugins = listOf(
                 networkPlugin,
                 okhttpNetworkPlugin,

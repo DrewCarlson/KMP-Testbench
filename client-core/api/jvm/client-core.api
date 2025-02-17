@@ -10,7 +10,7 @@ public final class testbench/client/ReconnectHandler$Companion {
 	public final fun withExponentialBackoff-QTBD994 (JJ)Ltestbench/client/ReconnectHandler;
 }
 
-public final class testbench/client/TestBenchClient {
+public final class testbench/client/TestbenchClient {
 	public fun <init> (Ljava/util/List;ZLtestbench/client/ReconnectHandler;Lkotlin/coroutines/CoroutineContext;)V
 	public synthetic fun <init> (Ljava/util/List;ZLtestbench/client/ReconnectHandler;Lkotlin/coroutines/CoroutineContext;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun disable ()V

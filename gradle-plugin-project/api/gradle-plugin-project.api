@@ -1,8 +1,8 @@
-public class testbench/gradle/TestBenchExtension {
+public class testbench/gradle/TestbenchExtension {
 	public fun <init> ()V
 }
 
-public class testbench/gradle/TestBenchGradlePlugin : org/gradle/api/Plugin {
+public class testbench/gradle/TestbenchGradlePlugin : org/gradle/api/Plugin {
 	public fun <init> ()V
 	public synthetic fun apply (Ljava/lang/Object;)V
 	public fun apply (Lorg/gradle/api/Project;)V

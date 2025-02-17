@@ -31,7 +31,7 @@ dependencies {
 
 
 ```kotlin
-val client = TestBenchClient(
+val client = TestbenchClient(
   plugins = listOf(MyPlugin())
 )
 ```

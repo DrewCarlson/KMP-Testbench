@@ -1,20 +1,20 @@
-public class testbench/gradle/TestBenchGradleSettingsExtension {
+public class testbench/gradle/TestbenchGradleSettingsExtension {
 	public fun <init> (Lorg/gradle/api/initialization/Settings;)V
 	public final fun includePlugin (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
-	public static synthetic fun includePlugin$default (Ltestbench/gradle/TestBenchGradleSettingsExtension;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static synthetic fun includePlugin$default (Ltestbench/gradle/TestbenchGradleSettingsExtension;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 }
 
-public final class testbench/gradle/TestBenchGradleSettingsExtensionKt {
+public final class testbench/gradle/TestbenchGradleSettingsExtensionKt {
 	public static final fun serialize (Lkotlin/Triple;)Ljava/lang/String;
 }
 
-public final class testbench/gradle/TestBenchGradleSettingsPlugin : org/gradle/api/Plugin {
+public final class testbench/gradle/TestbenchGradleSettingsPlugin : org/gradle/api/Plugin {
 	public fun <init> ()V
 	public synthetic fun apply (Ljava/lang/Object;)V
 	public fun apply (Lorg/gradle/api/initialization/Settings;)V
 }
 
-public final class testbench/gradle/TestBenchIncludePluginBuilder {
+public final class testbench/gradle/TestbenchIncludePluginBuilder {
 	public fun <init> ()V
 	public final fun clientVariations ([Ljava/lang/String;)V
 	public final fun getDesktopOnly ()Z

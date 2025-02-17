@@ -5,8 +5,8 @@ import io.ktor.client.plugins.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.*
-import io.ktor.websocket.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.coroutines.flow.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
@@ -20,9 +20,9 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.random.Random
 
 /**
- * TestBenchClient manages your plugins and connects them to the Testbench Desktop App.
+ * TestbenchClient manages your plugins and connects them to the Testbench Desktop App.
  *
- * [TestBenchClient] itself provides limited public APIs, aiming to be a simple manager
+ * [TestbenchClient] itself provides limited public APIs, aiming to be a simple manager
  * for the Desktop App connection.  It will maintain the desired connection state and
  * forward all plugin messages to/from the plugins on the client and Desktop App.
  *
@@ -32,7 +32,7 @@ import kotlin.random.Random
  * @param coroutineContext A [CoroutineContext] to customize how the client manages async work, default [Dispatchers.Default].
  * @param serverUrl The Desktop App server URL to pair with, for testing only.
  */
-public class TestBenchClient(
+public class TestbenchClient(
     private val plugins: List<ClientPlugin<*, *>>,
     autoConnect: Boolean = true,
     private val reconnectHandler: ReconnectHandler = ReconnectHandler.default(),
@@ -169,9 +169,10 @@ public class TestBenchClient(
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private suspend fun DefaultClientWebSocketSession.awaitIncomingMessages() {
         launch {
-            while (isActive) {
+            while (!incoming.isClosedForReceive) {
                 try {
                     val (pluginId, content) = receiveDeserialized<PluginMessage>()
                     val plugin = pluginMap[pluginId] ?: continue
@@ -180,6 +181,8 @@ public class TestBenchClient(
                     (plugin as ClientPlugin<Any, Any>).handleMessage(deserialized!!)
                 } catch (e: CancellationException) {
                     throw e
+                } catch (_: ClosedReceiveChannelException) {
+                    // ignored: normal closure while waiting for message
                 } catch (e: Throwable) {
                     e.printStackTrace()
                 }

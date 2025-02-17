@@ -11,7 +11,7 @@ internal val META_INF_BUILD_DIR =
     CompilerConfigurationKey<String>("The path to write META-INF/services to.")
 
 @OptIn(ExperimentalCompilerApi::class)
-class TestBenchCommandLineProcessor : CommandLineProcessor {
+class TestbenchCommandLineProcessor : CommandLineProcessor {
     internal companion object {
         val META_INF_BUILD_DIR_OPTION =
             CliOption(
