@@ -6,7 +6,7 @@ import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.cio.*
 import io.ktor.server.engine.*
-import io.ktor.server.plugins.callloging.*
+import io.ktor.server.plugins.calllogging.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.routing.*
@@ -24,13 +24,13 @@ import testbench.desktop.plugins.PluginRegistry
 import testbench.desktop.plugins.PluginRegistry.Companion.loadPlugins
 import testbench.device.DeviceInfo
 import testbench.plugin.desktop.DesktopPlugin
-import java.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 class TestbenchServer(
     private val sessionHolder: SessionHolder,
     private val plugins: List<DesktopPlugin<*, *>> = loadPlugins(),
 ) {
-    private lateinit var server: ApplicationEngine
+    private lateinit var server: EmbeddedServer<*, *>
     private val serverStarted = MutableStateFlow(false)
     val serverStartedFlow = serverStarted.asStateFlow()
 
@@ -52,8 +52,8 @@ class TestbenchServer(
                 json(Json)
             }
             install(WebSockets) {
-                pingPeriod = Duration.ofSeconds(60)
-                timeout = Duration.ofSeconds(15)
+                pingPeriod = 60.seconds
+                timeout = 15.seconds
                 contentConverter = KotlinxWebsocketSerializationConverter(Json)
             }
             routing {

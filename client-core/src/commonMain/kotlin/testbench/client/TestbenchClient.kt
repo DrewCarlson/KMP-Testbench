@@ -18,6 +18,7 @@ import testbench.device.DevicePlatform
 import testbench.plugin.client.ClientPlugin
 import kotlin.coroutines.CoroutineContext
 import kotlin.random.Random
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * TestbenchClient manages your plugins and connects them to the Testbench Desktop App.
@@ -64,7 +65,7 @@ public class TestbenchClient(
                 }
             }
             WebSockets {
-                pingInterval = 60
+                pingInterval = 60.seconds
                 contentConverter = KotlinxWebsocketSerializationConverter(Json)
             }
         }
