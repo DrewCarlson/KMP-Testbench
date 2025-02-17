@@ -1,6 +1,6 @@
 # Network Plugin
 
-<img src="../img/plugins_network.png" width="700px">
+![](../img/plugins_network.png)
 
 The network plugin allows you to capture and explore the network traffic in your project.
 It supports popular KMP networking libraries and is easily extended with support for custom HTTP clients.
