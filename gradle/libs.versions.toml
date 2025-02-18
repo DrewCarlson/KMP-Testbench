@@ -16,7 +16,7 @@ jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 compose-jetbrains = { id = "org.jetbrains.compose", version.ref = "compose" }
-compose-hotReload = { id = "org.jetbrains.compose-hot-reload", version = "1.0.0-dev.28.4" }
+compose-hotReload = { id = "org.jetbrains.compose-hot-reload", version = "1.0.0-dev-39" }
 buildKonfig = { id = "com.codingfeline.buildkonfig", version = "0.16.0" }
 gradleBuildConfig = { id = "com.github.gmazzo.buildconfig", version = "5.5.1" }
 mavenPublish = { id = "com.vanniktech.maven.publish", version.ref = "mavenPublish" }
