@@ -1,5 +1,5 @@
 [versions]
-kotlin = { strictly = "2.1.10" }
+kotlin = { strictly = "2.1.20-firework.34" }
 compose = { strictly = "1.7.3" }
 coroutines = "1.10.1"
 serialization = "1.8.0"
