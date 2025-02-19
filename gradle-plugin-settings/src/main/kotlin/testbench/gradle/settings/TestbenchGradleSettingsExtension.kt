@@ -41,21 +41,17 @@ public open class TestbenchGradleSettingsExtension(
 
         val new = if (config.desktopOnly) {
             TestbenchPluginGroup(
-                // coreModulePath =
-                null,
-                // clientModulePaths =
-                emptyList(),
-                // desktopModulePath =
-                newModulePaths[0],
+                coreModulePath = null,
+                clientModulePaths = emptyList(),
+                desktopModulePath = newModulePaths[0],
+                desktopUseKmp = config.desktopUseKmp,
             )
         } else {
             TestbenchPluginGroup(
-                // coreModulePath =
-                newModulePaths[0],
-                // clientModulePaths =e
-                newModulePaths.drop(2),
-                // desktopModulePath =
-                newModulePaths[1],
+                coreModulePath = newModulePaths[0],
+                clientModulePaths = newModulePaths.drop(2),
+                desktopModulePath = newModulePaths[1],
+                desktopUseKmp = config.desktopUseKmp,
             )
         }.serialize()
         settings.gradle.extra.set(TESTBENCH_PLUGIN_MODULE, existing + new)
@@ -66,6 +62,7 @@ public class TestbenchRegisterPluginBuilder {
     internal val clientVariations = mutableListOf<String>()
 
     internal var desktopOnly: Boolean = false
+    public var desktopUseKmp: Boolean = false
 
     public fun desktopOnly() {
         desktopOnly = true
@@ -76,6 +73,16 @@ public class TestbenchRegisterPluginBuilder {
     }
 }
 
-internal typealias TestbenchPluginGroup = Triple<String?, List<String>, String>
-
-internal fun TestbenchPluginGroup.serialize(): String = "$first/${second.joinToString(separator = ",")}/$third"
+public data class TestbenchPluginGroup(
+    val coreModulePath: String?,
+    val clientModulePaths: List<String>,
+    val desktopModulePath: String,
+    val desktopUseKmp: Boolean,
+) {
+    internal fun serialize(): String = listOf(
+        coreModulePath,
+        clientModulePaths.joinToString(separator = ","),
+        desktopModulePath,
+        desktopUseKmp,
+    ).joinToString(separator = "/")
+}

@@ -21,25 +21,22 @@ internal data class CustomPluginModuleGroup(
     val core: Project?,
 )
 
-public typealias TestbenchPluginGroup = Triple<String?, List<String>, String>
+public data class TestbenchPluginGroup(
+    val coreModulePath: String?,
+    val clientModulePaths: List<String>,
+    val desktopModulePath: String,
+    val desktopUseKmp: Boolean,
+)
 
 public fun String.deserialize(): TestbenchPluginGroup {
-    val (first, second, third) = split('/')
+    val (first, second, third, fourth) = split('/')
     return TestbenchPluginGroup(
         first.takeIf { it.isNotBlank() },
         second.split(",").filter { it.isNotBlank() },
         third,
+        fourth.toBoolean(),
     )
 }
-
-private val TestbenchPluginGroup.coreModulePath: String?
-    get() = first
-
-private val TestbenchPluginGroup.clientModulePaths: List<String>
-    get() = second
-
-private val TestbenchPluginGroup.desktopModulePath: String
-    get() = third
 
 internal fun configureCustomPlugins(project: Project): List<CustomPluginModuleGroup> {
     val settingsExtras = project.rootProject.gradle.extra
@@ -58,7 +55,11 @@ internal fun configureCustomPlugins(project: Project): List<CustomPluginModuleGr
             ?.let(project::project)
         CustomPluginModuleGroup(
             core = coreProject?.let(::applyCoreModuleConfiguration),
-            desktop = applyDesktopModuleConfiguration(project.project(moduleGroup.desktopModulePath), coreProject),
+            desktop = applyDesktopModuleConfiguration(
+                project = project.project(moduleGroup.desktopModulePath),
+                coreProject = coreProject,
+                useKmp = moduleGroup.desktopUseKmp,
+            ),
             client = moduleGroup.clientModulePaths.map { clientModulePath ->
                 applyClientModuleConfiguration(project.project(clientModulePath), coreProject)
             },
@@ -87,17 +88,34 @@ private fun applyCoreModuleConfiguration(project: Project): Project {
 private fun applyDesktopModuleConfiguration(
     project: Project,
     coreProject: Project?,
+    useKmp: Boolean,
 ): Project {
     project.pluginManager.apply("org.jetbrains.kotlin.plugin.compose")
     project.pluginManager.apply(ServiceGeneratorSubplugin::class)
-    project.pluginManager.apply("org.jetbrains.kotlin.jvm")
-    project.pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
-        project.dependencies.apply {
-            coreProject?.let { add("api", it) }
-            if (project.rootProject.name == "KMP-Testbench") {
-                add("api", project.project(":plugin-toolkit-desktop"))
-            } else {
-                add("api", "org.drewcarlson.testbench:plugin-toolkit-desktop:${BuildConfig.VERSION}")
+    if (useKmp) {
+        project.configureKmp {
+            jvm { withJava() }
+            sourceSets.jvmMain {
+                dependencies {
+                    coreProject?.run(::api)
+                    if (project.rootProject.name == "KMP-Testbench") {
+                        api(project.project(":plugin-toolkit-desktop"))
+                    } else {
+                        api("org.drewcarlson.testbench:plugin-toolkit-desktop:${BuildConfig.VERSION}")
+                    }
+                }
+            }
+        }
+    } else {
+        project.pluginManager.apply("org.jetbrains.kotlin.jvm")
+        project.pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
+            project.dependencies.apply {
+                coreProject?.let { add("api", it) }
+                if (project.rootProject.name == "KMP-Testbench") {
+                    add("api", project.project(":plugin-toolkit-desktop"))
+                } else {
+                    add("api", "org.drewcarlson.testbench:plugin-toolkit-desktop:${BuildConfig.VERSION}")
+                }
             }
         }
     }
@@ -128,7 +146,9 @@ private fun Project.configureAndroidLibrary() {
     pluginManager.apply("com.android.library")
     pluginManager.withPlugin("com.android.library") {
         extensions.configure<LibraryExtension> {
-            namespace = "$group.${project.name.replace("-", "")}"
+            namespace = "$group.${project.name}"
+                .replace("-", "")
+                .trim('.')
             compileSdk = 34
             defaultConfig {
                 minSdk = 23

@@ -18,6 +18,8 @@ testbench {
     clientVariations("ktor", "okhttp", "fuel")
     // optional: Create only a desktop module without client or core modules
     desktopOnly()
+    // optional: Enable to configure the desktop module with Kotlin Multiplatform instead of Kotlin JVM
+    desktopUseKmp = true
   }
 }
 ```
