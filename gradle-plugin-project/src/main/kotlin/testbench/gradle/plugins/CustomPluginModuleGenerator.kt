@@ -42,11 +42,14 @@ private val TestbenchPluginGroup.desktopModulePath: String
     get() = third
 
 internal fun configureCustomPlugins(project: Project): List<CustomPluginModuleGroup> {
+    val settingsExtras = project.rootProject.gradle.extra
+
+    if (!settingsExtras.has(TESTBENCH_PLUGIN_MODULE)) {
+        return emptyList()
+    }
+
     @Suppress("UNCHECKED_CAST")
-    val customPluginModules = (
-        project.rootProject.gradle.extra
-            .get(TESTBENCH_PLUGIN_MODULE) as? List<String>
-    ).orEmpty()
+    val customPluginModules = (settingsExtras.get(TESTBENCH_PLUGIN_MODULE) as? List<String>).orEmpty()
     val benchPluginModules = customPluginModules.map { it.deserialize() }
 
     return benchPluginModules.map { moduleGroup ->
