@@ -9,7 +9,7 @@ import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
 import testbench.gradle.plugins.configureCustomPlugins
 import testbench.gradle.tasks.RunTestbenchTask
 
-internal const val RUNTIME_CONFIG = "testBenchRuntime"
+internal const val RUNTIME_CONFIG = "testbenchRuntime"
 internal const val RUN_TASK_NAME = "runTestbench"
 
 public open class TestbenchGradlePlugin : Plugin<Project> {
@@ -29,23 +29,23 @@ public open class TestbenchGradlePlugin : Plugin<Project> {
     }
 
     private fun setupTestbenchRuntime(project: Project) {
+        val testbenchRuntime = project.configurations.create(RUNTIME_CONFIG) {
+            attributes {
+                attribute(Attribute.of("org.gradle.usage", String::class.java), "java-runtime")
+                attribute(Attribute.of("org.jetbrains.kotlin.platform.type", String::class.java), "jvm")
+            }
+        }
         val pluginProjects = try {
             configureCustomPlugins(project)
         } catch (e: Throwable) {
             project.logger.error("Failed to configure custom plugins", e)
             return
         }
-        val testBenchRuntime = project.configurations.create(RUNTIME_CONFIG) {
-            attributes {
-                attribute(Attribute.of("org.gradle.usage", String::class.java), "java-runtime")
-                attribute(Attribute.of("org.jetbrains.kotlin.platform.type", String::class.java), "jvm")
-            }
-        }
         project.dependencies {
-            add(testBenchRuntime.name, getComposeRuntimeForHost())
-            add(testBenchRuntime.name, "org.drewcarlson.testbench:desktop:${BuildConfig.VERSION}")
+            add(testbenchRuntime.name, getComposeRuntimeForHost())
+            add(testbenchRuntime.name, "org.drewcarlson.testbench:desktop:${BuildConfig.VERSION}")
             pluginProjects.forEach { pluginProject ->
-                add(testBenchRuntime.name, pluginProject.desktop)
+                add(testbenchRuntime.name, pluginProject.desktop)
             }
         }
     }
