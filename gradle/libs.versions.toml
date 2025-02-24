@@ -3,7 +3,7 @@ kotlin = { strictly = "2.1.10" }
 compose = { strictly = "1.7.3" }
 coroutines = "1.10.1"
 serialization = "1.8.0"
-ktorio = "3.1.0"
+ktorio = "3.1.1"
 datetime = "0.6.2"
 dokka = "2.0.0"
 jvmTarget = "17"
