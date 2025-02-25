@@ -17,7 +17,7 @@ serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref 
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 compose-jetbrains = { id = "org.jetbrains.compose", version.ref = "compose" }
 compose-hotReload = { id = "org.jetbrains.compose-hot-reload", version = "1.0.0-dev.28.4" }
-buildKonfig = { id = "com.codingfeline.buildkonfig", version = "0.16.0" }
+buildKonfig = { id = "com.codingfeline.buildkonfig", version = "0.17.0" }
 gradleBuildConfig = { id = "com.github.gmazzo.buildconfig", version = "5.5.1" }
 mavenPublish = { id = "com.vanniktech.maven.publish", version.ref = "mavenPublish" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
